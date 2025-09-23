@@ -201,12 +201,23 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
                     <>
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-bold" style={colors.accentStyle}>
+                           <h3 className="font-bold" style={colors.accentStyle}>
                             {edu.degree}
                           </h3>
-                          <p>{edu.institution} | {edu.location}</p>
-                          {edu.gpa && <p className="text-gray-600">• {edu.gpa}</p>}
-                          {edu.projects && <p className="text-gray-600">• {edu.projects}</p>}
+                          <p>{edu.institution} | {edu.location} {edu.gpa && `| GPA: ${edu.gpa}`}</p>
+                          {edu.projects && (
+                            <div className="mt-2">
+                              <ul className="space-y-1 ml-4">
+                                {edu.projects.split('\n').map((project, idx) => (
+                                  project.trim() && (
+                                    <li key={idx} className="list-disc text-gray-600">
+                                      {project.trim()}
+                                    </li>
+                                  )
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                         </div>
                         <div className="text-gray-600">
                           <p>{edu.graduationYear}</p>

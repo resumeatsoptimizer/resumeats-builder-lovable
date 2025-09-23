@@ -14,7 +14,7 @@ import { PDFGenerator } from '@/components/PDFGenerator';
 import LanguageSelection from '@/components/LanguageSelection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText } from 'lucide-react';
+import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 import { useNavigate } from 'react-router-dom';
 
@@ -64,6 +64,9 @@ const ResumeEditor = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [newSkill, setNewSkill] = useState('');
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [jobDescription, setJobDescription] = useState('');
+  const [isEnhancing, setIsEnhancing] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [resumeData, setResumeData] = useState<ResumeData>({
@@ -285,21 +288,36 @@ const ResumeEditor = () => {
         return;
       }
 
-      const { data, error } = await supabase
-        .from('resumes')
-        .upsert({
-          user_id: user.id,
-          template_name: templateName,
-          resume_data: resumeData as any,
-          is_public: isPublic
-        } as any)
-        .select('id')
-        .single();
+      const resumeToSave = {
+        user_id: user.id,
+        template_name: templateName,
+        resume_data: resumeData as any,
+        is_public: isPublic
+      };
 
+      let result;
+      if (resumeId) {
+        // Update existing resume
+        result = await supabase
+          .from('resumes')
+          .update(resumeToSave)
+          .eq('id', resumeId)
+          .select('id')
+          .single();
+      } else {
+        // Insert new resume
+        result = await supabase
+          .from('resumes')
+          .insert(resumeToSave)
+          .select('id')
+          .single();
+      }
+
+      const { data, error } = result;
       if (error) throw error;
 
       // Set the resume ID for QR code and PDF generation
-      if (data?.id) {
+      if (data?.id && !resumeId) {
         setResumeId(data.id);
       }
 
@@ -314,6 +332,102 @@ const ResumeEditor = () => {
         description: "Failed to save resume. Please try again.",
         variant: "destructive"
       });
+    }
+  };
+
+  const handleAiEnhancement = async () => {
+    try {
+      setIsEnhancing(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to use AI features",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Enhance the professional summary
+      const { data, error } = await supabase.functions.invoke('ai-enhance', {
+        body: {
+          text: resumeData.summary,
+          section: 'summary'
+        }
+      });
+
+      if (error) throw error;
+
+      setResumeData(prev => ({
+        ...prev,
+        summary: data.enhancedText
+      }));
+
+      toast({
+        title: "AI Enhancement Complete",
+        description: `Enhanced your summary! Credits remaining: ${data.credits}`
+      });
+    } catch (error) {
+      console.error('Error enhancing resume:', error);
+      toast({
+        title: "Error",
+        description: "Failed to enhance resume. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
+
+  const handleJobMatchAnalysis = async () => {
+    if (!jobDescription.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a job description",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      setIsAnalyzing(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to use AI features",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('ai-job-match', {
+        body: {
+          resumeData,
+          jobDescription
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: `Job Match: ${data.matchingScore}%`,
+        description: data.analysis,
+        duration: 10000
+      });
+
+      console.log('Full analysis:', data.analysis);
+    } catch (error) {
+      console.error('Error analyzing job match:', error);
+      toast({
+        title: "Error",
+        description: "Failed to analyze job match. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -337,14 +451,6 @@ const ResumeEditor = () => {
             <h1 className="text-2xl font-bold text-foreground">Resume Editor</h1>
           </div>
           <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={generateSampleData}
-              className="flex items-center gap-2"
-            >
-              <FileText className="w-4 h-4" />
-              Generate Sample
-            </Button>
             
             {/* Template & Theme */}
             <div className="flex items-center gap-4">
@@ -720,19 +826,19 @@ const ResumeEditor = () => {
                             />
                           </div>
                           <div>
-                            <Label>Graduation Year</Label>
-                            <Input
-                              value={edu.graduationYear}
-                              onChange={(e) => updateEducation(edu.id, 'graduationYear', e.target.value)}
-                              placeholder="2018"
-                            />
-                          </div>
-                          <div>
                             <Label>GPA (Optional)</Label>
                             <Input
                               value={edu.gpa || ''}
                               onChange={(e) => updateEducation(edu.id, 'gpa', e.target.value)}
                               placeholder="3.75"
+                            />
+                          </div>
+                          <div>
+                            <Label>Graduation Year</Label>
+                            <Input
+                              value={edu.graduationYear}
+                              onChange={(e) => updateEducation(edu.id, 'graduationYear', e.target.value)}
+                              placeholder="2018"
                             />
                           </div>
                         </div>
@@ -785,10 +891,13 @@ const ResumeEditor = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Languages className="w-4 h-4" />
-                      แปลภาษา
+                      Language Translation
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      การแปลจะใช้ 3 เครดิต ต่อ 1 ภาษา และอาจใช้เวลาสักครู่
+                    </p>
                     <LanguageSelection 
                       resumeData={resumeData}
                       onResumeUpdate={handleResumeUpdate}
@@ -796,22 +905,52 @@ const ResumeEditor = () => {
                   </CardContent>
                 </Card>
 
-                {/* Share Resume */}
+                {/* AI-Powered Enhancement */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Share2 className="w-4 h-4" />
-                      Share Your Resume
+                      <Zap className="w-4 h-4" />
+                      AI-Powered Enhancement
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="flex gap-3">
-                    <QRCodeGenerator 
-                      resumeId={resumeId || ''}
-                      resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Enhance your professional summary with AI (1 credit)
+                    </p>
+                    <Button 
+                      onClick={handleAiEnhancement}
+                      disabled={isEnhancing || !resumeData.summary.trim()}
+                      className="w-full"
+                    >
+                      {isEnhancing ? 'Enhancing...' : 'Enhance Summary'}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Job Match Analysis */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="w-4 h-4" />
+                      Job Match Analysis
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Analyze how well your resume matches a job description (2 credits)
+                    </p>
+                    <Textarea
+                      value={jobDescription}
+                      onChange={(e) => setJobDescription(e.target.value)}
+                      placeholder="Paste the job description here..."
+                      rows={4}
                     />
-                    <Button variant="outline" className="flex items-center gap-2">
-                      <Share2 className="w-4 h-4" />
-                      Share Resume
+                    <Button 
+                      onClick={handleJobMatchAnalysis}
+                      disabled={isAnalyzing || !jobDescription.trim()}
+                      className="w-full"
+                    >
+                      {isAnalyzing ? 'Analyzing...' : 'Analyze Job Match'}
                     </Button>
                   </CardContent>
                 </Card>
@@ -833,6 +972,26 @@ const ResumeEditor = () => {
                   themeColor={themeColor}
                 />
               </div>
+              
+              {/* Share Resume - Moved below preview */}
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Share2 className="w-4 h-4" />
+                    Share Your Resume
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex gap-3">
+                  <QRCodeGenerator 
+                    resumeId={resumeId || ''}
+                    resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+                  />
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Share2 className="w-4 h-4" />
+                    Share Resume
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
