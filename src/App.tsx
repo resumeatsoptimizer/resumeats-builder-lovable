@@ -9,6 +9,9 @@ import Auth from "./pages/Auth";
 import ResumeEditor from "./pages/ResumeEditor";
 import ResumePublic from "./pages/ResumePublic";
 import NotFound from "./pages/NotFound";
+import Pricing from "./pages/Pricing";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCanceled from "./pages/PaymentCanceled";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +26,9 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/resume-editor" element={<ResumeEditor />} />
           <Route path="/resume/:id" element={<ResumePublic />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-canceled" element={<PaymentCanceled />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
