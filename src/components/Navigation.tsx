@@ -71,7 +71,74 @@ const Navigation = () => {
   }] : [])];
   return <nav className="bg-background border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+        {/* Desktop Navigation */}
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="text-2xl font-bold text-primary">
+              ResumeATS-Builder
+            </Link>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-8">
+              {navLinks.map(link => 
+                link.href.startsWith('#') ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm font-medium transition-colors duration-200"
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm font-medium transition-colors duration-200"
+                  >
+                    {link.name}
+                  </Link>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Desktop Credits and Auth */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Desktop Credits Display */}
+            {isAuthenticated && userCredits !== null && (
+              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full">
+                <Coins className="h-5 w-5 text-yellow-600" />
+                <span className="text-sm font-semibold text-yellow-700">{userCredits} Credits</span>
+              </div>
+            )}
+            
+            {/* Desktop Auth Buttons */}
+            {!isAuthenticated ? (
+              <Button size="sm" asChild>
+                <Link to="/auth">Get Started</Link>
+              </Button>
+            ) : (
+              <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut()}>
+                Sign Out
+              </Button>
+            )}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleMenu}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
+        </div>
 
         {/* Mobile Navigation Menu */}
         <div className={cn("md:hidden overflow-hidden transition-all duration-300 ease-in-out", isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0")}>
