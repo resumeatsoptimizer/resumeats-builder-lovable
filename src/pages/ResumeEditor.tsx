@@ -10,6 +10,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { PDFGenerator } from '@/components/PDFGenerator';
+import LanguageSelection from '@/components/LanguageSelection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -205,6 +206,10 @@ const ResumeEditor = () => {
         variant: "destructive"
       });
     }
+  };
+
+  const handleResumeUpdate = (updatedData: ResumeData) => {
+    setResumeData(updatedData);
   };
 
   return (
@@ -495,6 +500,12 @@ const ResumeEditor = () => {
                   ))}
                 </CardContent>
               </Card>
+
+              {/* Language Translation */}
+              <LanguageSelection 
+                resumeData={resumeData}
+                onResumeUpdate={handleResumeUpdate}
+              />
             </div>
           </div>
         </ResizablePanel>
