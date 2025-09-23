@@ -448,9 +448,9 @@ const ResumeEditor = () => {
               <div className="flex items-center gap-4">
                 <Button variant="outline" onClick={() => navigate('/')} className="flex items-center gap-2">
                   <ArrowLeft className="w-4 h-4" />
-                  Back
+                  {t('editor.backToHome')}
                 </Button>
-                <h1 className="text-2xl font-bold text-foreground">Resume Editor</h1>
+                <h1 className="text-2xl font-bold text-foreground">{t('editor.title')}</h1>
               </div>
               <div className="flex items-center gap-4">
                 {/* Template & Theme */}
@@ -628,46 +628,46 @@ const ResumeEditor = () => {
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="fullName">Full Name</Label>
-                        <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
-                      </div>
-                      <div>
-                        <Label htmlFor="linkedin">LinkedIn</Label>
-                        <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="portfolio">Portfolio (Optional)</Label>
-                        <Input 
-                          id="portfolio" 
-                          value={resumeData.personalInfo.portfolio || ''} 
-                          onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
-                          placeholder="portfolio.yourname.com" 
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="website">Website (Optional)</Label>
-                        <Input 
-                          id="website" 
-                          value={resumeData.personalInfo.website || ''} 
-                          onChange={e => updatePersonalInfo('website', e.target.value)} 
-                          placeholder="www.yourname.com" 
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="address">Address (Optional)</Label>
+                         <Label htmlFor="fullName">{t('editor.fullName')}</Label>
+                         <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
+                       </div>
+                       <div>
+                         <Label htmlFor="phone">{t('editor.phone')}</Label>
+                         <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
+                       </div>
+                     </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div>
+                         <Label htmlFor="email">{t('editor.email')}</Label>
+                         <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
+                       </div>
+                       <div>
+                         <Label htmlFor="linkedin">LinkedIn</Label>
+                         <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
+                       </div>
+                     </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div>
+                         <Label htmlFor="portfolio">Portfolio ({t('editor.optional')})</Label>
+                         <Input 
+                           id="portfolio" 
+                           value={resumeData.personalInfo.portfolio || ''} 
+                           onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
+                           placeholder="portfolio.yourname.com" 
+                         />
+                       </div>
+                       <div>
+                         <Label htmlFor="website">{t('editor.website')} ({t('editor.optional')})</Label>
+                         <Input 
+                           id="website" 
+                           value={resumeData.personalInfo.website || ''} 
+                           onChange={e => updatePersonalInfo('website', e.target.value)} 
+                           placeholder="www.yourname.com" 
+                         />
+                       </div>
+                     </div>
+                     <div>
+                       <Label htmlFor="address">{t('editor.address')} ({t('editor.optional')})</Label>
                       <Input 
                         id="address" 
                         value={resumeData.personalInfo.address || ''} 
@@ -793,31 +793,31 @@ const ResumeEditor = () => {
                             </Button>}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <Label>Degree</Label>
-                            <Input value={edu.degree} onChange={e => updateEducation(edu.id, 'degree', e.target.value)} placeholder="Bachelor of Business Administration" />
-                          </div>
-                          <div>
-                            <Label>Institution</Label>
-                            <Input value={edu.institution} onChange={e => updateEducation(edu.id, 'institution', e.target.value)} placeholder="Chulalongkorn University" />
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <Label>Location</Label>
-                            <Input value={edu.location} onChange={e => updateEducation(edu.id, 'location', e.target.value)} placeholder="Bangkok, Thailand" />
-                          </div>
-                          <div>
-                            <Label>GPA (Optional)</Label>
-                            <Input value={edu.gpa || ''} onChange={e => updateEducation(edu.id, 'gpa', e.target.value)} placeholder="3.75" />
-                          </div>
-                          <div>
-                            <Label>Graduation Year</Label>
-                            <Input value={edu.graduationYear} onChange={e => updateEducation(edu.id, 'graduationYear', e.target.value)} placeholder="2018" />
-                          </div>
-                        </div>
-                        <div>
-                          <Label>Projects (Optional)</Label>
+                           <div>
+                             <Label>{t('editor.degree')}</Label>
+                             <Input value={edu.degree} onChange={e => updateEducation(edu.id, 'degree', e.target.value)} placeholder="Bachelor of Business Administration" />
+                           </div>
+                           <div>
+                             <Label>{t('editor.institution')}</Label>
+                             <Input value={edu.institution} onChange={e => updateEducation(edu.id, 'institution', e.target.value)} placeholder="Chulalongkorn University" />
+                           </div>
+                         </div>
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                           <div>
+                             <Label>{t('editor.location')}</Label>
+                             <Input value={edu.location} onChange={e => updateEducation(edu.id, 'location', e.target.value)} placeholder="Bangkok, Thailand" />
+                           </div>
+                           <div>
+                             <Label>GPA ({t('editor.optional')})</Label>
+                             <Input value={edu.gpa || ''} onChange={e => updateEducation(edu.id, 'gpa', e.target.value)} placeholder="3.75" />
+                           </div>
+                           <div>
+                             <Label>{t('editor.graduationYear')}</Label>
+                             <Input value={edu.graduationYear} onChange={e => updateEducation(edu.id, 'graduationYear', e.target.value)} placeholder="2018" />
+                           </div>
+                         </div>
+                         <div>
+                           <Label>{t('editor.projects')} ({t('editor.optional')})</Label>
                           <Textarea value={edu.projects || ''} onChange={e => updateEducation(edu.id, 'projects', e.target.value)} placeholder="Relevant projects or activities..." rows={2} />
                         </div>
                       </div>)}
