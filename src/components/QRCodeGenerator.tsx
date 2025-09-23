@@ -75,8 +75,10 @@ export const QRCodeGenerator = ({
     }
   };
   return <Card className="w-full max-w-sm">
-      
-      <CardContent className="space-y-48 ">
+      <CardHeader>
+        <CardTitle className="text-center text-lg">Share Your Resume</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
         <div className="flex justify-center">
           <div className="p-4 bg-white rounded-lg border">
             <QRCodeSVG id="qr-code-svg" value={resumeUrl} size={200} level="M" includeMargin={true} fgColor="#374151" bgColor="#ffffff" />
