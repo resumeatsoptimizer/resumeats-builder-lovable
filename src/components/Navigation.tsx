@@ -13,6 +13,7 @@ const Navigation = () => {
     { name: "Features", href: "#features" },
     { name: "Pricing", href: "#pricing" },
     { name: "About Us", href: "#about" },
+    { name: "Resume Editor", href: "/resume-editor" },
   ];
 
   return (
@@ -31,13 +32,23 @@ const Navigation = () => {
             {/* Navigation Links */}
             <div className="flex space-x-6">
               {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
-                  {link.name}
-                </a>
+                link.href.startsWith('#') ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
             </div>
 
@@ -79,14 +90,25 @@ const Navigation = () => {
           <div className="px-2 pt-2 pb-6 space-y-4">
             {/* Mobile Navigation Links */}
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.name}
-              </a>
+              link.href.startsWith('#') ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className="block px-3 py-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
 
             {/* Mobile Auth Buttons */}
