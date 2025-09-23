@@ -1,4 +1,4 @@
-import { FileCheck, Sparkles, BarChart3 } from "lucide-react";
+import { FileCheck, Sparkles, BarChart3, Globe } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const FeaturesSection = () => {
@@ -18,6 +18,11 @@ const FeaturesSection = () => {
       title: "Job Match Analysis",
       description: "วิเคราะห์ความเข้ากันของเรซูเม่กับตำแหน่งงานที่คุณสนใจ",
     },
+    {
+      icon: Globe,
+      title: "AI Translation",
+      description: "แปลเรซูเม่ของคุณเป็นภาษาต่างๆ ทั่วโลก เพื่อโอกาสที่ไร้พรมแดน",
+    },
   ];
 
   return (
@@ -34,7 +39,7 @@ const FeaturesSection = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
