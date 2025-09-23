@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
@@ -57,6 +58,7 @@ const ResumeEditor = () => {
   const { toast } = useToast();
   const [templateName, setTemplateName] = useState('Professional');
   const [resumeId, setResumeId] = useState<string | null>(null);
+  const [isPublic, setIsPublic] = useState(false);
   
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -178,7 +180,8 @@ const ResumeEditor = () => {
         .upsert({
           user_id: user.id,
           template_name: templateName,
-          resume_data: resumeData as any
+          resume_data: resumeData as any,
+          is_public: isPublic
         } as any)
         .select('id')
         .single();
@@ -220,6 +223,18 @@ const ResumeEditor = () => {
                 <SelectItem value="Corporate">Corporate</SelectItem>
               </SelectContent>
             </Select>
+            
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="public-resume"
+                checked={isPublic}
+                onCheckedChange={setIsPublic}
+              />
+              <Label htmlFor="public-resume" className="text-sm">
+                Make public
+              </Label>
+            </div>
+            
             <Button onClick={handleSave}>Save Resume</Button>
           </div>
         </div>
@@ -502,16 +517,25 @@ const ResumeEditor = () => {
                       resumeId={resumeId} 
                       resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} 
                     />
-                    <QRCodeGenerator 
-                      resumeId={resumeId}
-                      resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
-                    />
+                    {isPublic && (
+                      <QRCodeGenerator 
+                        resumeId={resumeId}
+                        resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+                      />
+                    )}
                   </>
                 )}
                 {!resumeId && (
                   <div className="text-center p-4 border border-dashed rounded-lg">
                     <p className="text-sm text-muted-foreground">
                       Save your resume first to enable PDF download and QR code sharing
+                    </p>
+                  </div>
+                )}
+                {resumeId && !isPublic && (
+                  <div className="text-center p-3 border border-dashed rounded-lg">
+                    <p className="text-xs text-muted-foreground">
+                      Enable "Make public" to share your resume via QR code
                     </p>
                   </div>
                 )}
