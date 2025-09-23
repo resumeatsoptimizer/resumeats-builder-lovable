@@ -8,13 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { PDFGenerator } from '@/components/PDFGenerator';
 import LanguageSelection from '@/components/LanguageSelection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target, Menu, Settings } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 import { useNavigate } from 'react-router-dom';
 interface WorkExperience {
@@ -52,10 +54,9 @@ interface ResumeData {
   awards: string[];
 }
 const ResumeEditor = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [templateName, setTemplateName] = useState('Professional');
   const [themeColor, setThemeColor] = useState('#3b82f6');
   const [resumeId, setResumeId] = useState<string | null>(null);
@@ -65,6 +66,7 @@ const ResumeEditor = () => {
   const [jobDescription, setJobDescription] = useState('');
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showMobileControls, setShowMobileControls] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -402,69 +404,149 @@ const ResumeEditor = () => {
     setResumeData(updatedData);
   };
   return <div className="min-h-screen bg-background">
+      {/* Header */}
       <div className="border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" onClick={() => navigate('/')} className="flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-            <h1 className="text-2xl font-bold text-foreground">Resume Editor</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            
-            {/* Template & Theme */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Label className="text-sm">Template:</Label>
-                <Select value={templateName} onValueChange={setTemplateName}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Professional">Professional</SelectItem>
-                    <SelectItem value="Creative">Creative</SelectItem>
-                    <SelectItem value="Corporate">Corporate</SelectItem>
-                  </SelectContent>
-                </Select>
+        <div className="container mx-auto px-4 py-4">
+          {/* Desktop Header */}
+          {!isMobile ? (
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <Button variant="outline" onClick={() => navigate('/')} className="flex items-center gap-2">
+                  <ArrowLeft className="w-4 h-4" />
+                  Back
+                </Button>
+                <h1 className="text-2xl font-bold text-foreground">Resume Editor</h1>
               </div>
-              
-              <div className="flex items-center gap-2">
-                <Label className="text-sm">Theme:</Label>
-                <div className="relative">
-                  <div className="w-8 h-8 rounded-md border cursor-pointer" style={{
-                  backgroundColor: themeColor
-                }} onClick={() => setShowColorPicker(!showColorPicker)} />
-                  {showColorPicker && <div className="absolute z-10 mt-2 right-0">
-                      <div className="fixed inset-0" onClick={() => setShowColorPicker(false)} />
-                      <div className="bg-white p-3 rounded-lg shadow-lg border">
-                        <HexColorPicker color={themeColor} onChange={setThemeColor} />
-                      </div>
-                    </div>}
+              <div className="flex items-center gap-4">
+                {/* Template & Theme */}
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm">Template:</Label>
+                    <Select value={templateName} onValueChange={setTemplateName}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Professional">Professional</SelectItem>
+                        <SelectItem value="Creative">Creative</SelectItem>
+                        <SelectItem value="Corporate">Corporate</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm">Theme:</Label>
+                    <div className="relative">
+                      <div className="w-8 h-8 rounded-md border cursor-pointer" style={{
+                      backgroundColor: themeColor
+                    }} onClick={() => setShowColorPicker(!showColorPicker)} />
+                      {showColorPicker && <div className="absolute z-10 mt-2 right-0">
+                          <div className="fixed inset-0" onClick={() => setShowColorPicker(false)} />
+                          <div className="bg-white p-3 rounded-lg shadow-lg border">
+                            <HexColorPicker color={themeColor} onChange={setThemeColor} />
+                          </div>
+                        </div>}
+                    </div>
+                  </div>
                 </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Switch id="public-resume" checked={isPublic} onCheckedChange={setIsPublic} />
+                  <Label htmlFor="public-resume" className="text-sm">
+                    Make public
+                  </Label>
+                </div>
+                
+                <PDFGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
+                
+                <Button onClick={handleSave}>Save Resume</Button>
               </div>
             </div>
-            
-            <div className="flex items-center space-x-2">
-              <Switch id="public-resume" checked={isPublic} onCheckedChange={setIsPublic} />
-              <Label htmlFor="public-resume" className="text-sm">
-                Make public
-              </Label>
+          ) : (
+            /* Mobile Header */
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" onClick={() => navigate('/')} className="flex items-center gap-1">
+                  <ArrowLeft className="w-4 h-4" />
+                  Back
+                </Button>
+                <h1 className="text-lg font-bold text-foreground">Resume Editor</h1>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button onClick={handleSave} size="sm">Save</Button>
+                <Sheet open={showMobileControls} onOpenChange={setShowMobileControls}>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Menu className="w-4 h-4" />
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="w-80">
+                    <div className="space-y-6 mt-6">
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold flex items-center gap-2">
+                          <Settings className="w-5 h-5" />
+                          Resume Settings
+                        </h3>
+                        
+                        {/* Template Selection */}
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">Template</Label>
+                          <Select value={templateName} onValueChange={setTemplateName}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Professional">Professional</SelectItem>
+                              <SelectItem value="Creative">Creative</SelectItem>
+                              <SelectItem value="Corporate">Corporate</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        {/* Theme Color */}
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">Theme Color</Label>
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-md border cursor-pointer" style={{
+                            backgroundColor: themeColor
+                          }} onClick={() => setShowColorPicker(!showColorPicker)} />
+                            <span className="text-sm text-muted-foreground">Tap to change</span>
+                          </div>
+                          {showColorPicker && <div className="mt-4">
+                              <HexColorPicker color={themeColor} onChange={setThemeColor} />
+                            </div>}
+                        </div>
+                        
+                        {/* Public Toggle */}
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="mobile-public-resume" className="text-sm font-medium">
+                            Make Resume Public
+                          </Label>
+                          <Switch id="mobile-public-resume" checked={isPublic} onCheckedChange={setIsPublic} />
+                        </div>
+                        
+                        {/* PDF Download */}
+                        <div className="pt-4 border-t">
+                          <PDFGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
+                        </div>
+                      </div>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
             </div>
-            
-            <PDFGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
-            
-            <Button onClick={handleSave}>Save Resume</Button>
-          </div>
+          )}
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6">
         {/* Main Content */}
-        <ResizablePanelGroup direction="horizontal" className="h-[calc(100vh-280px)]">
-          <ResizablePanel defaultSize={50} minSize={30}>
-            <div className="p-6 h-full overflow-y-auto">
-              <div className="space-y-6">
+        {!isMobile ? (
+          /* Desktop Layout - Side by side panels */
+          <ResizablePanelGroup direction="horizontal" className="h-[calc(100vh-280px)]">
+            <ResizablePanel defaultSize={50} minSize={30}>
+              <div className="p-6 h-full overflow-y-auto">
+                <div className="space-y-6">
                 {/* Profile Photo Upload */}
                 <Card>
                   <CardHeader>
@@ -503,7 +585,7 @@ const ResumeEditor = () => {
                     <CardTitle>Personal Information</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="fullName">Full Name</Label>
                         <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
@@ -513,7 +595,7 @@ const ResumeEditor = () => {
                         <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="email">Email</Label>
                         <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
@@ -546,16 +628,16 @@ const ResumeEditor = () => {
                 {/* Skills */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex justify-between items-center">
-                      Skills
-                      <div className="flex gap-2">
-                        <Input value={newSkill} onChange={e => setNewSkill(e.target.value)} placeholder="เพิ่มทักษะ" className="w-48" onKeyPress={e => {
+                    <CardTitle className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                      <span>Skills</span>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <Input value={newSkill} onChange={e => setNewSkill(e.target.value)} placeholder="เพิ่มทักษะ" className="w-full sm:w-48" onKeyPress={e => {
                         if (e.key === 'Enter') {
                           e.preventDefault();
                           addSkill();
                         }
                       }} />
-                        <Button type="button" onClick={addSkill} size="sm">
+                        <Button type="button" onClick={addSkill} size="sm" className="whitespace-nowrap">
                           <Plus className="w-4 h-4" />
                           Add Skill
                         </Button>
@@ -593,7 +675,7 @@ const ResumeEditor = () => {
                               Delete
                             </Button>}
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <Label>Position</Label>
                             <Input value={exp.position} onChange={e => updateWorkExperience(exp.id, 'position', e.target.value)} placeholder="e.g., Senior Marketing Specialist" />
@@ -603,7 +685,7 @@ const ResumeEditor = () => {
                             <Input value={exp.company} onChange={e => updateWorkExperience(exp.id, 'company', e.target.value)} placeholder="Company name" />
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div>
                             <Label>Location</Label>
                             <Input value={exp.location} onChange={e => updateWorkExperience(exp.id, 'location', e.target.value)} placeholder="Bangkok, Thailand" />
@@ -644,7 +726,7 @@ const ResumeEditor = () => {
                               Delete
                             </Button>}
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
                             <Label>Degree</Label>
                             <Input value={edu.degree} onChange={e => updateEducation(edu.id, 'degree', e.target.value)} placeholder="Bachelor of Business Administration" />
@@ -654,7 +736,7 @@ const ResumeEditor = () => {
                             <Input value={edu.institution} onChange={e => updateEducation(edu.id, 'institution', e.target.value)} placeholder="Chulalongkorn University" />
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div>
                             <Label>Location</Label>
                             <Input value={edu.location} onChange={e => updateEducation(edu.id, 'location', e.target.value)} placeholder="Bangkok, Thailand" />
@@ -754,37 +836,173 @@ const ResumeEditor = () => {
                     <LanguageSelection resumeData={resumeData} onResumeUpdate={handleResumeUpdate} />
                   </CardContent>
                 </Card>
+                </div>
+              </div>
+            </ResizablePanel>
+            
+            <ResizableHandle />
+            
+            <ResizablePanel defaultSize={50} minSize={30}>
+              <div className="p-6 h-full overflow-y-auto bg-gray-50">
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold text-center text-foreground">LIVE Preview</h2>
+                </div>
+                <div className="bg-white rounded-lg shadow-sm">
+                  <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
+                </div>
+                
+                {/* Share Resume - Moved below preview */}
+                <Card className="mt-6">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Share2 className="w-4 h-4" />
+                      Share Your Resume
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex gap-3">
+                    <QRCodeGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
+                  </CardContent>
+                </Card>
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        ) : (
+          /* Mobile Layout - Stacked vertically */
+          <div className="space-y-6">
+            {/* Mobile Form Section */}
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-foreground">Edit Resume</h2>
+              <div className="space-y-6">
+                {/* Mobile form content - responsive version */}
+                {/* Profile Photo Upload */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Profile Photo</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        {resumeData.personalInfo.profileImage ? <img src={resumeData.personalInfo.profileImage} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-border" /> : <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center border-2 border-border">
+                            <User className="w-8 h-8 text-muted-foreground" />
+                          </div>}
+                      </div>
+                      <div className="space-y-2">
+                        <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2">
+                          <Upload className="w-4 h-4" />
+                          อัพโหลดรูปภาพ
+                        </Button>
+                        <p className="text-xs text-muted-foreground">
+                          รองรับไฟล์ JPG, PNG (สูงสุด 2MB)
+                        </p>
+                        <input ref={fileInputRef} type="file" accept="image/jpeg,image/png" onChange={handleImageUpload} className="hidden" />
+                      </div>
+                    </div>
+                    <div className="mt-4">
+                      <Button type="button" variant="secondary" onClick={generateSampleData} className="flex items-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        Generate Sample
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Personal Information - Mobile */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Personal Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="fullName">Full Name</Label>
+                        <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
+                      </div>
+                      <div>
+                        <Label htmlFor="phone">Phone</Label>
+                        <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
+                      </div>
+                      <div>
+                        <Label htmlFor="linkedin">LinkedIn</Label>
+                        <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
+                      </div>
+                      <div>
+                        <Label htmlFor="portfolio">Portfolio/Website (Optional)</Label>
+                        <Input id="portfolio" value={resumeData.personalInfo.portfolio || ''} onChange={e => updatePersonalInfo('portfolio', e.target.value)} placeholder="your-portfolio.com" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Professional Summary */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Professional Summary</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Textarea value={resumeData.summary} onChange={e => setResumeData(prev => ({
+                    ...prev,
+                    summary: e.target.value
+                  }))} placeholder="Write a compelling professional summary highlighting your key achievements and skills..." className="min-h-[120px]" />
+                  </CardContent>
+                </Card>
+
+                {/* Skills - Mobile Friendly */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Skills</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Input value={newSkill} onChange={e => setNewSkill(e.target.value)} placeholder="เพิ่มทักษะ" onKeyPress={e => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          addSkill();
+                        }
+                      }} />
+                      <Button type="button" onClick={addSkill} size="sm" className="w-full">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Skill
+                      </Button>
+                    </div>
+                    {resumeData.skills.length > 0 ? <div className="flex flex-wrap gap-2">
+                        {resumeData.skills.map((skill, index) => <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                            {skill}
+                            <Button type="button" variant="ghost" size="sm" className="h-4 w-4 p-0 hover:bg-transparent" onClick={() => removeSkill(skill)}>
+                              <X className="w-3 h-3" />
+                            </Button>
+                          </Badge>)}
+                      </div> : <p className="text-muted-foreground text-sm">ยังไม่มีทักษะที่เพิ่ม กรุณาเพิ่มทักษะของคุณ</p>}
+                  </CardContent>
+                </Card>
               </div>
             </div>
-          </ResizablePanel>
-          
-          <ResizableHandle />
-          
-          <ResizablePanel defaultSize={50} minSize={30}>
-            <div className="p-6 h-full overflow-y-auto bg-gray-50">
-              <div className="mb-4">
-                <h2 className="text-xl font-bold text-center text-foreground">LIVE Preview</h2>
-              </div>
-              <div className="bg-white rounded-lg shadow-sm">
+            
+            {/* Mobile Preview Section */}
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold text-foreground">Live Preview</h2>
+              <div className="bg-white rounded-lg shadow-sm border p-4">
                 <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
               </div>
               
-              {/* Share Resume - Moved below preview */}
-              <Card className="mt-6">
+              {/* Share Resume */}
+              <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Share2 className="w-4 h-4" />
                     Share Your Resume
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="flex gap-3">
+                <CardContent>
                   <QRCodeGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
-                  
                 </CardContent>
               </Card>
             </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+          </div>
+        )}
       </div>
     </div>;
 };
