@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.ai-enhance]
 verify_jwt = true
+
+[functions.ai-job-match]
+verify_jwt = true
