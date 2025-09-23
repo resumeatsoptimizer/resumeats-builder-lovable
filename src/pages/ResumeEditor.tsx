@@ -44,7 +44,8 @@ interface ResumeData {
     phone: string;
     email: string;
     linkedin: string;
-    portfolio?: string;
+  portfolio?: string;
+  website?: string;
     address?: string;
     profileImage?: string;
   };
@@ -76,7 +77,8 @@ const ResumeEditor = () => {
       phone: '',
       email: '',
       linkedin: '',
-      portfolio: ''
+      portfolio: '',
+      website: ''
     },
     summary: '',
     skills: [],
@@ -160,7 +162,8 @@ const ResumeEditor = () => {
         phone: "+66 81 234 5678",
         email: "somchai.jaidee@email.com",
         linkedin: "linkedin.com/in/somchai-jaidee",
-        portfolio: "somchai-portfolio.com",
+        portfolio: "portfolio.somchai.com",
+        website: "www.somchai.com",
         address: "123/456 Sukhumvit Road, Watthana, Bangkok 10110"
       },
       summary: "Digital Marketing Specialist with 5+ years of experience in developing and executing successful digital marketing campaigns. Proven track record of increasing brand awareness and driving sales growth through strategic use of SEO, SEM, and social media marketing.",
@@ -609,14 +612,25 @@ const ResumeEditor = () => {
                         <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
                       </div>
                     </div>
-                    <div>
-                      <Label htmlFor="portfolio">Portfolio/Website (Optional)</Label>
-                      <Input 
-                        id="portfolio" 
-                        value={resumeData.personalInfo.portfolio || ''} 
-                        onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
-                        placeholder="your-portfolio.com" 
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="portfolio">Portfolio (Optional)</Label>
+                        <Input 
+                          id="portfolio" 
+                          value={resumeData.personalInfo.portfolio || ''} 
+                          onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
+                          placeholder="portfolio.yourname.com" 
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="website">Website (Optional)</Label>
+                        <Input 
+                          id="website" 
+                          value={resumeData.personalInfo.website || ''} 
+                          onChange={e => updatePersonalInfo('website', e.target.value)} 
+                          placeholder="www.yourname.com" 
+                        />
+                      </div>
                     </div>
                     <div>
                       <Label htmlFor="address">Address (Optional)</Label>

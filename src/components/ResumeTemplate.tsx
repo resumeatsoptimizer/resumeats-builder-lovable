@@ -4,6 +4,7 @@ interface PersonalInfo {
   email: string;
   linkedin: string;
   portfolio?: string;
+  website?: string;
   address?: string;
   profileImage?: string;
 }
@@ -56,11 +57,14 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
     if (template === 'Corporate') {
       return {
         headerStyle: {
-          background: '#000000'
+          background: 'transparent'
         },
         accentStyle: {
           color: '#000000',
           borderColor: '#000000'
+        },
+        headerTextStyle: {
+          color: '#000000'
         }
       };
     }
@@ -110,15 +114,15 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
     <div className="max-w-4xl mx-auto bg-white text-black text-sm leading-relaxed">
       {/* Header */}
       <div 
-        className={`text-white ${styles.headerPadding} flex items-center gap-6`}
+        className={`${template === 'Corporate' ? 'text-black' : 'text-white'} ${styles.headerPadding} flex items-center gap-6`}
         style={colors.headerStyle}
       >
         {personalInfo.profileImage && (
           <img
             src={personalInfo.profileImage}
             alt="Profile"
-            className="w-24 h-24 object-cover border-4 border-white shadow-lg"
-            style={{ borderRadius: '25px' }}
+            className="w-24 h-24 rounded-full object-cover shadow-lg"
+            style={{ border: `3px solid ${template === 'Corporate' ? '#000000' : '#ffffff'}` }}
           />
         )}
         <div className="flex-1">
@@ -127,7 +131,8 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             {personalInfo.phone && <span>Phone: {personalInfo.phone}</span>}
             {personalInfo.email && <span>Email: {personalInfo.email}</span>}
             {personalInfo.linkedin && <span>LinkedIn: {personalInfo.linkedin}</span>}
-            {personalInfo.portfolio && <span>Portfolio/Website: {personalInfo.portfolio}</span>}
+            {personalInfo.portfolio && <span>Portfolio: {personalInfo.portfolio}</span>}
+            {personalInfo.website && <span>Website: {personalInfo.website}</span>}
             {personalInfo.address && <span>Address: {personalInfo.address}</span>}
           </div>
         </div>
