@@ -16,23 +16,28 @@ const Navigation = () => {
     // Check authentication status and fetch credits
     const checkAuthAndFetchCredits = async () => {
       const { data: { user } } = await supabase.auth.getUser();
+      console.log('Navigation - Current user:', user);
       
       if (user) {
         setIsAuthenticated(true);
         
         // Fetch user credits
-        const { data: profile } = await supabase
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('credits')
           .eq('id', user.id)
           .single();
         
+        console.log('Navigation - Profile data:', profile, 'Error:', error);
+        
         if (profile) {
           setUserCredits(profile.credits);
+          console.log('Navigation - Set credits to:', profile.credits);
         }
       } else {
         setIsAuthenticated(false);
         setUserCredits(null);
+        console.log('Navigation - No user, cleared credits');
       }
     };
 
@@ -40,6 +45,7 @@ const Navigation = () => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Navigation - Auth state change:', event, session?.user?.id);
       if (session?.user) {
         setIsAuthenticated(true);
         checkAuthAndFetchCredits();
