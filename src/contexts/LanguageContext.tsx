@@ -153,7 +153,7 @@ const translations: Translations = {
   'editor.theme': { th: 'สีธีม', en: 'Theme Color' },
   'editor.preview': { th: 'ตัวอย่าง', en: 'Preview' },
   'editor.aiEnhance': { th: 'ปรับปรุงด้วย AI', en: 'AI Enhance' },
-  'editor.jobMatch': { th: 'วิเคราะห์ Job Match', en: 'Job Match Analysis' },
+  'editor.jobMatch': { th: 'Job Match Analysis', en: 'Job Match Analysis' },
   'editor.translate': { th: 'แปลภาษา', en: 'Translate' },
   'editor.save': { th: 'บันทึก', en: 'Save' },
   'editor.download': { th: 'ดาวน์โหลด PDF', en: 'Download PDF' },
