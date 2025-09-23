@@ -205,6 +205,14 @@ const ResumeEditor = () => {
       }],
       education: [{
         id: '1',
+        degree: "Master of Business Administration (Marketing)",
+        institution: "Thammasat University",
+        location: "Bangkok, Thailand",
+        graduationYear: "2021",
+        gpa: "3.75",
+        projects: "Thesis: Digital Transformation in Thai SMEs - A Marketing Perspective"
+      }, {
+        id: '2',
         degree: "Bachelor of Business Administration (Marketing)",
         institution: "Chulalongkorn University",
         location: "Bangkok, Thailand",
