@@ -20,6 +20,9 @@ const translations: Translations = {
   'nav.getStarted': { th: 'Get Started', en: 'Get Started' },
   'nav.signOut': { th: 'ออกจากระบบ', en: 'Sign Out' },
   'nav.resumeEditor': { th: 'แก้ไขเรซูเม่', en: 'Resume Editor' },
+  'nav.features': { th: 'คุณสมบัติ', en: 'Features' },
+  'nav.pricing': { th: 'แผนราคา', en: 'Pricing' },
+  'nav.aboutUs': { th: 'เกี่ยวกับเรา', en: 'About Us' },
   
   // Hero Section
   'hero.title': { th: 'สร้างเรซูเม่ที่ผ่าน ATS ได้ง่าย', en: 'Create ATS-Friendly Resumes Easily' },

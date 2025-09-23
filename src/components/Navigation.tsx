@@ -60,13 +60,13 @@ const Navigation = () => {
     return () => subscription.unsubscribe();
   }, []);
   const navLinks = [{
-    name: "Features",
+    name: t('nav.features'),
     href: "#features"
   }, {
-    name: "Pricing", 
+    name: t('nav.pricing'), 
     href: "/pricing"
   }, {
-    name: "About Us",
+    name: t('nav.aboutUs'),
     href: "#about"
   }, ...(isAuthenticated ? [{
     name: t('nav.resumeEditor'),

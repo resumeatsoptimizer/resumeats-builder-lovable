@@ -45,7 +45,7 @@ const HeroSection = () => {
                 className="text-lg px-8 py-6 rounded-xl"
                 asChild
               >
-                <Link to="/auth">
+                <Link to="/resume-editor">
                   <Zap className="mr-2 h-5 w-5" />
                   {t('hero.cta')}
                 </Link>
