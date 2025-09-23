@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
+import { QRCodeGenerator } from '@/components/QRCodeGenerator';
+import { PDFGenerator } from '@/components/PDFGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -54,6 +56,7 @@ interface ResumeData {
 const ResumeEditor = () => {
   const { toast } = useToast();
   const [templateName, setTemplateName] = useState('Professional');
+  const [resumeId, setResumeId] = useState<string | null>(null);
   
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -170,15 +173,22 @@ const ResumeEditor = () => {
         return;
       }
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('resumes')
         .upsert({
           user_id: user.id,
           template_name: templateName,
           resume_data: resumeData as any
-        } as any);
+        } as any)
+        .select('id')
+        .single();
 
       if (error) throw error;
+
+      // Set the resume ID for QR code and PDF generation
+      if (data?.id) {
+        setResumeId(data.id);
+      }
 
       toast({
         title: "Success",
@@ -478,10 +488,36 @@ const ResumeEditor = () => {
         
         <ResizablePanel defaultSize={50} minSize={30}>
           <div className="p-6 h-full overflow-y-auto bg-muted/30">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold text-foreground">Live Preview</h2>
-              <p className="text-sm text-muted-foreground">Template: {templateName}</p>
+            <div className="mb-4 flex justify-between items-start">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">Live Preview</h2>
+                <p className="text-sm text-muted-foreground">Template: {templateName}</p>
+              </div>
+              
+              {/* PDF and QR Code Controls */}
+              <div className="flex flex-col gap-3 min-w-[200px]">
+                {resumeId && (
+                  <>
+                    <PDFGenerator 
+                      resumeId={resumeId} 
+                      resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} 
+                    />
+                    <QRCodeGenerator 
+                      resumeId={resumeId}
+                      resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+                    />
+                  </>
+                )}
+                {!resumeId && (
+                  <div className="text-center p-4 border border-dashed rounded-lg">
+                    <p className="text-sm text-muted-foreground">
+                      Save your resume first to enable PDF download and QR code sharing
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
+            
             <div className="bg-white shadow-lg rounded-lg">
               <ResumeTemplate data={resumeData} template={templateName} />
             </div>
