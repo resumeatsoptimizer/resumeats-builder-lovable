@@ -14,7 +14,7 @@ import { PDFGenerator } from '@/components/PDFGenerator';
 import LanguageSelection from '@/components/LanguageSelection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages } from 'lucide-react';
+import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 import { useNavigate } from 'react-router-dom';
 
@@ -151,6 +151,65 @@ const ResumeEditor = () => {
     reader.readAsDataURL(file);
   };
 
+  const generateSampleData = () => {
+    setResumeData({
+      personalInfo: {
+        fullName: "สมชาย ใจดี",
+        phone: "+66 81 234 5678",
+        email: "somchai.jaidee@email.com",
+        linkedin: "linkedin.com/in/somchai-jaidee",
+        portfolio: "somchai-portfolio.com"
+      },
+      summary: "Digital Marketing Specialist with 5+ years of experience in developing and executing successful digital marketing campaigns. Proven track record of increasing brand awareness and driving sales growth through strategic use of SEO, SEM, and social media marketing.",
+      skills: ["Digital Marketing", "Google Analytics", "SEO/SEM", "Social Media Marketing", "Content Marketing", "Google Ads", "Facebook Ads", "Data Analysis"],
+      workExperience: [{
+        id: '1',
+        position: "Senior Digital Marketing Specialist",
+        company: "ABC Company Ltd.",
+        location: "Bangkok, Thailand",
+        startDate: "Jan 2021",
+        endDate: "Present",
+        description: [
+          "• Increased organic website traffic by 150% through SEO optimization",
+          "• Managed Google Ads campaigns with ROI of 300%",
+          "• Led social media strategy resulting in 200% follower growth"
+        ]
+      }, {
+        id: '2',
+        position: "Marketing Coordinator",
+        company: "XYZ Marketing Agency",
+        location: "Bangkok, Thailand",
+        startDate: "Jun 2019",
+        endDate: "Dec 2020",
+        description: [
+          "• Coordinated marketing campaigns across multiple channels",
+          "• Analyzed campaign performance using Google Analytics",
+          "• Created content for social media platforms"
+        ]
+      }],
+      education: [{
+        id: '1',
+        degree: "Bachelor of Business Administration (Marketing)",
+        institution: "Chulalongkorn University",
+        location: "Bangkok, Thailand",
+        graduationYear: "2019",
+        gpa: "3.65",
+        projects: "Senior Project: Digital Marketing Strategy for SMEs"
+      }],
+      certifications: [
+        "• Google Ads Certified",
+        "• Google Analytics Individual Qualification (IQ)",
+        "• Facebook Blueprint Certified",
+        "• HubSpot Inbound Marketing Certified"
+      ],
+      awards: [
+        "• Best Digital Campaign Award - Marketing Excellence 2023",
+        "• Top Performer of the Quarter - Q3 2023",
+        "• Outstanding Achievement in SEO - Company Awards 2022"
+      ]
+    });
+  };
+
   const addWorkExperience = () => {
     setResumeData(prev => ({
       ...prev,
@@ -163,6 +222,13 @@ const ResumeEditor = () => {
         endDate: '',
         description: ['']
       }]
+    }));
+  };
+
+  const deleteWorkExperience = (id: string) => {
+    setResumeData(prev => ({
+      ...prev,
+      workExperience: prev.workExperience.filter(exp => exp.id !== id)
     }));
   };
 
@@ -187,6 +253,13 @@ const ResumeEditor = () => {
         gpa: '',
         projects: ''
       }]
+    }));
+  };
+
+  const deleteEducation = (id: string) => {
+    setResumeData(prev => ({
+      ...prev,
+      education: prev.education.filter(edu => edu.id !== id)
     }));
   };
 
@@ -264,6 +337,54 @@ const ResumeEditor = () => {
             <h1 className="text-2xl font-bold text-foreground">Resume Editor</h1>
           </div>
           <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              onClick={generateSampleData}
+              className="flex items-center gap-2"
+            >
+              <FileText className="w-4 h-4" />
+              Generate Sample
+            </Button>
+            
+            {/* Template & Theme */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Label className="text-sm">Template:</Label>
+                <Select value={templateName} onValueChange={setTemplateName}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Professional">Professional</SelectItem>
+                    <SelectItem value="Creative">Creative</SelectItem>
+                    <SelectItem value="Corporate">Corporate</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Label className="text-sm">Theme:</Label>
+                <div className="relative">
+                  <div 
+                    className="w-8 h-8 rounded-md border cursor-pointer"
+                    style={{ backgroundColor: themeColor }}
+                    onClick={() => setShowColorPicker(!showColorPicker)}
+                  />
+                  {showColorPicker && (
+                    <div className="absolute z-10 mt-2 right-0">
+                      <div 
+                        className="fixed inset-0" 
+                        onClick={() => setShowColorPicker(false)}
+                      />
+                      <div className="bg-white p-3 rounded-lg shadow-lg border">
+                        <HexColorPicker color={themeColor} onChange={setThemeColor} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            
             <div className="flex items-center space-x-2">
               <Switch
                 id="public-resume"
@@ -281,9 +402,8 @@ const ResumeEditor = () => {
       </div>
 
       <div className="container mx-auto px-4 py-6">
-        {/* Quick Actions Cards Above Preview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          {/* Quick Actions */}
+        {/* Quick Actions Card Above Preview */}
+        <div className="grid grid-cols-1 gap-4 mb-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -291,7 +411,7 @@ const ResumeEditor = () => {
                 Quick Actions
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="flex gap-3">
               <PDFGenerator 
                 resumeId={resumeId || ''}
                 resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
@@ -300,72 +420,10 @@ const ResumeEditor = () => {
                 resumeId={resumeId || ''}
                 resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
               />
-              <Button variant="outline" className="w-full flex items-center gap-2">
+              <Button variant="outline" className="flex items-center gap-2">
                 <Share2 className="w-4 h-4" />
                 Share Resume
               </Button>
-            </CardContent>
-          </Card>
-
-          {/* Template & Theme */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Template & Theme</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label>Template</Label>
-                <Select value={templateName} onValueChange={setTemplateName}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select template" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Professional">Professional</SelectItem>
-                    <SelectItem value="Creative">Creative</SelectItem>
-                    <SelectItem value="Corporate">Corporate</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div>
-                <Label>Color Theme</Label>
-                <div className="relative">
-                  <div 
-                    className="w-full h-10 rounded-md border cursor-pointer flex items-center px-3"
-                    style={{ backgroundColor: themeColor }}
-                    onClick={() => setShowColorPicker(!showColorPicker)}
-                  >
-                    <span className="text-white font-medium">{themeColor}</span>
-                  </div>
-                  {showColorPicker && (
-                    <div className="absolute z-10 mt-2">
-                      <div 
-                        className="fixed inset-0" 
-                        onClick={() => setShowColorPicker(false)}
-                      />
-                      <div className="bg-white p-3 rounded-lg shadow-lg border">
-                        <HexColorPicker color={themeColor} onChange={setThemeColor} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Language Translation */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Languages className="w-4 h-4" />
-                แปลภาษา
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <LanguageSelection 
-                resumeData={resumeData}
-                onResumeUpdate={handleResumeUpdate}
-              />
             </CardContent>
           </Card>
         </div>
@@ -497,28 +555,30 @@ const ResumeEditor = () => {
                 {/* Skills */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Skills</CardTitle>
+                    <CardTitle className="flex justify-between items-center">
+                      Skills
+                      <div className="flex gap-2">
+                        <Input
+                          value={newSkill}
+                          onChange={(e) => setNewSkill(e.target.value)}
+                          placeholder="เพิ่มทักษะ"
+                          className="w-48"
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              addSkill();
+                            }
+                          }}
+                        />
+                        <Button type="button" onClick={addSkill} size="sm">
+                          <Plus className="w-4 h-4" />
+                          Add Skill
+                        </Button>
+                      </div>
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex gap-2">
-                      <Input
-                        value={newSkill}
-                        onChange={(e) => setNewSkill(e.target.value)}
-                        placeholder="เพิ่มทักษะ เช่น Digital Marketing, Google Analytics"
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault();
-                            addSkill();
-                          }
-                        }}
-                      />
-                      <Button type="button" onClick={addSkill} size="sm">
-                        <Plus className="w-4 h-4" />
-                        Add Skill
-                      </Button>
-                    </div>
-                    
-                    {resumeData.skills.length > 0 && (
+                  <CardContent>
+                    {resumeData.skills.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
                         {resumeData.skills.map((skill, index) => (
                           <Badge key={index} variant="secondary" className="flex items-center gap-1">
@@ -535,25 +595,9 @@ const ResumeEditor = () => {
                           </Badge>
                         ))}
                       </div>
+                    ) : (
+                      <p className="text-muted-foreground text-sm">ยังไม่มีทักษะที่เพิ่ม กรุณาเพิ่มทักษะของคุณ</p>
                     )}
-                    
-                    <div className="text-sm text-muted-foreground">
-                      <p className="font-medium mb-1">แนะนำทักษะ:</p>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <span className="font-medium">Digital Marketing:</span> SEO, SEM, Content Marketing, Social Media Marketing
-                        </div>
-                        <div>
-                          <span className="font-medium">Analytics:</span> Google Analytics, Data Analysis, A/B Testing
-                        </div>
-                        <div>
-                          <span className="font-medium">Tools:</span> Google Ads, Facebook Ads Manager, HubSpot
-                        </div>
-                        <div>
-                          <span className="font-medium">Soft Skills:</span> Strategic Planning, Project Management, Team Leadership
-                        </div>
-                      </div>
-                    </div>
                   </CardContent>
                 </Card>
 
@@ -570,6 +614,20 @@ const ResumeEditor = () => {
                   <CardContent className="space-y-6">
                     {resumeData.workExperience.map((exp, index) => (
                       <div key={exp.id} className="space-y-4 p-4 border rounded-md">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-medium">Experience #{index + 1}</h4>
+                          {resumeData.workExperience.length > 1 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => deleteWorkExperience(exp.id)}
+                              className="flex items-center gap-1 text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Delete
+                            </Button>
+                          )}
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <Label>Position</Label>
@@ -641,6 +699,20 @@ const ResumeEditor = () => {
                   <CardContent className="space-y-6">
                     {resumeData.education.map((edu, index) => (
                       <div key={edu.id} className="space-y-4 p-4 border rounded-md">
+                        <div className="flex justify-between items-start mb-4">
+                          <h4 className="font-medium">Education #{index + 1}</h4>
+                          {resumeData.education.length > 1 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => deleteEducation(edu.id)}
+                              className="flex items-center gap-1 text-destructive"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Delete
+                            </Button>
+                          )}
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
                             <Label>Degree</Label>
@@ -725,6 +797,22 @@ const ResumeEditor = () => {
                       onChange={(e) => setResumeData(prev => ({ ...prev, awards: e.target.value.split('\n') }))}
                       placeholder="• Top Performer of the Year 2023&#10;• Best Campaign Award - Digital Marketing Conference 2022"
                       rows={4}
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* Language Translation */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Languages className="w-4 h-4" />
+                      แปลภาษา
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <LanguageSelection 
+                      resumeData={resumeData}
+                      onResumeUpdate={handleResumeUpdate}
                     />
                   </CardContent>
                 </Card>
