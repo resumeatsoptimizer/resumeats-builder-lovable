@@ -11,7 +11,7 @@ const Navigation = () => {
 
   const navLinks = [
     { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
+    { name: "Pricing", href: "/pricing" },
     { name: "About Us", href: "#about" },
     { name: "Resume Editor", href: "/resume-editor" },
   ];
