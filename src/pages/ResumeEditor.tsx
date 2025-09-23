@@ -823,6 +823,9 @@ const ResumeEditor = () => {
           
           <ResizablePanel defaultSize={50} minSize={30}>
             <div className="p-6 h-full overflow-y-auto bg-gray-50">
+              <div className="mb-4">
+                <h2 className="text-xl font-bold text-center text-foreground">LIVE Preview</h2>
+              </div>
               <div className="bg-white rounded-lg shadow-sm min-h-full">
                 <ResumeTemplate 
                   data={resumeData} 

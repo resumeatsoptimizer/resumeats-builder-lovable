@@ -47,77 +47,57 @@ interface ResumeTemplateProps {
 export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeTemplateProps) => {
   const { personalInfo, summary, skills, workExperience, education, certifications, awards } = data;
 
-  // Get theme color classes
+  // Get theme color styles using hex color
   const getThemeColors = () => {
-    switch (themeColor) {
-      case 'blue':
-        return {
-          header: 'from-blue-600 to-blue-800',
-          section: 'text-blue-700 border-blue-700',
-          accent: 'text-blue-700'
-        };
-      case 'emerald':
-        return {
-          header: 'from-emerald-600 to-emerald-800',
-          section: 'text-emerald-700 border-emerald-700',
-          accent: 'text-emerald-700'
-        };
-      case 'violet':
-        return {
-          header: 'from-violet-600 to-violet-800',
-          section: 'text-violet-700 border-violet-700',
-          accent: 'text-violet-700'
-        };
-      case 'rose':
-        return {
-          header: 'from-rose-600 to-rose-800',
-          section: 'text-rose-700 border-rose-700',
-          accent: 'text-rose-700'
-        };
-      default: // slate
-        return {
-          header: 'from-slate-600 to-slate-800',
-          section: 'text-slate-700 border-slate-700',
-          accent: 'text-slate-700'
-        };
-    }
+    const hexColor = themeColor?.startsWith('#') ? themeColor : '#64748b'; // default to slate
+    return {
+      headerStyle: {
+        background: `linear-gradient(135deg, ${hexColor}dd, ${hexColor})`
+      },
+      accentStyle: {
+        color: hexColor,
+        borderColor: hexColor
+      }
+    };
   };
 
-  // Professional template styling
-  const getTemplateStyles = () => {
-    const colors = getThemeColors();
-    
+  // Template layout styling (templates change layout, not colors)
+  const getTemplateStyles = () => {    
     switch (template) {
       case 'Creative':
         return {
-          headerBg: `bg-gradient-to-r ${colors.header}`,
-          headerText: 'text-white',
-          sectionTitle: `${colors.section} border-b-2`,
-          accentColor: colors.accent
+          layout: 'creative',
+          headerPadding: 'p-10',
+          sectionSpacing: 'space-y-8',
+          nameSize: 'text-5xl'
         };
       case 'Corporate':
         return {
-          headerBg: 'bg-gray-800',
-          headerText: 'text-white',
-          sectionTitle: 'text-gray-800 border-b-2 border-gray-800',
-          accentColor: 'text-gray-800'
+          layout: 'corporate',
+          headerPadding: 'p-6',
+          sectionSpacing: 'space-y-6',
+          nameSize: 'text-3xl'
         };
       default: // Professional
         return {
-          headerBg: `bg-gradient-to-r ${colors.header}`,
-          headerText: 'text-white',
-          sectionTitle: `${colors.section} border-b-2`,
-          accentColor: colors.accent
+          layout: 'professional',
+          headerPadding: 'p-8',
+          sectionSpacing: 'space-y-6',
+          nameSize: 'text-4xl'
         };
     }
   };
 
   const styles = getTemplateStyles();
+  const colors = getThemeColors();
 
   return (
     <div className="max-w-4xl mx-auto bg-white text-black text-sm leading-relaxed">
       {/* Header */}
-      <div className={`${styles.headerBg} ${styles.headerText} p-8 flex items-center gap-6`}>
+      <div 
+        className={`text-white ${styles.headerPadding} flex items-center gap-6`}
+        style={colors.headerStyle}
+      >
         {personalInfo.profileImage && (
           <img
             src={personalInfo.profileImage}
@@ -126,7 +106,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           />
         )}
         <div className="flex-1">
-          <h1 className="text-4xl font-bold mb-3">{personalInfo.fullName || 'Your Name'}</h1>
+          <h1 className={`${styles.nameSize} font-bold mb-3`}>{personalInfo.fullName || 'Your Name'}</h1>
           <div className="grid grid-cols-2 gap-2 text-sm opacity-95">
             {personalInfo.phone && <span>📞 {personalInfo.phone}</span>}
             {personalInfo.email && <span>✉️ {personalInfo.email}</span>}
@@ -136,11 +116,11 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className={`p-6 ${styles.sectionSpacing}`}>
         {/* Professional Summary */}
         {summary && (
           <section>
-            <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
+            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
               PROFESSIONAL SUMMARY
             </h2>
             <p className="text-justify">{summary}</p>
@@ -150,14 +130,15 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
         {/* Skills */}
         {skills.length > 0 && (
           <section>
-            <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
+            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
               SKILLS
             </h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill, index) => (
                 <span
                   key={index}
-                  className={`px-3 py-1 text-xs font-medium rounded-full border ${styles.accentColor} bg-gray-50`}
+                  className="px-3 py-1 text-xs font-medium rounded-full border bg-gray-50"
+                  style={colors.accentStyle}
                 >
                   {skill}
                 </span>
@@ -169,7 +150,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
         {/* Work Experience */}
         {workExperience.length > 0 && workExperience[0].position && (
           <section>
-            <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
+            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
               WORK EXPERIENCE
             </h2>
             <div className="space-y-4">
@@ -179,7 +160,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
                     <>
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h3 className={`font-bold ${styles.accentColor}`}>
+                          <h3 className="font-bold" style={colors.accentStyle}>
                             {exp.position} | {exp.company}
                           </h3>
                           <p className="text-gray-600">{exp.location}</p>
@@ -210,7 +191,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
         {/* Education */}
         {education.length > 0 && education[0].degree && (
           <section>
-            <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
+            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
               EDUCATION
             </h2>
             <div className="space-y-3">
@@ -220,7 +201,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
                     <>
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className={`font-bold ${styles.accentColor}`}>
+                          <h3 className="font-bold" style={colors.accentStyle}>
                             {edu.degree}
                           </h3>
                           <p>{edu.institution} | {edu.location}</p>
@@ -242,7 +223,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
         {/* Certifications */}
         {certifications.length > 0 && certifications[0] && (
           <section>
-            <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
+            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
               CERTIFICATIONS
             </h2>
             <ul className="space-y-1 ml-4">
@@ -260,7 +241,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
         {/* Awards */}
         {awards.length > 0 && awards[0] && (
           <section>
-            <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
+            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
               AWARDS AND RECOGNITION
             </h2>
             <ul className="space-y-1 ml-4">
