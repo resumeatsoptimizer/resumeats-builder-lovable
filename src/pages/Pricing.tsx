@@ -29,13 +29,13 @@ const Pricing: React.FC = () => {
     {
       name: t('pricing.premium'),
       price: '฿199',
-      credits: 60,
+      credits: 75,
       priceId: 'price_1SATl1CfUrZVjQTCXz7crofs',
       popular: true,
       features: [
-        `60 ${t('feature.aiPowered.title')} uses`,
-        `30 ${t('feature.match.title')}`,
-        `20 ${t('feature.translation.title')}`,
+        `75 ${t('feature.aiPowered.title')} uses`,
+        `37 ${t('feature.match.title')}`,
+        `25 ${t('feature.translation.title')}`,
         t('pricing.features.validMonths').replace('{months}', '12'),
         t('pricing.features.bestValue')
       ]
