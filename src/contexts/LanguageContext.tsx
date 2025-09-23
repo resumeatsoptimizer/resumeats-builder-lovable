@@ -90,7 +90,7 @@ const translations: Translations = {
   
   // Credit usage
   'pricing.creditUsage': { th: 'การใช้เครดิต', en: 'Credit Usage' },
-  'pricing.enhancement': { th: 'Enhancement', en: 'Enhancement' },
+  'pricing.enhancement': { th: 'AI Enhancement', en: 'AI Enhancement' },
   'pricing.enhancementCredit': { th: '1 เครดิต ต่อการปรับปรุง', en: '1 credit per enhancement' },
   'pricing.jobMatchCredit': { th: '2 เครดิต ต่อการวิเคราะห์', en: '2 credits per analysis' },
   'pricing.translationCredit': { th: '3 เครดิต ต่อการแปลเรซูเม่', en: '3 credits per resume translation' },
