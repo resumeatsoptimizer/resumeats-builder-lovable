@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,7 +14,7 @@ import { PDFGenerator } from '@/components/PDFGenerator';
 import LanguageSelection from '@/components/LanguageSelection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target, Coins } from 'lucide-react';
+import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 import { useNavigate } from 'react-router-dom';
 interface WorkExperience {
@@ -65,7 +65,6 @@ const ResumeEditor = () => {
   const [jobDescription, setJobDescription] = useState('');
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [userCredits, setUserCredits] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -402,30 +401,6 @@ const ResumeEditor = () => {
   const handleResumeUpdate = (updatedData: ResumeData) => {
     setResumeData(updatedData);
   };
-
-  // Fetch user credits
-  const fetchUserCredits = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('credits')
-          .eq('id', user.id)
-          .single();
-        
-        if (error) throw error;
-        setUserCredits(data?.credits || 0);
-      }
-    } catch (error) {
-      console.error('Error fetching user credits:', error);
-    }
-  };
-
-  // Fetch credits on component mount
-  useEffect(() => {
-    fetchUserCredits();
-  }, []);
   return <div className="min-h-screen bg-background">
       <div className="border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -437,13 +412,6 @@ const ResumeEditor = () => {
             <h1 className="text-2xl font-bold text-foreground">Resume Editor</h1>
           </div>
           <div className="flex items-center gap-4">
-            {/* Credits Display */}
-            <div className="flex items-center gap-2 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 px-4 py-2 rounded-full border border-yellow-200 dark:border-yellow-800">
-              <Coins className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
-              <span className="font-semibold text-yellow-800 dark:text-yellow-200">
-                {userCredits} Credits
-              </span>
-            </div>
             
             {/* Template & Theme */}
             <div className="flex items-center gap-4">
