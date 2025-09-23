@@ -2,9 +2,29 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { FileText, Star, Zap, CheckCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const HeroSection = () => {
   const { t } = useLanguage();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check initial auth state
+    const checkAuthState = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsAuthenticated(!!user);
+    };
+
+    checkAuthState();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session?.user);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <section className="bg-background py-20 lg:py-28">
@@ -45,7 +65,7 @@ const HeroSection = () => {
                 className="text-lg px-8 py-6 rounded-xl"
                 asChild
               >
-                <Link to="/resume-editor">
+                <Link to={isAuthenticated ? "/resume-editor" : "/auth"}>
                   <Zap className="mr-2 h-5 w-5" />
                   {t('hero.cta')}
                 </Link>
