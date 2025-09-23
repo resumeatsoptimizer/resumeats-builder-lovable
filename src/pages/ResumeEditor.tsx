@@ -155,6 +155,24 @@ const ResumeEditor = () => {
     };
     reader.readAsDataURL(file);
   };
+
+  const handleDeleteProfileImage = () => {
+    setResumeData(prev => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        profileImage: undefined
+      }
+    }));
+    // Clear the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    toast({
+      title: "รูปโปรไฟล์ถูกลบแล้ว",
+      description: "รูปโปรไฟล์ของคุณถูกลบเรียบร้อยแล้ว"
+    });
+  };
   const generateSampleData = () => {
     setResumeData({
       personalInfo: {
@@ -554,7 +572,7 @@ const ResumeEditor = () => {
             <ResizablePanel defaultSize={50} minSize={30}>
               <div className="p-6 h-full overflow-y-auto">
                 <div className="space-y-6">
-                {/* Profile Photo Upload */}
+                 {/* Profile Photo Upload */}
                 <Card>
                   <CardHeader>
                     <CardTitle>Profile Photo</CardTitle>
@@ -571,6 +589,12 @@ const ResumeEditor = () => {
                           <Upload className="w-4 h-4" />
                           อัพโหลดรูปภาพ
                         </Button>
+                        {resumeData.personalInfo.profileImage && (
+                          <Button type="button" variant="outline" onClick={handleDeleteProfileImage} className="flex items-center gap-2 text-destructive hover:text-destructive">
+                            <Trash2 className="w-4 h-4" />
+                            ลบรูปภาพ
+                          </Button>
+                        )}
                         <p className="text-xs text-muted-foreground">
                           รองรับไฟล์ JPG, PNG (สูงสุด 2MB)
                         </p>
@@ -905,8 +929,7 @@ const ResumeEditor = () => {
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-foreground">Edit Resume</h2>
               <div className="space-y-6">
-                {/* Mobile form content - responsive version */}
-                {/* Profile Photo Upload */}
+                 {/* Profile Photo Upload */}
                 <Card>
                   <CardHeader>
                     <CardTitle>Profile Photo</CardTitle>
@@ -923,6 +946,12 @@ const ResumeEditor = () => {
                           <Upload className="w-4 h-4" />
                           อัพโหลดรูปภาพ
                         </Button>
+                        {resumeData.personalInfo.profileImage && (
+                          <Button type="button" variant="outline" onClick={handleDeleteProfileImage} className="flex items-center gap-2 text-destructive hover:text-destructive">
+                            <Trash2 className="w-4 h-4" />
+                            ลบรูปภาพ
+                          </Button>
+                        )}
                         <p className="text-xs text-muted-foreground">
                           รองรับไฟล์ JPG, PNG (สูงสุด 2MB)
                         </p>
