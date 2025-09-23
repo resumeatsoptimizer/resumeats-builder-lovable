@@ -702,22 +702,6 @@ const ResumeEditor = () => {
                   </CardContent>
                 </Card>
 
-                {/* Language Translation */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Languages className="w-4 h-4" />
-                      Language Translation
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      การแปลจะใช้ 3 เครดิต ต่อ 1 ภาษา และอาจใช้เวลาสักครู่
-                    </p>
-                    <LanguageSelection resumeData={resumeData} onResumeUpdate={handleResumeUpdate} />
-                  </CardContent>
-                </Card>
-
                 {/* AI-Powered Enhancement */}
                 <Card>
                   <CardHeader>
@@ -754,6 +738,22 @@ const ResumeEditor = () => {
                     </Button>
                   </CardContent>
                 </Card>
+
+                {/* Language Translation */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Languages className="w-4 h-4" />
+                      Language Translation
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      การแปลจะใช้ 3 เครดิต ต่อ 1 ภาษา และอาจใช้เวลาสักครู่
+                    </p>
+                    <LanguageSelection resumeData={resumeData} onResumeUpdate={handleResumeUpdate} />
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </ResizablePanel>
@@ -765,7 +765,7 @@ const ResumeEditor = () => {
               <div className="mb-4">
                 <h2 className="text-xl font-bold text-center text-foreground">LIVE Preview</h2>
               </div>
-              <div className="bg-white rounded-lg shadow-sm min-h-full">
+              <div className="bg-white rounded-lg shadow-sm">
                 <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
               </div>
               
