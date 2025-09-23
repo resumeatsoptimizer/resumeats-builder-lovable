@@ -117,17 +117,18 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           <img
             src={personalInfo.profileImage}
             alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+            className="w-24 h-24 object-cover border-4 border-white shadow-lg"
+            style={{ borderRadius: '25px' }}
           />
         )}
         <div className="flex-1">
           <h1 className={`${styles.nameSize} font-bold mb-3`}>{personalInfo.fullName || 'Your Name'}</h1>
-          <div className="grid grid-cols-2 gap-2 text-sm opacity-95">
+          <div className="flex flex-col gap-1 text-sm opacity-95">
             {personalInfo.phone && <span>Phone: {personalInfo.phone}</span>}
             {personalInfo.email && <span>Email: {personalInfo.email}</span>}
             {personalInfo.linkedin && <span>LinkedIn: {personalInfo.linkedin}</span>}
             {personalInfo.portfolio && <span>Portfolio/Website: {personalInfo.portfolio}</span>}
-            {personalInfo.address && <span className="col-span-2">Address: {personalInfo.address}</span>}
+            {personalInfo.address && <span>Address: {personalInfo.address}</span>}
           </div>
         </div>
       </div>
