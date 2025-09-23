@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { FileText, Star, Zap, CheckCircle } from "lucide-react";
 
 const HeroSection = () => {
@@ -41,13 +42,12 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="text-lg px-8 py-6 rounded-xl"
-                onClick={() => {
-                  // TODO: Navigate to registration page
-                  console.log("Navigate to registration");
-                }}
+                asChild
               >
-                <Zap className="mr-2 h-5 w-5" />
-                สร้างเรซูเม่ของคุณฟรี!
+                <Link to="/auth">
+                  <Zap className="mr-2 h-5 w-5" />
+                  สร้างเรซูเม่ของคุณฟรี!
+                </Link>
               </Button>
             </div>
 

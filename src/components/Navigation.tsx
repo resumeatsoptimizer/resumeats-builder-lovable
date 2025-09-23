@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,9 +21,9 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-foreground">
+            <Link to="/" className="text-xl font-bold text-foreground">
               ResumeATS-Builder
-            </h1>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -42,11 +43,11 @@ const Navigation = () => {
 
             {/* Auth Buttons */}
             <div className="flex space-x-3">
-              <Button variant="outline" size="sm">
-                Log In
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/auth">Log In</Link>
               </Button>
-              <Button size="sm">
-                Sign Up
+              <Button size="sm" asChild>
+                <Link to="/auth">Sign Up</Link>
               </Button>
             </div>
           </div>
@@ -90,11 +91,11 @@ const Navigation = () => {
 
             {/* Mobile Auth Buttons */}
             <div className="flex flex-col space-y-2 px-3 pt-4">
-              <Button variant="outline" size="sm" className="w-full">
-                Log In
+              <Button variant="outline" size="sm" className="w-full" asChild>
+                <Link to="/auth">Log In</Link>
               </Button>
-              <Button size="sm" className="w-full">
-                Sign Up
+              <Button size="sm" className="w-full" asChild>
+                <Link to="/auth">Sign Up</Link>
               </Button>
             </div>
           </div>
