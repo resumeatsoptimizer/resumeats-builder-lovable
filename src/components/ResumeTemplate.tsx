@@ -117,154 +117,319 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
       </div>
 
       <div className={`p-6 ${styles.sectionSpacing}`}>
-        {/* Professional Summary */}
-        {summary && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              PROFESSIONAL SUMMARY
-            </h2>
-            <p className="text-justify">{summary}</p>
-          </section>
-        )}
+        {template === 'Creative' ? (
+          // Creative Template: 2-column layout
+          <>
+            {/* Row 1: Professional Summary + Skills */}
+            {(summary || skills.length > 0) && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                {/* Professional Summary */}
+                {summary && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      PROFESSIONAL SUMMARY
+                    </h2>
+                    <p className="text-justify">{summary}</p>
+                  </section>
+                )}
 
-        {/* Skills */}
-        {skills.length > 0 && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              SKILLS
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 text-xs font-medium rounded-full border bg-gray-50"
-                  style={colors.accentStyle}
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </section>
-        )}
+                {/* Skills */}
+                {skills.length > 0 && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      SKILLS
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {skills.map((skill, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 text-xs font-medium rounded-full border bg-gray-50"
+                          style={colors.accentStyle}
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </div>
+            )}
 
-        {/* Work Experience */}
-        {workExperience.length > 0 && workExperience[0].position && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              WORK EXPERIENCE
-            </h2>
-            <div className="space-y-4">
-              {workExperience.map((exp) => (
-                <div key={exp.id}>
-                  {exp.position && (
-                    <>
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h3 className="font-bold" style={colors.accentStyle}>
-                            {exp.position} | {exp.company}
-                          </h3>
-                          <p className="text-gray-600">{exp.location}</p>
-                        </div>
-                        <div className="text-right text-gray-600">
-                          <p>{exp.startDate} – {exp.endDate}</p>
-                        </div>
-                      </div>
-                      {exp.description.length > 0 && exp.description[0] && (
-                        <ul className="space-y-1 ml-4">
-                          {exp.description.map((desc, index) => (
-                            desc.trim() && (
-                              <li key={index} className="list-disc">
-                                {desc.trim()}
-                              </li>
-                            )
-                          ))}
-                        </ul>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Education */}
-        {education.length > 0 && education[0].degree && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              EDUCATION
-            </h2>
-            <div className="space-y-3">
-              {education.map((edu) => (
-                <div key={edu.id}>
-                  {edu.degree && (
-                    <>
-                      <div className="flex justify-between items-start">
-                        <div>
-                           <h3 className="font-bold" style={colors.accentStyle}>
-                            {edu.degree}
-                          </h3>
-                          <p>{edu.institution} | {edu.location} {edu.gpa && `| GPA: ${edu.gpa}`}</p>
-                          {edu.projects && (
-                            <div className="mt-2">
-                              <ul className="space-y-1 ml-4">
-                                {edu.projects.split('\n').map((project, idx) => (
-                                  project.trim() && (
-                                    <li key={idx} className="list-disc text-gray-600">
-                                      {project.trim()}
-                                    </li>
-                                  )
-                                ))}
-                              </ul>
-                            </div>
+            {/* Row 2: Work Experience + Education */}
+            {((workExperience.length > 0 && workExperience[0].position) || (education.length > 0 && education[0].degree)) && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                {/* Work Experience */}
+                {workExperience.length > 0 && workExperience[0].position && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      WORK EXPERIENCE
+                    </h2>
+                    <div className="space-y-4">
+                      {workExperience.map((exp) => (
+                        <div key={exp.id}>
+                          {exp.position && (
+                            <>
+                              <div className="mb-2">
+                                <h3 className="font-bold" style={colors.accentStyle}>
+                                  {exp.position} | {exp.company}
+                                </h3>
+                                <p className="text-gray-600 text-xs">{exp.location}</p>
+                                <p className="text-gray-600 text-xs">{exp.startDate} – {exp.endDate}</p>
+                              </div>
+                              {exp.description.length > 0 && exp.description[0] && (
+                                <ul className="space-y-1 ml-4">
+                                  {exp.description.map((desc, index) => (
+                                    desc.trim() && (
+                                      <li key={index} className="list-disc text-xs">
+                                        {desc.trim()}
+                                      </li>
+                                    )
+                                  ))}
+                                </ul>
+                              )}
+                            </>
                           )}
                         </div>
-                        <div className="text-gray-600">
-                          <p>{edu.graduationYear}</p>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* Education */}
+                {education.length > 0 && education[0].degree && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      EDUCATION
+                    </h2>
+                    <div className="space-y-3">
+                      {education.map((edu) => (
+                        <div key={edu.id}>
+                          {edu.degree && (
+                            <>
+                              <div>
+                                <h3 className="font-bold" style={colors.accentStyle}>
+                                  {edu.degree}
+                                </h3>
+                                <p className="text-xs">{edu.institution} | {edu.location} {edu.gpa && `| GPA: ${edu.gpa}`}</p>
+                                <p className="text-gray-600 text-xs">{edu.graduationYear}</p>
+                                {edu.projects && (
+                                  <div className="mt-2">
+                                    <ul className="space-y-1 ml-4">
+                                      {edu.projects.split('\n').map((project, idx) => (
+                                        project.trim() && (
+                                          <li key={idx} className="list-disc text-gray-600 text-xs">
+                                            {project.trim()}
+                                          </li>
+                                        )
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          )}
                         </div>
-                      </div>
-                    </>
-                  )}
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </div>
+            )}
+
+            {/* Row 3: Certifications + Awards */}
+            {((certifications.length > 0 && certifications[0]) || (awards.length > 0 && awards[0])) && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Certifications */}
+                {certifications.length > 0 && certifications[0] && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      CERTIFICATIONS
+                    </h2>
+                    <ul className="space-y-1 ml-4">
+                      {certifications.map((cert, index) => (
+                        cert.trim() && (
+                          <li key={index} className="list-disc text-xs">
+                            {cert.trim()}
+                          </li>
+                        )
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {/* Awards */}
+                {awards.length > 0 && awards[0] && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      AWARDS AND RECOGNITION
+                    </h2>
+                    <ul className="space-y-1 ml-4">
+                      {awards.map((award, index) => (
+                        award.trim() && (
+                          <li key={index} className="list-disc text-xs">
+                            {award.trim()}
+                          </li>
+                        )
+                      ))}
+                    </ul>
+                  </section>
+                )}
+              </div>
+            )}
+          </>
+        ) : (
+          // Default layout for Professional and Corporate templates
+          <>
+            {/* Professional Summary */}
+            {summary && (
+              <section>
+                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                  PROFESSIONAL SUMMARY
+                </h2>
+                <p className="text-justify">{summary}</p>
+              </section>
+            )}
+
+            {/* Skills */}
+            {skills.length > 0 && (
+              <section>
+                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                  SKILLS
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 text-xs font-medium rounded-full border bg-gray-50"
+                      style={colors.accentStyle}
+                    >
+                      {skill}
+                    </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
-        )}
+              </section>
+            )}
 
-        {/* Certifications */}
-        {certifications.length > 0 && certifications[0] && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              CERTIFICATIONS
-            </h2>
-            <ul className="space-y-1 ml-4">
-              {certifications.map((cert, index) => (
-                cert.trim() && (
-                  <li key={index} className="list-disc">
-                    {cert.trim()}
-                  </li>
-                )
-              ))}
-            </ul>
-          </section>
-        )}
+            {/* Work Experience */}
+            {workExperience.length > 0 && workExperience[0].position && (
+              <section>
+                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                  WORK EXPERIENCE
+                </h2>
+                <div className="space-y-4">
+                  {workExperience.map((exp) => (
+                    <div key={exp.id}>
+                      {exp.position && (
+                        <>
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <h3 className="font-bold" style={colors.accentStyle}>
+                                {exp.position} | {exp.company}
+                              </h3>
+                              <p className="text-gray-600">{exp.location}</p>
+                            </div>
+                            <div className="text-right text-gray-600">
+                              <p>{exp.startDate} – {exp.endDate}</p>
+                            </div>
+                          </div>
+                          {exp.description.length > 0 && exp.description[0] && (
+                            <ul className="space-y-1 ml-4">
+                              {exp.description.map((desc, index) => (
+                                desc.trim() && (
+                                  <li key={index} className="list-disc">
+                                    {desc.trim()}
+                                  </li>
+                                )
+                              ))}
+                            </ul>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
-        {/* Awards */}
-        {awards.length > 0 && awards[0] && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              AWARDS AND RECOGNITION
-            </h2>
-            <ul className="space-y-1 ml-4">
-              {awards.map((award, index) => (
-                award.trim() && (
-                  <li key={index} className="list-disc">
-                    {award.trim()}
-                  </li>
-                )
-              ))}
-            </ul>
-          </section>
+            {/* Education */}
+            {education.length > 0 && education[0].degree && (
+              <section>
+                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                  EDUCATION
+                </h2>
+                <div className="space-y-3">
+                  {education.map((edu) => (
+                    <div key={edu.id}>
+                      {edu.degree && (
+                        <>
+                          <div className="flex justify-between items-start">
+                            <div>
+                               <h3 className="font-bold" style={colors.accentStyle}>
+                                {edu.degree}
+                              </h3>
+                              <p>{edu.institution} | {edu.location} {edu.gpa && `| GPA: ${edu.gpa}`}</p>
+                              {edu.projects && (
+                                <div className="mt-2">
+                                  <ul className="space-y-1 ml-4">
+                                    {edu.projects.split('\n').map((project, idx) => (
+                                      project.trim() && (
+                                        <li key={idx} className="list-disc text-gray-600">
+                                          {project.trim()}
+                                        </li>
+                                      )
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                            <div className="text-gray-600">
+                              <p>{edu.graduationYear}</p>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Certifications */}
+            {certifications.length > 0 && certifications[0] && (
+              <section>
+                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                  CERTIFICATIONS
+                </h2>
+                <ul className="space-y-1 ml-4">
+                  {certifications.map((cert, index) => (
+                    cert.trim() && (
+                      <li key={index} className="list-disc">
+                        {cert.trim()}
+                      </li>
+                    )
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Awards */}
+            {awards.length > 0 && awards[0] && (
+              <section>
+                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                  AWARDS AND RECOGNITION
+                </h2>
+                <ul className="space-y-1 ml-4">
+                  {awards.map((award, index) => (
+                    award.trim() && (
+                      <li key={index} className="list-disc">
+                        {award.trim()}
+                      </li>
+                    )
+                  ))}
+                </ul>
+              </section>
+            )}
+          </>
         )}
       </div>
     </div>
