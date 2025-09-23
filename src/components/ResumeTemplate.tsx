@@ -1,3 +1,6 @@
+import React from 'react';
+import '../styles/resume-layouts.css';
+
 interface PersonalInfo {
   fullName: string;
   phone: string;
@@ -6,7 +9,6 @@ interface PersonalInfo {
   portfolio?: string;
   profileImage?: string;
 }
-
 
 interface WorkExperience {
   id: string;
@@ -40,233 +42,416 @@ interface ResumeData {
 
 interface ResumeTemplateProps {
   data: ResumeData;
-  template: string;
+  layout: string;
   themeColor?: string;
 }
 
-export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeTemplateProps) => {
+export const ResumeTemplate = ({ data, layout, themeColor = '#0b6efd' }: ResumeTemplateProps) => {
   const { personalInfo, summary, skills, workExperience, education, certifications, awards } = data;
 
-  // Get theme color styles using hex color
-  const getThemeColors = () => {
-    const hexColor = themeColor?.startsWith('#') ? themeColor : '#64748b'; // default to slate
-    return {
-      headerStyle: {
-        background: `linear-gradient(135deg, ${hexColor}dd, ${hexColor})`
-      },
-      accentStyle: {
-        color: hexColor,
-        borderColor: hexColor
-      }
-    };
-  };
-
-  // Template layout styling (templates change layout, not colors)
-  const getTemplateStyles = () => {    
-    switch (template) {
-      case 'Creative':
-        return {
-          layout: 'creative',
-          headerPadding: 'p-10',
-          sectionSpacing: 'space-y-8',
-          nameSize: 'text-5xl'
-        };
-      case 'Corporate':
-        return {
-          layout: 'corporate',
-          headerPadding: 'p-6',
-          sectionSpacing: 'space-y-6',
-          nameSize: 'text-3xl'
-        };
-      default: // Professional
-        return {
-          layout: 'professional',
-          headerPadding: 'p-8',
-          sectionSpacing: 'space-y-6',
-          nameSize: 'text-4xl'
-        };
+  // Get layout class name
+  const getLayoutClass = () => {
+    switch (layout) {
+      case 'Layout 1: Classic Two-Column':
+        return 'layout-1';
+      case 'Layout 2: Modern Single Column':
+        return 'layout-2';
+      case 'Layout 3: Left Sidebar':
+        return 'layout-3';
+      case 'Layout 4: Grid/Card Style':
+        return 'layout-4';
+      case 'Layout 5: Minimalist Centered':
+        return 'layout-5';
+      default:
+        return 'layout-1';
     }
   };
 
-  const styles = getTemplateStyles();
-  const colors = getThemeColors();
+  // Create contact info string
+  const getContactInfo = () => {
+    const contacts = [];
+    if (personalInfo.phone) contacts.push(personalInfo.phone);
+    if (personalInfo.email) contacts.push(personalInfo.email);
+    if (personalInfo.linkedin) contacts.push(personalInfo.linkedin);
+    if (personalInfo.portfolio) contacts.push(personalInfo.portfolio);
+    return contacts.join(' • ');
+  };
 
-  return (
-    <div className="max-w-4xl mx-auto bg-white text-black text-sm leading-relaxed">
-      {/* Header */}
-      <div 
-        className={`text-white ${styles.headerPadding} flex items-center gap-6`}
-        style={colors.headerStyle}
-      >
-        {personalInfo.profileImage && (
-          <img
-            src={personalInfo.profileImage}
-            alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
-          />
-        )}
-        <div className="flex-1">
-          <h1 className={`${styles.nameSize} font-bold mb-3`}>{personalInfo.fullName || 'Your Name'}</h1>
-          <div className="grid grid-cols-2 gap-2 text-sm opacity-95">
-            {personalInfo.phone && <span>📞 {personalInfo.phone}</span>}
-            {personalInfo.email && <span>✉️ {personalInfo.email}</span>}
-            {personalInfo.linkedin && <span>💼 {personalInfo.linkedin}</span>}
-            {personalInfo.portfolio && <span>🌐 {personalInfo.portfolio}</span>}
-          </div>
-        </div>
-      </div>
+  const layoutClass = getLayoutClass();
 
-      <div className={`p-6 ${styles.sectionSpacing}`}>
-        {/* Professional Summary */}
-        {summary && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              PROFESSIONAL SUMMARY
-            </h2>
-            <p className="text-justify">{summary}</p>
-          </section>
-        )}
-
-        {/* Skills */}
-        {skills.length > 0 && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              SKILLS
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 text-xs font-medium rounded-full border bg-gray-50"
-                  style={colors.accentStyle}
-                >
-                  {skill}
-                </span>
-              ))}
+  // Special handling for layout 3 (sidebar layout)
+  if (layoutClass === 'layout-3') {
+    return (
+      <article className={`resume ${layoutClass}`} style={{ '--accent': themeColor } as React.CSSProperties}>
+        <div className="sidebar">
+          <header className="r-header">
+            <h1 className="name">{personalInfo.fullName || 'Your Name'}</h1>
+            <div className="contact">
+              {personalInfo.phone && <p>{personalInfo.phone}</p>}
+              {personalInfo.email && <p>{personalInfo.email}</p>}
+              {personalInfo.linkedin && <p>{personalInfo.linkedin}</p>}
+              {personalInfo.portfolio && <p>{personalInfo.portfolio}</p>}
             </div>
-          </section>
-        )}
+          </header>
+          
+          {skills.length > 0 && (
+            <section className="skills">
+              <h2>Skills</h2>
+              <ul className="skill-list">
+                {skills.map((skill, index) => (
+                  <li key={index}>{skill}</li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-        {/* Work Experience */}
-        {workExperience.length > 0 && workExperience[0].position && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              WORK EXPERIENCE
-            </h2>
-            <div className="space-y-4">
+          {education.length > 0 && education[0].degree && (
+            <section className="education">
+              <h2>Education</h2>
+              {education.map((edu) => (
+                edu.degree && (
+                  <div key={edu.id}>
+                    <p><strong>{edu.degree}</strong></p>
+                    <p>{edu.institution} — {edu.graduationYear}</p>
+                    {edu.gpa && <p>GPA: {edu.gpa}</p>}
+                  </div>
+                )
+              ))}
+            </section>
+          )}
+        </div>
+
+        <div className="main">
+          {summary && (
+            <section className="summary">
+              <h2>Professional Summary</h2>
+              <p>{summary}</p>
+            </section>
+          )}
+
+          {workExperience.length > 0 && workExperience[0].position && (
+            <section className="experience">
+              <h2>Work Experience</h2>
               {workExperience.map((exp) => (
-                <div key={exp.id}>
-                  {exp.position && (
-                    <>
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h3 className="font-bold" style={colors.accentStyle}>
-                            {exp.position} | {exp.company}
-                          </h3>
-                          <p className="text-gray-600">{exp.location}</p>
-                        </div>
-                        <div className="text-right text-gray-600">
-                          <p>{exp.startDate} – {exp.endDate}</p>
-                        </div>
-                      </div>
+                exp.position && (
+                  <article key={exp.id} className="job">
+                    <h3 className="job-title">{exp.position} — {exp.company}</h3>
+                    <p className="job-meta">{exp.startDate} — {exp.endDate} • {exp.location}</p>
+                    {exp.description.length > 0 && exp.description[0] && (
+                      <ul>
+                        {exp.description.map((desc, index) => (
+                          desc.trim() && <li key={index}>{desc.trim()}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </article>
+                )
+              ))}
+            </section>
+          )}
+
+          {certifications.length > 0 && certifications[0] && (
+            <section className="certifications">
+              <h2>Certifications</h2>
+              <ul>
+                {certifications.map((cert, index) => (
+                  cert.trim() && <li key={index}>{cert.trim()}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {awards.length > 0 && awards[0] && (
+            <section className="awards">
+              <h2>Awards</h2>
+              <ul>
+                {awards.map((award, index) => (
+                  award.trim() && <li key={index}>{award.trim()}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      </article>
+    );
+  }
+
+  // Special handling for layout 1 (two-column)
+  if (layoutClass === 'layout-1') {
+    return (
+      <article className={`resume ${layoutClass}`} style={{ '--accent': themeColor } as React.CSSProperties}>
+        <header className="r-header">
+          <h1 className="name">{personalInfo.fullName || 'Your Name'}</h1>
+          <p className="tagline">{getContactInfo()}</p>
+        </header>
+
+        <main>
+          <div className="left">
+            {summary && (
+              <section className="summary">
+                <h2>Professional Summary</h2>
+                <p>{summary}</p>
+              </section>
+            )}
+
+            {skills.length > 0 && (
+              <section className="skills">
+                <h2>Skills</h2>
+                <ul className="skill-list">
+                  {skills.map((skill, index) => (
+                    <li key={index}>{skill}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {education.length > 0 && education[0].degree && (
+              <section className="education">
+                <h2>Education</h2>
+                {education.map((edu) => (
+                  edu.degree && (
+                    <div key={edu.id}>
+                      <p><strong>{edu.degree}</strong> — {edu.institution} — {edu.graduationYear}</p>
+                      {edu.gpa && <p>GPA: {edu.gpa}</p>}
+                    </div>
+                  )
+                ))}
+              </section>
+            )}
+          </div>
+
+          <div className="right">
+            {workExperience.length > 0 && workExperience[0].position && (
+              <section className="experience">
+                <h2>Work Experience</h2>
+                {workExperience.map((exp) => (
+                  exp.position && (
+                    <article key={exp.id} className="job">
+                      <h3 className="job-title">{exp.position} — {exp.company}</h3>
+                      <p className="job-meta">{exp.startDate} — {exp.endDate} • {exp.location}</p>
                       {exp.description.length > 0 && exp.description[0] && (
-                        <ul className="space-y-1 ml-4">
+                        <ul>
                           {exp.description.map((desc, index) => (
-                            desc.trim() && (
-                              <li key={index} className="list-disc">
-                                {desc.trim()}
-                              </li>
-                            )
+                            desc.trim() && <li key={index}>{desc.trim()}</li>
                           ))}
                         </ul>
                       )}
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+                    </article>
+                  )
+                ))}
+              </section>
+            )}
 
-        {/* Education */}
-        {education.length > 0 && education[0].degree && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              EDUCATION
-            </h2>
-            <div className="space-y-3">
+            {certifications.length > 0 && certifications[0] && (
+              <section className="certifications">
+                <h2>Certifications</h2>
+                <ul>
+                  {certifications.map((cert, index) => (
+                    cert.trim() && <li key={index}>{cert.trim()}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {awards.length > 0 && awards[0] && (
+              <section className="awards">
+                <h2>Awards</h2>
+                <ul>
+                  {awards.map((award, index) => (
+                    award.trim() && <li key={index}>{award.trim()}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </div>
+        </main>
+      </article>
+    );
+  }
+
+  // Special handling for layout 4 (grid/card style)
+  if (layoutClass === 'layout-4') {
+    return (
+      <article className={`resume ${layoutClass}`} style={{ '--accent': themeColor } as React.CSSProperties}>
+        <header className="r-header">
+          <h1 className="name">{personalInfo.fullName || 'Your Name'}</h1>
+          <p className="tagline">{getContactInfo()}</p>
+        </header>
+
+        <main>
+          {summary && (
+            <section className="summary">
+              <h2>Professional Summary</h2>
+              <p>{summary}</p>
+            </section>
+          )}
+
+          {skills.length > 0 && (
+            <section className="skills">
+              <h2>Skills</h2>
+              <ul className="skill-list">
+                {skills.map((skill, index) => (
+                  <li key={index}>{skill}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {workExperience.length > 0 && workExperience[0].position && (
+            <section className="experience">
+              <h2>Work Experience</h2>
+              <div className="experience-grid">
+                {workExperience.map((exp) => (
+                  exp.position && (
+                    <div key={exp.id} className="exp-card">
+                      <h3>{exp.position}</h3>
+                      <p className="meta">{exp.company} • {exp.startDate} — {exp.endDate}</p>
+                      <p className="meta">{exp.location}</p>
+                      {exp.description.length > 0 && exp.description[0] && (
+                        <ul>
+                          {exp.description.map((desc, index) => (
+                            desc.trim() && <li key={index}>{desc.trim()}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )
+                ))}
+              </div>
+            </section>
+          )}
+
+          {education.length > 0 && education[0].degree && (
+            <section className="education">
+              <h2>Education</h2>
               {education.map((edu) => (
+                edu.degree && (
+                  <p key={edu.id}>{edu.degree} — {edu.institution} — {edu.graduationYear}</p>
+                )
+              ))}
+            </section>
+          )}
+
+          {certifications.length > 0 && certifications[0] && (
+            <section className="certifications">
+              <h2>Certifications</h2>
+              <ul>
+                {certifications.map((cert, index) => (
+                  cert.trim() && <li key={index}>{cert.trim()}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {awards.length > 0 && awards[0] && (
+            <section className="awards">
+              <h2>Awards</h2>
+              <ul>
+                {awards.map((award, index) => (
+                  award.trim() && <li key={index}>{award.trim()}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </main>
+      </article>
+    );
+  }
+
+  // Default layout (layout-2, layout-5 and others use single column structure)
+  return (
+    <article className={`resume ${layoutClass}`} style={{ '--accent': themeColor } as React.CSSProperties}>
+      <header className="r-header">
+        <h1 className="name">{personalInfo.fullName || 'Your Name'}</h1>
+        <p className="tagline">{getContactInfo()}</p>
+      </header>
+
+      <main>
+        {summary && (
+          <section className="summary">
+            <h2>Professional Summary</h2>
+            <p>{summary}</p>
+          </section>
+        )}
+
+        {skills.length > 0 && (
+          <section className="skills">
+            <h2>Skills</h2>
+            <ul className="skill-list">
+              {skills.map((skill, index) => (
+                <li key={index}>{skill}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {workExperience.length > 0 && workExperience[0].position && (
+          <section className="experience">
+            <h2>Work Experience</h2>
+            {workExperience.map((exp) => (
+              exp.position && (
+                <article key={exp.id} className="job">
+                  <h3 className="job-title">{exp.position} — {exp.company}</h3>
+                  <p className="job-meta">{exp.startDate} — {exp.endDate} • {exp.location}</p>
+                  {exp.description.length > 0 && exp.description[0] && (
+                    <ul>
+                      {exp.description.map((desc, index) => (
+                        desc.trim() && <li key={index}>{desc.trim()}</li>
+                      ))}
+                    </ul>
+                  )}
+                </article>
+              )
+            ))}
+          </section>
+        )}
+
+        {education.length > 0 && education[0].degree && (
+          <section className="education">
+            <h2>Education</h2>
+            {education.map((edu) => (
+              edu.degree && (
                 <div key={edu.id}>
-                  {edu.degree && (
-                    <>
-                      <div className="flex justify-between items-start">
-                        <div>
-                           <h3 className="font-bold" style={colors.accentStyle}>
-                            {edu.degree}
-                          </h3>
-                          <p>{edu.institution} | {edu.location} {edu.gpa && `| GPA: ${edu.gpa}`}</p>
-                          {edu.projects && (
-                            <div className="mt-2">
-                              <ul className="space-y-1 ml-4">
-                                {edu.projects.split('\n').map((project, idx) => (
-                                  project.trim() && (
-                                    <li key={idx} className="list-disc text-gray-600">
-                                      {project.trim()}
-                                    </li>
-                                  )
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
-                        <div className="text-gray-600">
-                          <p>{edu.graduationYear}</p>
-                        </div>
-                      </div>
-                    </>
+                  <p><strong>{edu.degree}</strong> — {edu.institution} — {edu.graduationYear}</p>
+                  {edu.gpa && <p>GPA: {edu.gpa}</p>}
+                  {edu.projects && (
+                    <div>
+                      <strong>Projects:</strong>
+                      <ul>
+                        {edu.projects.split('\n').map((project, idx) => (
+                          project.trim() && <li key={idx}>{project.trim()}</li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
-              ))}
-            </div>
+              )
+            ))}
           </section>
         )}
 
-        {/* Certifications */}
         {certifications.length > 0 && certifications[0] && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              CERTIFICATIONS
-            </h2>
-            <ul className="space-y-1 ml-4">
+          <section className="certifications">
+            <h2>Certifications</h2>
+            <ul>
               {certifications.map((cert, index) => (
-                cert.trim() && (
-                  <li key={index} className="list-disc">
-                    {cert.trim()}
-                  </li>
-                )
+                cert.trim() && <li key={index}>{cert.trim()}</li>
               ))}
             </ul>
           </section>
         )}
 
-        {/* Awards */}
         {awards.length > 0 && awards[0] && (
-          <section>
-            <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-              AWARDS AND RECOGNITION
-            </h2>
-            <ul className="space-y-1 ml-4">
+          <section className="awards">
+            <h2>Awards</h2>
+            <ul>
               {awards.map((award, index) => (
-                award.trim() && (
-                  <li key={index} className="list-disc">
-                    {award.trim()}
-                  </li>
-                )
+                award.trim() && <li key={index}>{award.trim()}</li>
               ))}
             </ul>
           </section>
         )}
-      </div>
-    </div>
+      </main>
+    </article>
   );
 };

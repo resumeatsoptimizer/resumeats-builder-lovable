@@ -87,7 +87,7 @@ const ResumePublic = () => {
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
           <ResumeTemplate 
             data={resumeData.resume_data} 
-            template={resumeData.template_name} 
+            layout={resumeData.template_name} 
           />
         </div>
         
