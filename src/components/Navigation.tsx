@@ -1,13 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [userCredits, setUserCredits] = useState<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    // Check authentication status and fetch credits
+    const checkAuthAndFetchCredits = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        setIsAuthenticated(true);
+        
+        // Fetch user credits
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('credits')
+          .eq('id', user.id)
+          .single();
+        
+        if (profile) {
+          setUserCredits(profile.credits);
+        }
+      } else {
+        setIsAuthenticated(false);
+        setUserCredits(null);
+      }
+    };
+
+    checkAuthAndFetchCredits();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        setIsAuthenticated(true);
+        checkAuthAndFetchCredits();
+      } else {
+        setIsAuthenticated(false);
+        setUserCredits(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const navLinks = [
     { name: "Features", href: "#features" },
@@ -52,14 +95,35 @@ const Navigation = () => {
               ))}
             </div>
 
-            {/* Auth Buttons */}
-            <div className="flex space-x-3">
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/auth">Log In</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link to="/auth">Sign Up</Link>
-              </Button>
+            {/* Credits and Auth */}
+            <div className="flex items-center space-x-4">
+              {/* Credits Display */}
+              {isAuthenticated && userCredits !== null && (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full">
+                  <Coins className="h-4 w-4 text-yellow-600" />
+                  <span className="text-sm font-semibold text-yellow-700">{userCredits}</span>
+                </div>
+              )}
+              
+              {/* Auth Buttons */}
+              {!isAuthenticated ? (
+                <div className="flex space-x-3">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/auth">Log In</Link>
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link to="/auth">Sign Up</Link>
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => supabase.auth.signOut()}
+                >
+                  Sign Out
+                </Button>
+              )}
             </div>
           </div>
 
@@ -111,14 +175,36 @@ const Navigation = () => {
               )
             ))}
 
-            {/* Mobile Auth Buttons */}
-            <div className="flex flex-col space-y-2 px-3 pt-4">
-              <Button variant="outline" size="sm" className="w-full" asChild>
-                <Link to="/auth">Log In</Link>
-              </Button>
-              <Button size="sm" className="w-full" asChild>
-                <Link to="/auth">Sign Up</Link>
-              </Button>
+            {/* Mobile Credits and Auth */}
+            <div className="flex flex-col space-y-3 px-3 pt-4">
+              {/* Mobile Credits Display */}
+              {isAuthenticated && userCredits !== null && (
+                <div className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full">
+                  <Coins className="h-5 w-5 text-yellow-600" />
+                  <span className="text-base font-semibold text-yellow-700">{userCredits} Credits</span>
+                </div>
+              )}
+              
+              {/* Mobile Auth Buttons */}
+              {!isAuthenticated ? (
+                <>
+                  <Button variant="outline" size="sm" className="w-full" asChild>
+                    <Link to="/auth">Log In</Link>
+                  </Button>
+                  <Button size="sm" className="w-full" asChild>
+                    <Link to="/auth">Sign Up</Link>
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full"
+                  onClick={() => supabase.auth.signOut()}
+                >
+                  Sign Out
+                </Button>
+              )}
             </div>
           </div>
         </div>
