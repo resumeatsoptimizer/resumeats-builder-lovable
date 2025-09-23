@@ -163,28 +163,26 @@ const ResumeEditor = () => {
       
       if (!user) {
         toast({
-          title: "Error", 
+          title: "Error",
           description: "You must be logged in to save a resume",
           variant: "destructive"
         });
         return;
       }
 
-      // TODO: Uncomment after creating resumes table migration
-      // const { error } = await supabase
-      //   .from('resumes')
-      //   .upsert({
-      //     user_id: user.id,
-      //     template_name: templateName,
-      //     resume_data: resumeData
-      //   });
+      const { error } = await supabase
+        .from('resumes')
+        .upsert({
+          user_id: user.id,
+          template_name: templateName,
+          resume_data: resumeData as any
+        } as any);
 
-      // if (error) throw error;
+      if (error) throw error;
 
-      // For now, just show success message
       toast({
         title: "Success",
-        description: "Resume saved successfully! (Database integration pending)"
+        description: "Resume saved successfully!"
       });
     } catch (error) {
       console.error('Error saving resume:', error);
