@@ -170,9 +170,9 @@ const ResumeEditor = () => {
         startDate: "Jan 2021",
         endDate: "Present",
         description: [
-          "• Increased organic website traffic by 150% through SEO optimization",
-          "• Managed Google Ads campaigns with ROI of 300%",
-          "• Led social media strategy resulting in 200% follower growth"
+          "Increased organic website traffic by 150% through SEO optimization",
+          "Managed Google Ads campaigns with ROI of 300%",
+          "Led social media strategy resulting in 200% follower growth"
         ]
       }, {
         id: '2',
@@ -182,9 +182,9 @@ const ResumeEditor = () => {
         startDate: "Jun 2019",
         endDate: "Dec 2020",
         description: [
-          "• Coordinated marketing campaigns across multiple channels",
-          "• Analyzed campaign performance using Google Analytics",
-          "• Created content for social media platforms"
+          "Coordinated marketing campaigns across multiple channels",
+          "Analyzed campaign performance using Google Analytics",
+          "Created content for social media platforms"
         ]
       }],
       education: [{
@@ -197,15 +197,15 @@ const ResumeEditor = () => {
         projects: "Senior Project: Digital Marketing Strategy for SMEs"
       }],
       certifications: [
-        "• Google Ads Certified",
-        "• Google Analytics Individual Qualification (IQ)",
-        "• Facebook Blueprint Certified",
-        "• HubSpot Inbound Marketing Certified"
+        "Google Ads Certified",
+        "Google Analytics Individual Qualification (IQ)",
+        "Facebook Blueprint Certified",
+        "HubSpot Inbound Marketing Certified"
       ],
       awards: [
-        "• Best Digital Campaign Award - Marketing Excellence 2023",
-        "• Top Performer of the Quarter - Q3 2023",
-        "• Outstanding Achievement in SEO - Company Awards 2022"
+        "Best Digital Campaign Award - Marketing Excellence 2023",
+        "Top Performer of the Quarter - Q3 2023",
+        "Outstanding Achievement in SEO - Company Awards 2022"
       ]
     });
   };
