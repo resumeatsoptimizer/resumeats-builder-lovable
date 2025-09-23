@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Check, Loader2 } from 'lucide-react';
+import Navigation from '@/components/Navigation';
 
 const creditPackages = [
   {
@@ -87,7 +88,9 @@ const Pricing: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-primary mb-2">เลือกแพ็กเกจเครดิต</h1>
         <p className="text-muted-foreground text-lg">
@@ -163,6 +166,7 @@ const Pricing: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+      </div>
       </div>
     </div>
   );

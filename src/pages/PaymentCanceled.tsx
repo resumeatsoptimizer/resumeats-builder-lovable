@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { XCircle } from 'lucide-react';
+import Navigation from '@/components/Navigation';
 
 const PaymentCanceled: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
       <Card className="w-full max-w-md text-center">
         <CardHeader>
           <div className="mx-auto mb-4">
@@ -51,6 +54,7 @@ const PaymentCanceled: React.FC = () => {
         </CardContent>
       </Card>
     </div>
+  </div>
   );
 };
 

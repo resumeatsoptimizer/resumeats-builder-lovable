@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
+import Navigation from '@/components/Navigation';
 
 const ResumePublic = () => {
   const { id } = useParams<{ id: string }>();
@@ -79,7 +80,9 @@ const ResumePublic = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <div className="min-h-screen bg-gray-100 py-8">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
           <ResumeTemplate 
@@ -94,6 +97,7 @@ const ResumePublic = () => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };

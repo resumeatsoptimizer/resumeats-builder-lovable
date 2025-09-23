@@ -13,6 +13,7 @@ import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { PDFGenerator } from '@/components/PDFGenerator';
 import LanguageSelection from '@/components/LanguageSelection';
+import Navigation from '@/components/Navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -404,6 +405,7 @@ const ResumeEditor = () => {
     setResumeData(updatedData);
   };
   return <div className="min-h-screen bg-background">
+      <Navigation />
       {/* Header */}
       <div className="border-b">
         <div className="container mx-auto px-4 py-4">

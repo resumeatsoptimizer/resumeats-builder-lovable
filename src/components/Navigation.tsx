@@ -62,7 +62,7 @@ const Navigation = () => {
     { name: "Features", href: "#features" },
     { name: "Pricing", href: "/pricing" },
     { name: "About Us", href: "#about" },
-    { name: "Resume Editor", href: "/resume-editor" },
+    ...(isAuthenticated ? [{ name: "Resume Editor", href: "/resume-editor" }] : []),
   ];
 
   return (
@@ -113,14 +113,9 @@ const Navigation = () => {
               
               {/* Auth Buttons */}
               {!isAuthenticated ? (
-                <div className="flex space-x-3">
-                  <Button variant="outline" size="sm" asChild>
-                    <Link to="/auth">Log In</Link>
-                  </Button>
-                  <Button size="sm" asChild>
-                    <Link to="/auth">Sign Up</Link>
-                  </Button>
-                </div>
+                <Button size="sm" asChild>
+                  <Link to="/auth">Get Started</Link>
+                </Button>
               ) : (
                 <Button 
                   variant="outline" 
@@ -193,14 +188,9 @@ const Navigation = () => {
               
               {/* Mobile Auth Buttons */}
               {!isAuthenticated ? (
-                <>
-                  <Button variant="outline" size="sm" className="w-full" asChild>
-                    <Link to="/auth">Log In</Link>
-                  </Button>
-                  <Button size="sm" className="w-full" asChild>
-                    <Link to="/auth">Sign Up</Link>
-                  </Button>
-                </>
+                <Button size="sm" className="w-full" asChild>
+                  <Link to="/auth">Get Started</Link>
+                </Button>
               ) : (
                 <Button 
                   variant="outline" 

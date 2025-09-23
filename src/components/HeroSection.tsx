@@ -46,7 +46,7 @@ const HeroSection = () => {
               >
                 <Link to="/auth">
                   <Zap className="mr-2 h-5 w-5" />
-                  สร้างเรซูเม่ของคุณฟรี!
+                  Get Started
                 </Link>
               </Button>
             </div>
