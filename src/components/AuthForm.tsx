@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { User, Session } from "@supabase/supabase-js";
 
 const AuthForm = () => {
@@ -21,6 +22,7 @@ const AuthForm = () => {
   const [fullName, setFullName] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -34,8 +36,8 @@ const AuthForm = () => {
           setTimeout(() => {
             navigate("/");
             toast({
-              title: "เข้าสู่ระบบสำเร็จ",
-              description: "ยินดีต้อนรับสู่ ResumeATS-Builder!",
+              title: t('auth.signInSuccess'),
+              description: t('auth.welcome'),
             });
           }, 0);
         }
@@ -75,16 +77,16 @@ const AuthForm = () => {
 
     if (error) {
       if (error.message.includes("User already registered")) {
-        setError("อีเมลนี้มีการสมัครสมาชิกแล้ว กรุณาเข้าสู่ระบบ");
+        setError(t('auth.emailExists'));
       } else if (error.message.includes("Password should be at least")) {
-        setError("รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
+        setError(t('auth.passwordShort'));
       } else {
         setError(error.message);
       }
     } else {
       toast({
-        title: "สมัครสมาชิกสำเร็จ",
-        description: "กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชีของคุณ",
+        title: t('auth.signUpSuccess'),
+        description: t('auth.signUpCheck'),
       });
     }
 
@@ -103,7 +105,7 @@ const AuthForm = () => {
 
     if (error) {
       if (error.message.includes("Invalid login credentials")) {
-        setError("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
+        setError(t('auth.invalidLogin'));
       } else {
         setError(error.message);
       }
@@ -140,14 +142,14 @@ const AuthForm = () => {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">ResumeATS-Builder</CardTitle>
           <CardDescription>
-            เข้าสู่ระบบหรือสมัครสมาชิกเพื่อเริ่มสร้างเรซูเม่
+            {t('auth.description')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">เข้าสู่ระบบ</TabsTrigger>
-              <TabsTrigger value="signup">สมัครสมาชิก</TabsTrigger>
+              <TabsTrigger value="login">{t('auth.signIn')}</TabsTrigger>
+              <TabsTrigger value="signup">{t('auth.signUp')}</TabsTrigger>
             </TabsList>
 
             {error && (
@@ -159,7 +161,7 @@ const AuthForm = () => {
             <TabsContent value="login" className="space-y-4">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div>
-                  <Label htmlFor="login-email">อีเมล</Label>
+                  <Label htmlFor="login-email">{t('auth.email')}</Label>
                   <Input
                     id="login-email"
                     type="email"
@@ -171,7 +173,7 @@ const AuthForm = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="login-password">รหัสผ่าน</Label>
+                  <Label htmlFor="login-password">{t('auth.password')}</Label>
                   <Input
                     id="login-password"
                     type="password"
@@ -186,12 +188,12 @@ const AuthForm = () => {
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      กำลังเข้าสู่ระบบ...
+                      {t('auth.signingIn')}
                     </>
                   ) : (
                     <>
                       <Mail className="mr-2 h-4 w-4" />
-                      เข้าสู่ระบบ
+                      {t('auth.signIn')}
                     </>
                   )}
                 </Button>
@@ -201,11 +203,11 @@ const AuthForm = () => {
             <TabsContent value="signup" className="space-y-4">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div>
-                  <Label htmlFor="signup-name">ชื่อ-นามสกุล</Label>
+                  <Label htmlFor="signup-name">{t('auth.fullName')}</Label>
                   <Input
                     id="signup-name"
                     type="text"
-                    placeholder="จอห์น โด"
+                    placeholder={t('auth.fullNamePlaceholder')}
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
@@ -213,7 +215,7 @@ const AuthForm = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="signup-email">อีเมล</Label>
+                  <Label htmlFor="signup-email">{t('auth.email')}</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -225,7 +227,7 @@ const AuthForm = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="signup-password">รหัสผ่าน</Label>
+                  <Label htmlFor="signup-password">{t('auth.password')}</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -237,19 +239,19 @@ const AuthForm = () => {
                     minLength={6}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
-                    รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร
+                    {t('auth.passwordRequirement')}
                   </p>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      กำลังสมัครสมาชิก...
+                      {t('auth.signingUp')}
                     </>
                   ) : (
                     <>
                       <Mail className="mr-2 h-4 w-4" />
-                      สมัครสมาชิก
+                      {t('auth.signUp')}
                     </>
                   )}
                 </Button>
@@ -263,7 +265,7 @@ const AuthForm = () => {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">หรือ</span>
+              <span className="bg-background px-2 text-muted-foreground">{t('auth.or')}</span>
             </div>
           </div>
 
@@ -296,7 +298,7 @@ const AuthForm = () => {
                 />
               </svg>
             )}
-            เข้าสู่ระบบด้วย Google
+            {t('auth.googleSignIn')}
           </Button>
         </CardContent>
       </Card>

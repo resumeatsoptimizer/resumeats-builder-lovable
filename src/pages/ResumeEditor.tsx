@@ -17,6 +17,7 @@ import Navigation from '@/components/Navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target, Menu, Settings } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 import { useNavigate } from 'react-router-dom';
@@ -60,6 +61,7 @@ const ResumeEditor = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
   const [templateName, setTemplateName] = useState('Professional');
   const [themeColor, setThemeColor] = useState('#3b82f6');
   const [resumeId, setResumeId] = useState<string | null>(null);
@@ -501,12 +503,12 @@ const ResumeEditor = () => {
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" onClick={() => navigate('/')} className="flex items-center gap-1">
                   <ArrowLeft className="w-4 h-4" />
-                  Back
+                  {t('editor.backToHome')}
                 </Button>
-                <h1 className="text-lg font-bold text-foreground">Resume Editor</h1>
+                <h1 className="text-lg font-bold text-foreground">{t('editor.title')}</h1>
               </div>
               <div className="flex items-center gap-2">
-                <Button onClick={handleSave} size="sm">Save</Button>
+                <Button onClick={handleSave} size="sm">{t('editor.save')}</Button>
                 <Sheet open={showMobileControls} onOpenChange={setShowMobileControls}>
                   <SheetTrigger asChild>
                     <Button variant="outline" size="sm">
@@ -518,12 +520,12 @@ const ResumeEditor = () => {
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold flex items-center gap-2">
                           <Settings className="w-5 h-5" />
-                          Resume Settings
+                          {t('editor.title')}
                         </h3>
                         
                         {/* Template Selection */}
                         <div className="space-y-2">
-                          <Label className="text-sm font-medium">Template</Label>
+                          <Label className="text-sm font-medium">{t('editor.template')}</Label>
                           <Select value={templateName} onValueChange={setTemplateName}>
                             <SelectTrigger className="w-full">
                               <SelectValue />
@@ -538,7 +540,7 @@ const ResumeEditor = () => {
                         
                         {/* Theme Color */}
                         <div className="space-y-2">
-                          <Label className="text-sm font-medium">Theme Color</Label>
+                          <Label className="text-sm font-medium">{t('editor.theme')}</Label>
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-md border cursor-pointer" style={{
                             backgroundColor: themeColor
@@ -553,7 +555,7 @@ const ResumeEditor = () => {
                         {/* Public Toggle */}
                         <div className="flex items-center justify-between">
                           <Label htmlFor="mobile-public-resume" className="text-sm font-medium">
-                            Make Resume Public
+                            {t('editor.public')}
                           </Label>
                           <Switch id="mobile-public-resume" checked={isPublic} onCheckedChange={setIsPublic} />
                         </div>
@@ -581,10 +583,10 @@ const ResumeEditor = () => {
               <div className="p-6 h-full overflow-y-auto">
                 <div className="space-y-6">
                  {/* Profile Photo Upload */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Profile Photo</CardTitle>
-                  </CardHeader>
+                  <Card>
+                   <CardHeader>
+                     <CardTitle>{t('editor.profileImage')}</CardTitle>
+                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center gap-4">
                       <div className="relative">
@@ -593,10 +595,10 @@ const ResumeEditor = () => {
                           </div>}
                       </div>
                       <div className="space-y-2">
-                        <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2">
-                          <Upload className="w-4 h-4" />
-                          อัพโหลดรูปภาพ
-                        </Button>
+                         <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2">
+                           <Upload className="w-4 h-4" />
+                           {t('editor.uploadImage')}
+                         </Button>
                         {resumeData.personalInfo.profileImage && (
                           <Button type="button" variant="outline" onClick={handleDeleteProfileImage} className="flex items-center gap-2 text-destructive hover:text-destructive">
                             <Trash2 className="w-4 h-4" />
@@ -619,10 +621,10 @@ const ResumeEditor = () => {
                 </Card>
 
                 {/* Personal Information */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
-                  </CardHeader>
+                  <Card>
+                   <CardHeader>
+                     <CardTitle>{t('editor.personalInfo')}</CardTitle>
+                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -676,11 +678,11 @@ const ResumeEditor = () => {
                   </CardContent>
                 </Card>
 
-                {/* Professional Summary */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Professional Summary</CardTitle>
-                  </CardHeader>
+                 {/* Professional Summary */}
+                 <Card>
+                   <CardHeader>
+                     <CardTitle>{t('editor.summary')}</CardTitle>
+                   </CardHeader>
                   <CardContent>
                     <Textarea value={resumeData.summary} onChange={e => setResumeData(prev => ({
                     ...prev,
@@ -709,27 +711,27 @@ const ResumeEditor = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {resumeData.skills.length > 0 ? <div className="flex flex-wrap gap-2">
-                        {resumeData.skills.map((skill, index) => <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                            {skill}
-                            <Button type="button" variant="ghost" size="sm" className="h-4 w-4 p-0 hover:bg-transparent" onClick={() => removeSkill(skill)}>
-                              <X className="w-3 h-3" />
-                            </Button>
-                          </Badge>)}
-                      </div> : <p className="text-muted-foreground text-sm">ยังไม่มีทักษะที่เพิ่ม กรุณาเพิ่มทักษะของคุณ</p>}
+                     {resumeData.skills.length > 0 ? <div className="flex flex-wrap gap-2">
+                         {resumeData.skills.map((skill, index) => <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                             {skill}
+                             <Button type="button" variant="ghost" size="sm" className="h-4 w-4 p-0 hover:bg-transparent" onClick={() => removeSkill(skill)}>
+                               <X className="w-3 h-3" />
+                             </Button>
+                           </Badge>)}
+                       </div> : <p className="text-muted-foreground text-sm">{t('editor.addSkill')}</p>}
                   </CardContent>
                 </Card>
 
-                {/* Work Experience */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex justify-between items-center">
-                      Work Experience
-                      <Button variant="outline" size="sm" onClick={addWorkExperience}>
-                        Add Experience
-                      </Button>
-                    </CardTitle>
-                  </CardHeader>
+                 {/* Work Experience */}
+                 <Card>
+                   <CardHeader>
+                     <CardTitle className="flex justify-between items-center">
+                       {t('editor.workExperience')}
+                       <Button variant="outline" size="sm" onClick={addWorkExperience}>
+                         {t('editor.addExperience')}
+                       </Button>
+                     </CardTitle>
+                   </CardHeader>
                   <CardContent className="space-y-6">
                     {resumeData.workExperience.map((exp, index) => <div key={exp.id} className="space-y-4 p-4 border rounded-md">
                         <div className="flex justify-between items-start mb-4">
@@ -739,48 +741,48 @@ const ResumeEditor = () => {
                               Delete
                             </Button>}
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <Label>Position</Label>
-                            <Input value={exp.position} onChange={e => updateWorkExperience(exp.id, 'position', e.target.value)} placeholder="e.g., Senior Marketing Specialist" />
-                          </div>
-                          <div>
-                            <Label>Company</Label>
-                            <Input value={exp.company} onChange={e => updateWorkExperience(exp.id, 'company', e.target.value)} placeholder="Company name" />
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <Label>Location</Label>
-                            <Input value={exp.location} onChange={e => updateWorkExperience(exp.id, 'location', e.target.value)} placeholder="Bangkok, Thailand" />
-                          </div>
-                          <div>
-                            <Label>Start Date</Label>
-                            <Input value={exp.startDate} onChange={e => updateWorkExperience(exp.id, 'startDate', e.target.value)} placeholder="Jan 2020" />
-                          </div>
-                          <div>
-                            <Label>End Date</Label>
-                            <Input value={exp.endDate} onChange={e => updateWorkExperience(exp.id, 'endDate', e.target.value)} placeholder="Present" />
-                          </div>
-                        </div>
-                        <div>
-                          <Label>Description</Label>
-                          <Textarea value={exp.description.join('\n')} onChange={e => updateWorkExperience(exp.id, 'description', e.target.value.split('\n'))} placeholder="• Achieved 150% of quarterly sales targets..." rows={4} />
-                        </div>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           <div>
+                             <Label>{t('editor.position')}</Label>
+                             <Input value={exp.position} onChange={e => updateWorkExperience(exp.id, 'position', e.target.value)} placeholder="e.g., Senior Marketing Specialist" />
+                           </div>
+                           <div>
+                             <Label>{t('editor.company')}</Label>
+                             <Input value={exp.company} onChange={e => updateWorkExperience(exp.id, 'company', e.target.value)} placeholder="Company name" />
+                           </div>
+                         </div>
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                           <div>
+                             <Label>{t('editor.location')}</Label>
+                             <Input value={exp.location} onChange={e => updateWorkExperience(exp.id, 'location', e.target.value)} placeholder="Bangkok, Thailand" />
+                           </div>
+                           <div>
+                             <Label>{t('editor.startDate')}</Label>
+                             <Input value={exp.startDate} onChange={e => updateWorkExperience(exp.id, 'startDate', e.target.value)} placeholder="Jan 2020" />
+                           </div>
+                           <div>
+                             <Label>{t('editor.endDate')}</Label>
+                             <Input value={exp.endDate} onChange={e => updateWorkExperience(exp.id, 'endDate', e.target.value)} placeholder="Present" />
+                           </div>
+                         </div>
+                         <div>
+                           <Label>{t('editor.description')}</Label>
+                           <Textarea value={exp.description.join('\n')} onChange={e => updateWorkExperience(exp.id, 'description', e.target.value.split('\n'))} placeholder="• Achieved 150% of quarterly sales targets..." rows={4} />
+                         </div>
                       </div>)}
                   </CardContent>
                 </Card>
 
-                {/* Education */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex justify-between items-center">
-                      Education
-                      <Button variant="outline" size="sm" onClick={addEducation}>
-                        Add Education
-                      </Button>
-                    </CardTitle>
-                  </CardHeader>
+                 {/* Education */}
+                 <Card>
+                   <CardHeader>
+                     <CardTitle className="flex justify-between items-center">
+                       {t('editor.education')}
+                       <Button variant="outline" size="sm" onClick={addEducation}>
+                         {t('editor.addEducation')}
+                       </Button>
+                     </CardTitle>
+                   </CardHeader>
                   <CardContent className="space-y-6">
                     {resumeData.education.map((edu, index) => <div key={edu.id} className="space-y-4 p-4 border rounded-md">
                         <div className="flex justify-between items-start mb-4">
@@ -822,11 +824,11 @@ const ResumeEditor = () => {
                   </CardContent>
                 </Card>
 
-                {/* Certifications */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Certifications</CardTitle>
-                  </CardHeader>
+                 {/* Certifications */}
+                 <Card>
+                   <CardHeader>
+                     <CardTitle>{t('editor.certifications')}</CardTitle>
+                   </CardHeader>
                   <CardContent>
                     <Textarea value={resumeData.certifications.join('\n')} onChange={e => setResumeData(prev => ({
                     ...prev,
@@ -835,11 +837,11 @@ const ResumeEditor = () => {
                   </CardContent>
                 </Card>
 
-                {/* Awards */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Awards & Achievements</CardTitle>
-                  </CardHeader>
+                 {/* Awards */}
+                 <Card>
+                   <CardHeader>
+                     <CardTitle>{t('editor.awards')}</CardTitle>
+                   </CardHeader>
                   <CardContent>
                     <Textarea value={resumeData.awards.join('\n')} onChange={e => setResumeData(prev => ({
                     ...prev,
@@ -866,40 +868,40 @@ const ResumeEditor = () => {
                   </CardContent>
                 </Card>
 
-                {/* Job Match Analysis */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="w-4 h-4" />
-                      Job Match Analysis
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-sm text-muted-foreground">
-                      Analyze how well your resume matches a job description (2 credits)
-                    </p>
-                    <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder="Paste the job description here..." rows={4} />
-                    <Button onClick={handleJobMatchAnalysis} disabled={isAnalyzing || !jobDescription.trim()} className="w-full">
-                      {isAnalyzing ? 'Analyzing...' : 'Analyze Job Match'}
-                    </Button>
-                  </CardContent>
-                </Card>
+                 {/* Job Match Analysis */}
+                 <Card>
+                   <CardHeader>
+                     <CardTitle className="flex items-center gap-2">
+                       <Target className="w-4 h-4" />
+                       {t('editor.jobMatch')}
+                     </CardTitle>
+                   </CardHeader>
+                   <CardContent className="space-y-4">
+                     <p className="text-sm text-muted-foreground">
+                       {t('pricing.jobMatchCredit')}
+                     </p>
+                     <Textarea value={jobDescription} onChange={e => setJobDescription(e.target.value)} placeholder={t('editor.jobDescription')} rows={4} />
+                     <Button onClick={handleJobMatchAnalysis} disabled={isAnalyzing || !jobDescription.trim()} className="w-full">
+                       {isAnalyzing ? t('editor.analyzing') : t('editor.jobMatch')}
+                     </Button>
+                   </CardContent>
+                 </Card>
 
-                {/* Language Translation */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Languages className="w-4 h-4" />
-                      Language Translation
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      การแปลจะใช้ 3 เครดิต ต่อ 1 ภาษา และอาจใช้เวลาสักครู่
-                    </p>
-                    <LanguageSelection resumeData={resumeData} onResumeUpdate={handleResumeUpdate} />
-                  </CardContent>
-                </Card>
+                 {/* Language Translation */}
+                 <Card>
+                   <CardHeader>
+                     <CardTitle className="flex items-center gap-2">
+                       <Languages className="w-4 h-4" />
+                       {t('editor.translate')}
+                     </CardTitle>
+                   </CardHeader>
+                   <CardContent>
+                     <p className="text-sm text-muted-foreground mb-4">
+                       {t('pricing.translationCredit')}
+                     </p>
+                     <LanguageSelection resumeData={resumeData} onResumeUpdate={handleResumeUpdate} />
+                   </CardContent>
+                 </Card>
                 </div>
               </div>
             </ResizablePanel>
@@ -909,7 +911,7 @@ const ResumeEditor = () => {
             <ResizablePanel defaultSize={50} minSize={30}>
               <div className="p-6 h-full overflow-y-auto bg-gray-50">
                 <div className="mb-4">
-                  <h2 className="text-xl font-bold text-center text-foreground">LIVE Preview</h2>
+                  <h2 className="text-xl font-bold text-center text-foreground">{t('editor.preview')}</h2>
                 </div>
                 <div className="bg-white rounded-lg shadow-sm">
                   <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
@@ -918,10 +920,10 @@ const ResumeEditor = () => {
                 {/* Share Resume - Moved below preview */}
                 <Card className="mt-6">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Share2 className="w-4 h-4" />
-                      Share Your Resume
-                    </CardTitle>
+                     <CardTitle className="flex items-center gap-2">
+                       <Share2 className="w-4 h-4" />
+                       {t('editor.share')}
+                     </CardTitle>
                   </CardHeader>
                   <CardContent className="flex gap-3">
                     <QRCodeGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
@@ -935,13 +937,13 @@ const ResumeEditor = () => {
           <div className="space-y-6">
             {/* Mobile Form Section */}
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-foreground">Edit Resume</h2>
+              <h2 className="text-lg font-semibold text-foreground">{t('editor.title')}</h2>
               <div className="space-y-6">
                  {/* Profile Photo Upload */}
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Profile Photo</CardTitle>
-                  </CardHeader>
+                   <CardHeader>
+                     <CardTitle>{t('editor.profileImage')}</CardTitle>
+                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center gap-4">
                       <div className="relative">
@@ -950,10 +952,10 @@ const ResumeEditor = () => {
                           </div>}
                       </div>
                       <div className="space-y-2">
-                        <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2">
-                          <Upload className="w-4 h-4" />
-                          อัพโหลดรูปภาพ
-                        </Button>
+                         <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2">
+                           <Upload className="w-4 h-4" />
+                           {t('editor.uploadImage')}
+                         </Button>
                         {resumeData.personalInfo.profileImage && (
                           <Button type="button" variant="outline" onClick={handleDeleteProfileImage} className="flex items-center gap-2 text-destructive hover:text-destructive">
                             <Trash2 className="w-4 h-4" />
@@ -967,10 +969,10 @@ const ResumeEditor = () => {
                       </div>
                     </div>
                     <div className="mt-4">
-                      <Button type="button" variant="secondary" onClick={generateSampleData} className="flex items-center gap-2">
-                        <FileText className="w-4 h-4" />
-                        Generate Sample
-                      </Button>
+                       <Button type="button" variant="secondary" onClick={generateSampleData} className="flex items-center gap-2">
+                         <FileText className="w-4 h-4" />
+                         {t('editor.generateSample')}
+                       </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -1052,7 +1054,7 @@ const ResumeEditor = () => {
             
             {/* Mobile Preview Section */}
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-foreground">Live Preview</h2>
+              <h2 className="text-lg font-semibold text-foreground">{t('editor.preview')}</h2>
               <div className="bg-white rounded-lg shadow-sm border p-4">
                 <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
               </div>
