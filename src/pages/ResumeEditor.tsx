@@ -45,6 +45,7 @@ interface ResumeData {
     email: string;
     linkedin: string;
     portfolio?: string;
+    address?: string;
     profileImage?: string;
   };
   summary: string;
@@ -159,7 +160,8 @@ const ResumeEditor = () => {
         phone: "+66 81 234 5678",
         email: "somchai.jaidee@email.com",
         linkedin: "linkedin.com/in/somchai-jaidee",
-        portfolio: "somchai-portfolio.com"
+        portfolio: "somchai-portfolio.com",
+        address: "123/456 Sukhumvit Road, Watthana, Bangkok 10110"
       },
       summary: "Digital Marketing Specialist with 5+ years of experience in developing and executing successful digital marketing campaigns. Proven track record of increasing brand awareness and driving sales growth through strategic use of SEO, SEM, and social media marketing.",
       skills: ["Digital Marketing", "Google Analytics", "SEO/SEM", "Social Media Marketing", "Content Marketing", "Google Ads", "Facebook Ads", "Data Analysis"],
@@ -609,7 +611,21 @@ const ResumeEditor = () => {
                     </div>
                     <div>
                       <Label htmlFor="portfolio">Portfolio/Website (Optional)</Label>
-                      <Input id="portfolio" value={resumeData.personalInfo.portfolio || ''} onChange={e => updatePersonalInfo('portfolio', e.target.value)} placeholder="your-portfolio.com" />
+                      <Input 
+                        id="portfolio" 
+                        value={resumeData.personalInfo.portfolio || ''} 
+                        onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
+                        placeholder="your-portfolio.com" 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="address">Address (Optional)</Label>
+                      <Input 
+                        id="address" 
+                        value={resumeData.personalInfo.address || ''} 
+                        onChange={e => updatePersonalInfo('address', e.target.value)} 
+                        placeholder="123 Main St, Bangkok 10110, Thailand" 
+                      />
                     </div>
                   </CardContent>
                 </Card>

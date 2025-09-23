@@ -4,6 +4,7 @@ interface PersonalInfo {
   email: string;
   linkedin: string;
   portfolio?: string;
+  address?: string;
   profileImage?: string;
 }
 
@@ -50,6 +51,20 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
   // Get theme color styles using hex color
   const getThemeColors = () => {
     const hexColor = themeColor?.startsWith('#') ? themeColor : '#64748b'; // default to slate
+    
+    // Corporate template uses black text only
+    if (template === 'Corporate') {
+      return {
+        headerStyle: {
+          background: '#000000'
+        },
+        accentStyle: {
+          color: '#000000',
+          borderColor: '#000000'
+        }
+      };
+    }
+    
     return {
       headerStyle: {
         background: `linear-gradient(135deg, ${hexColor}dd, ${hexColor})`
@@ -108,10 +123,11 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
         <div className="flex-1">
           <h1 className={`${styles.nameSize} font-bold mb-3`}>{personalInfo.fullName || 'Your Name'}</h1>
           <div className="grid grid-cols-2 gap-2 text-sm opacity-95">
-            {personalInfo.phone && <span>📞 {personalInfo.phone}</span>}
-            {personalInfo.email && <span>✉️ {personalInfo.email}</span>}
-            {personalInfo.linkedin && <span>💼 {personalInfo.linkedin}</span>}
-            {personalInfo.portfolio && <span>🌐 {personalInfo.portfolio}</span>}
+            {personalInfo.phone && <span>Phone: {personalInfo.phone}</span>}
+            {personalInfo.email && <span>Email: {personalInfo.email}</span>}
+            {personalInfo.linkedin && <span>LinkedIn: {personalInfo.linkedin}</span>}
+            {personalInfo.portfolio && <span>Portfolio/Website: {personalInfo.portfolio}</span>}
+            {personalInfo.address && <span className="col-span-2">Address: {personalInfo.address}</span>}
           </div>
         </div>
       </div>
