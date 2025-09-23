@@ -488,6 +488,12 @@ const ResumeEditor = () => {
                         <input ref={fileInputRef} type="file" accept="image/jpeg,image/png" onChange={handleImageUpload} className="hidden" />
                       </div>
                     </div>
+                    <div className="mt-4">
+                      <Button type="button" variant="secondary" onClick={generateSampleData} className="flex items-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        Generate Sample
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
 
