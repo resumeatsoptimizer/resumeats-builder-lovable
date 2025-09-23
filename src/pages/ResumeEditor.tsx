@@ -58,7 +58,7 @@ const ResumeEditor = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const [layoutName, setLayoutName] = useState('Layout 1: Classic Two-Column');
+  const [templateName, setTemplateName] = useState('Professional');
   const [themeColor, setThemeColor] = useState('#3b82f6');
   const [resumeId, setResumeId] = useState<string | null>(null);
   const [isPublic, setIsPublic] = useState(false);
@@ -268,7 +268,7 @@ const ResumeEditor = () => {
       }
       const resumeToSave = {
         user_id: user.id,
-        template_name: layoutName,
+        template_name: templateName,
         resume_data: resumeData as any,
         is_public: isPublic
       };
@@ -423,17 +423,15 @@ const ResumeEditor = () => {
                 {/* Template & Theme */}
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <Label className="text-sm">Layout:</Label>
-                    <Select value={layoutName} onValueChange={setLayoutName}>
+                    <Label className="text-sm">Template:</Label>
+                    <Select value={templateName} onValueChange={setTemplateName}>
                       <SelectTrigger className="w-32">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Layout 1: Classic Two-Column">Layout 1</SelectItem>
-                        <SelectItem value="Layout 2: Modern Single Column">Layout 2</SelectItem>
-                        <SelectItem value="Layout 3: Left Sidebar">Layout 3</SelectItem>
-                        <SelectItem value="Layout 4: Grid/Card Style">Layout 4</SelectItem>
-                        <SelectItem value="Layout 5: Minimalist Centered">Layout 5</SelectItem>
+                        <SelectItem value="Professional">Professional</SelectItem>
+                        <SelectItem value="Creative">Creative</SelectItem>
+                        <SelectItem value="Corporate">Corporate</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -492,19 +490,17 @@ const ResumeEditor = () => {
                           Resume Settings
                         </h3>
                         
-                        {/* Layout Selection */}
+                        {/* Template Selection */}
                         <div className="space-y-2">
-                          <Label className="text-sm font-medium">Layout</Label>
-                          <Select value={layoutName} onValueChange={setLayoutName}>
+                          <Label className="text-sm font-medium">Template</Label>
+                          <Select value={templateName} onValueChange={setTemplateName}>
                             <SelectTrigger className="w-full">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="Layout 1: Classic Two-Column">Layout 1: Classic Two-Column</SelectItem>
-                              <SelectItem value="Layout 2: Modern Single Column">Layout 2: Modern Single Column</SelectItem>
-                              <SelectItem value="Layout 3: Left Sidebar">Layout 3: Left Sidebar</SelectItem>
-                              <SelectItem value="Layout 4: Grid/Card Style">Layout 4: Grid/Card Style</SelectItem>
-                              <SelectItem value="Layout 5: Minimalist Centered">Layout 5: Minimalist Centered</SelectItem>
+                              <SelectItem value="Professional">Professional</SelectItem>
+                              <SelectItem value="Creative">Creative</SelectItem>
+                              <SelectItem value="Corporate">Corporate</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -854,7 +850,7 @@ const ResumeEditor = () => {
                   <h2 className="text-xl font-bold text-center text-foreground">LIVE Preview</h2>
                 </div>
                 <div className="bg-white rounded-lg shadow-sm">
-                  <ResumeTemplate data={resumeData} layout={layoutName} themeColor={themeColor} />
+                  <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
                 </div>
                 
                 {/* Share Resume - Moved below preview */}
@@ -991,7 +987,7 @@ const ResumeEditor = () => {
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-foreground">Live Preview</h2>
               <div className="bg-white rounded-lg shadow-sm border p-4">
-        <ResumeTemplate data={resumeData} layout={layoutName} themeColor={themeColor} />
+                <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
               </div>
               
               {/* Share Resume */}
