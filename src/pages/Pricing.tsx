@@ -15,8 +15,8 @@ const creditPackages = [
     priceId: 'price_1SATkMCfUrZVjQTC4lbDFaBg',
     features: [
       '25 AI Enhancement uses',
-      '5 Job Match Analysis',
-      '1 Full Resume Translation',
+      '12 Job Match Analysis',
+      '8 Language Resume Translation',
       'Valid for 6 months'
     ]
   },
@@ -28,8 +28,8 @@ const creditPackages = [
     popular: true,
     features: [
       '60 AI Enhancement uses',
-      '12 Job Match Analysis',
-      '3 Full Resume Translations',
+      '30 Job Match Analysis',
+      '20 Language Resume Translation',
       'Valid for 12 months',
       'Best Value!'
     ]
@@ -156,13 +156,13 @@ const Pricing: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <h3 className="font-medium">Job Match Analysis</h3>
-              <p className="text-sm text-muted-foreground mt-1">1 เครดิต ต่อการวิเคราะห์</p>
+              <p className="text-sm text-muted-foreground mt-1">2 เครดิต ต่อการวิเคราะห์</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
               <h3 className="font-medium">Translation</h3>
-              <p className="text-sm text-muted-foreground mt-1">5 เครดิต ต่อการแปลเรซูเม่</p>
+              <p className="text-sm text-muted-foreground mt-1">3 เครดิต ต่อการแปลเรซูเม่</p>
             </CardContent>
           </Card>
         </div>
