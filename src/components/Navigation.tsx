@@ -80,9 +80,10 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          {/* Desktop Navigation Links and Auth - Right Side */}
+          <div className="hidden md:flex items-center space-x-8">
+            {/* Navigation Links */}
+            <div className="flex items-center space-x-6">
               {navLinks.map(link => 
                 link.href.startsWith('#') ? (
                   <a
@@ -103,11 +104,8 @@ const Navigation = () => {
                 )
               )}
             </div>
-          </div>
 
-          {/* Desktop Credits and Auth */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Desktop Credits Display */}
+            {/* Credits Display */}
             {isAuthenticated && userCredits !== null && (
               <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full">
                 <Coins className="h-5 w-5 text-yellow-600" />
@@ -115,7 +113,7 @@ const Navigation = () => {
               </div>
             )}
             
-            {/* Desktop Auth Buttons */}
+            {/* Auth Buttons */}
             {!isAuthenticated ? (
               <Button size="sm" asChild>
                 <Link to="/auth">Get Started</Link>
