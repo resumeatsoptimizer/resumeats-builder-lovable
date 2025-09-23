@@ -1,35 +1,28 @@
 import { FileCheck, Sparkles, BarChart3, Globe, Download } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/contexts/LanguageContext";
-
 const FeaturesSection = () => {
-  const { t } = useLanguage();
-  
-  const features = [
-    {
-      icon: FileCheck,
-      title: t('feature.atsReady.title'),
-      description: t('feature.atsReady.desc'),
-    },
-    {
-      icon: Sparkles,
-      title: t('feature.aiPowered.title'),
-      description: t('feature.aiPowered.desc'),
-    },
-    {
-      icon: BarChart3,
-      title: t('feature.match.title'),
-      description: t('feature.match.desc'),
-    },
-    {
-      icon: Globe,
-      title: t('feature.translation.title'),
-      description: t('feature.translation.desc'),
-    },
-  ];
-
-  return (
-    <section className="py-20 bg-muted/30">
+  const {
+    t
+  } = useLanguage();
+  const features = [{
+    icon: FileCheck,
+    title: t('feature.atsReady.title'),
+    description: t('feature.atsReady.desc')
+  }, {
+    icon: Sparkles,
+    title: t('feature.aiPowered.title'),
+    description: t('feature.aiPowered.desc')
+  }, {
+    icon: BarChart3,
+    title: t('feature.match.title'),
+    description: t('feature.match.desc')
+  }, {
+    icon: Globe,
+    title: t('feature.translation.title'),
+    description: t('feature.translation.desc')
+  }];
+  return <section className="py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -44,9 +37,8 @@ const FeaturesSection = () => {
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => {
-            const IconComponent = feature.icon;
-            return (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-border bg-background">
+          const IconComponent = feature.icon;
+          return <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-border bg-background">
                 <CardContent className="p-8 text-center">
                   {/* Icon */}
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-6 group-hover:bg-primary/15 transition-colors">
@@ -63,35 +55,15 @@ const FeaturesSection = () => {
                     {feature.description}
                   </p>
                 </CardContent>
-              </Card>
-            );
-          })}
+              </Card>;
+        })}
         </div>
 
         {/* Additional Benefits */}
         <div className="mt-16 text-center">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="space-y-2">
-              <div className="text-2xl font-bold text-primary">10+</div>
-              <div className="text-sm text-muted-foreground">เทมเพลต ATS</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-2xl font-bold text-primary">90%</div>
-              <div className="text-sm text-muted-foreground">อัตราผ่าน ATS</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-2xl font-bold text-primary">5 นาที</div>
-              <div className="text-sm text-muted-foreground">สร้างเรซูเม่</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-2xl font-bold text-primary">24/7</div>
-              <div className="text-sm text-muted-foreground">ความช่วยเหลือ AI</div>
-            </div>
-          </div>
+          
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default FeaturesSection;
