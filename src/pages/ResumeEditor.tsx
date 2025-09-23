@@ -396,38 +396,17 @@ const ResumeEditor = () => {
               </Label>
             </div>
             
+            <PDFGenerator 
+              resumeId={resumeId || ''}
+              resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+            />
+            
             <Button onClick={handleSave}>Save Resume</Button>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6">
-        {/* Quick Actions Card Above Preview */}
-        <div className="grid grid-cols-1 gap-4 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                Quick Actions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex gap-3">
-              <PDFGenerator 
-                resumeId={resumeId || ''}
-                resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
-              />
-              <QRCodeGenerator 
-                resumeId={resumeId || ''}
-                resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
-              />
-              <Button variant="outline" className="flex items-center gap-2">
-                <Share2 className="w-4 h-4" />
-                Share Resume
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Main Content */}
         <ResizablePanelGroup direction="horizontal" className="h-[calc(100vh-280px)]">
           <ResizablePanel defaultSize={50} minSize={30}>
@@ -814,6 +793,26 @@ const ResumeEditor = () => {
                       resumeData={resumeData}
                       onResumeUpdate={handleResumeUpdate}
                     />
+                  </CardContent>
+                </Card>
+
+                {/* Share Resume */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Share2 className="w-4 h-4" />
+                      Share Your Resume
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex gap-3">
+                    <QRCodeGenerator 
+                      resumeId={resumeId || ''}
+                      resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+                    />
+                    <Button variant="outline" className="flex items-center gap-2">
+                      <Share2 className="w-4 h-4" />
+                      Share Resume
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
