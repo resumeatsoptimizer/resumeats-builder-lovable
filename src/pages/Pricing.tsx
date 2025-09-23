@@ -6,39 +6,41 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Check, Loader2 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
-
-const creditPackages = [
-  {
-    name: '25 Credits Package',
-    price: '฿99',
-    credits: 25,
-    priceId: 'price_1SATkMCfUrZVjQTC4lbDFaBg',
-    features: [
-      '25 AI Enhancement uses',
-      '12 Job Match Analysis',
-      '8 Language Resume Translation',
-      'Valid for 6 months'
-    ]
-  },
-  {
-    name: '60 Credits Package',
-    price: '฿199',
-    credits: 60,
-    priceId: 'price_1SATl1CfUrZVjQTCXz7crofs',
-    popular: true,
-    features: [
-      '60 AI Enhancement uses',
-      '30 Job Match Analysis',
-      '20 Language Resume Translation',
-      'Valid for 12 months',
-      'Best Value!'
-    ]
-  }
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Pricing: React.FC = () => {
   const [loading, setLoading] = useState<string | null>(null);
   const { toast } = useToast();
+  const { t } = useLanguage();
+
+  const creditPackages = [
+    {
+      name: t('pricing.basic'),
+      price: '฿99',
+      credits: 25,
+      priceId: 'price_1SATkMCfUrZVjQTC4lbDFaBg',
+      features: [
+        `25 ${t('feature.aiPowered.title')} uses`,
+        `12 ${t('feature.match.title')}`,
+        `8 ${t('feature.translation.title')}`,
+        t('pricing.features.validMonths').replace('{months}', '6')
+      ]
+    },
+    {
+      name: t('pricing.premium'),
+      price: '฿199',
+      credits: 60,
+      priceId: 'price_1SATl1CfUrZVjQTCXz7crofs',
+      popular: true,
+      features: [
+        `60 ${t('feature.aiPowered.title')} uses`,
+        `30 ${t('feature.match.title')}`,
+        `20 ${t('feature.translation.title')}`,
+        t('pricing.features.validMonths').replace('{months}', '12'),
+        t('pricing.features.bestValue')
+      ]
+    }
+  ];
 
   const handlePurchase = async (priceId: string, packageName: string) => {
     try {
@@ -92,9 +94,9 @@ const Pricing: React.FC = () => {
       <Navigation />
       <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-primary mb-2">เลือกแพ็กเกจเครดิต</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">{t('pricing.title')}</h1>
         <p className="text-muted-foreground text-lg">
-          เติมเครดิตเพื่อใช้ฟีเจอร์ AI ขั้นสูงในการสร้างเรซูเม่ของคุณ
+          {t('pricing.subtitle')}
         </p>
       </div>
 
@@ -103,14 +105,14 @@ const Pricing: React.FC = () => {
           <Card key={pkg.priceId} className={`relative ${pkg.popular ? 'border-primary shadow-lg' : ''}`}>
             {pkg.popular && (
               <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary">
-                แนะนำ
+                {t('pricing.popular')}
               </Badge>
             )}
             <CardHeader className="text-center">
               <CardTitle className="text-xl">{pkg.name}</CardTitle>
               <CardDescription>
                 <span className="text-3xl font-bold text-primary">{pkg.price}</span>
-                <span className="text-muted-foreground ml-1">/ {pkg.credits} เครดิต</span>
+                <span className="text-muted-foreground ml-1">/ {pkg.credits} {t('common.credits')}</span>
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -133,10 +135,10 @@ const Pricing: React.FC = () => {
                 {loading === pkg.priceId ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    กำลังดำเนินการ...
+                    {t('common.loading')}
                   </>
                 ) : (
-                  `ซื้อ ${pkg.credits} เครดิต`
+                  `${t('pricing.getStarted')} ${pkg.credits} ${t('common.credits')}`
                 )}
               </Button>
             </CardFooter>
@@ -145,24 +147,24 @@ const Pricing: React.FC = () => {
       </div>
 
       <div className="mt-12 text-center">
-        <h2 className="text-xl font-semibold mb-4">เครดิตใช้สำหรับอะไร?</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('pricing.creditUsage')}</h2>
         <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
           <Card>
             <CardContent className="pt-6">
-              <h3 className="font-medium">AI Enhancement</h3>
-              <p className="text-sm text-muted-foreground mt-1">1 เครดิต ต่อการปรับปรุงข้อความ</p>
+              <h3 className="font-medium">{t('pricing.enhancement')}</h3>
+              <p className="text-sm text-muted-foreground mt-1">{t('pricing.enhancementCredit')}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
-              <h3 className="font-medium">Job Match Analysis</h3>
-              <p className="text-sm text-muted-foreground mt-1">2 เครดิต ต่อการวิเคราะห์</p>
+              <h3 className="font-medium">{t('feature.match.title')}</h3>
+              <p className="text-sm text-muted-foreground mt-1">{t('pricing.jobMatchCredit')}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6">
-              <h3 className="font-medium">Translation</h3>
-              <p className="text-sm text-muted-foreground mt-1">3 เครดิต ต่อการแปลเรซูเม่</p>
+              <h3 className="font-medium">{t('feature.translation.title')}</h3>
+              <p className="text-sm text-muted-foreground mt-1">{t('pricing.translationCredit')}</p>
             </CardContent>
           </Card>
         </div>

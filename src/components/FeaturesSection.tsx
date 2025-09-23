@@ -1,27 +1,30 @@
-import { FileCheck, Sparkles, BarChart3, Globe } from "lucide-react";
+import { FileCheck, Sparkles, BarChart3, Globe, Download } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const FeaturesSection = () => {
+  const { t } = useLanguage();
+  
   const features = [
     {
       icon: FileCheck,
-      title: "ATS-Friendly Templates",
-      description: "เลือกเทมเพลตที่ออกแบบมาเพื่อผ่านระบบคัดกรองอัตโนมัติโดยเฉพาะ",
+      title: t('feature.atsReady.title'),
+      description: t('feature.atsReady.desc'),
     },
     {
       icon: Sparkles,
-      title: "AI-Powered Enhancement",
-      description: "อัปเกรดเนื้อหาเรซูเม่ของคุณให้โดดเด่นด้วยพลังของ AI",
+      title: t('feature.aiPowered.title'),
+      description: t('feature.aiPowered.desc'),
     },
     {
       icon: BarChart3,
-      title: "Job Match Analysis",
-      description: "วิเคราะห์ความเข้ากันของเรซูเม่กับตำแหน่งงานที่คุณสนใจ",
+      title: t('feature.match.title'),
+      description: t('feature.match.desc'),
     },
     {
       icon: Globe,
-      title: "AI Translation",
-      description: "แปลเรซูเม่ของคุณเป็นภาษาต่างๆ ทั่วโลก เพื่อโอกาสที่ไร้พรมแดน",
+      title: t('feature.translation.title'),
+      description: t('feature.translation.desc'),
     },
   ];
 
@@ -31,10 +34,10 @@ const FeaturesSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            ฟีเจอร์เด็ดที่จะทำให้เรซูเม่คุณโดดเด่น
+            {t('features.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            เครื่องมือครบครันที่ช่วยให้คุณสร้างเรซูเม่ที่ผ่านระบบ ATS และสร้างความประทับใจให้กับผู้รับสมัครงาน
+            {t('features.subtitle')}
           </p>
         </div>
 

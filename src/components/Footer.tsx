@@ -1,6 +1,9 @@
 import { Facebook, Linkedin } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLanguage();
+  
   return (
     <footer className="bg-background border-t border-border py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,7 +14,7 @@ const Footer = () => {
               ResumeATS-Builder
             </h3>
             <p className="text-muted-foreground mb-6 max-w-md">
-              แพลตฟอร์มสร้างเรซูเม่ที่ผ่านระบบ ATS สำหรับนักศึกษาจบใหม่และผู้หางานยุคใหม่ในประเทศไทย
+              {t('hero.subtitle')}
             </p>
             
             {/* Social Media Icons */}
@@ -36,22 +39,22 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">
-              เมนูหลัก
+              {t('footer.product')}
             </h4>
             <ul className="space-y-3">
               <li>
                 <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-                  ฟีเจอร์
+                  Features
                 </a>
               </li>
               <li>
-                <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  ราคา
+                <a href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Pricing
                 </a>
               </li>
               <li>
                 <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">
-                  เกี่ยวกับเรา
+                  About Us
                 </a>
               </li>
             </ul>
@@ -60,22 +63,22 @@ const Footer = () => {
           {/* Legal Links */}
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">
-              ข้อมูลสำคัญ
+              {t('footer.support')}
             </h4>
             <ul className="space-y-3">
               <li>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Privacy Policy
+                  {t('footer.privacy')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Terms of Service
+                  {t('footer.terms')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  ช่วยเหลือ
+                  {t('footer.help')}
                 </a>
               </li>
             </ul>
@@ -86,7 +89,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-muted-foreground text-sm">
-              © 2025 ResumeATS-Builder. All Rights Reserved.
+              © 2025 ResumeATS-Builder. {t('footer.rights')}
             </p>
             <p className="text-muted-foreground text-sm mt-4 md:mt-0">
               Made with ❤️ for Thai job seekers

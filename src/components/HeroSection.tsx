@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { FileText, Star, Zap, CheckCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-background py-20 lg:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,29 +14,27 @@ const HeroSection = () => {
           <div className="space-y-8">
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-              สร้างเรซูเม่เทพ{" "}
-              <span className="text-primary">ผ่านทุกระบบ ATS</span>{" "}
-              ใน 10 นาที
+              {t('hero.title')}
             </h1>
 
             {/* Sub-headline */}
             <p className="text-xl text-muted-foreground leading-relaxed">
-              แพลตฟอร์มสำหรับนักศึกษาจบใหม่และผู้หางานยุคใหม่ในประเทศไทย
+              {t('hero.subtitle')}
             </p>
 
             {/* Features List */}
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                <span className="text-muted-foreground">เทมเพลตที่ผ่านระบบ ATS</span>
+                <span className="text-muted-foreground">{t('feature.atsReady.desc')}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                <span className="text-muted-foreground">ปรับปรุงด้วย AI อัจฉริยะ</span>
+                <span className="text-muted-foreground">{t('feature.aiPowered.desc')}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                <span className="text-muted-foreground">วิเคราะห์ความเข้ากันกับงาน</span>
+                <span className="text-muted-foreground">{t('feature.match.desc')}</span>
               </div>
             </div>
 
@@ -46,7 +47,7 @@ const HeroSection = () => {
               >
                 <Link to="/auth">
                   <Zap className="mr-2 h-5 w-5" />
-                  Get Started
+                  {t('hero.cta')}
                 </Link>
               </Button>
             </div>

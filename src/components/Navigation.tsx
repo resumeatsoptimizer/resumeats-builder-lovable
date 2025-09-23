@@ -4,7 +4,10 @@ import { Menu, X, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 const Navigation = () => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [userCredits, setUserCredits] = useState<number | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,13 +63,13 @@ const Navigation = () => {
     name: "Features",
     href: "#features"
   }, {
-    name: "Pricing",
+    name: "Pricing", 
     href: "/pricing"
   }, {
     name: "About Us",
     href: "#about"
   }, ...(isAuthenticated ? [{
-    name: "Resume Editor",
+    name: t('nav.resumeEditor'),
     href: "/resume-editor"
   }] : [])];
   return <nav className="bg-background border-b border-border sticky top-0 z-50">
@@ -105,22 +108,25 @@ const Navigation = () => {
               )}
             </div>
 
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {/* Credits Display */}
             {isAuthenticated && userCredits !== null && (
               <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full">
                 <Coins className="h-5 w-5 text-yellow-600" />
-                <span className="text-sm font-semibold text-yellow-700">{userCredits} Credits</span>
+                <span className="text-sm font-semibold text-yellow-700">{userCredits} {t('common.credits')}</span>
               </div>
             )}
             
             {/* Auth Buttons */}
             {!isAuthenticated ? (
               <Button size="sm" asChild>
-                <Link to="/auth">Get Started</Link>
+                <Link to="/auth">{t('nav.getStarted')}</Link>
               </Button>
             ) : (
               <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut()}>
-                Sign Out
+                {t('nav.signOut')}
               </Button>
             )}
           </div>
@@ -150,17 +156,22 @@ const Navigation = () => {
 
             {/* Mobile Credits and Auth */}
             <div className="flex flex-col space-y-3 px-3 pt-4">
+              {/* Mobile Language Switcher */}
+              <div className="flex justify-center">
+                <LanguageSwitcher />
+              </div>
+
               {/* Mobile Credits Display */}
               {isAuthenticated && userCredits !== null && <div className="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full">
                   <Coins className="h-5 w-5 text-yellow-600" />
-                  <span className="text-base font-semibold text-yellow-700">{userCredits} Credits</span>
+                  <span className="text-base font-semibold text-yellow-700">{userCredits} {t('common.credits')}</span>
                 </div>}
               
               {/* Mobile Auth Buttons */}
               {!isAuthenticated ? <Button size="sm" className="w-full" asChild>
-                  <Link to="/auth">Get Started</Link>
+                  <Link to="/auth">{t('nav.getStarted')}</Link>
                 </Button> : <Button variant="outline" size="sm" className="w-full" onClick={() => supabase.auth.signOut()}>
-                  Sign Out
+                  {t('nav.signOut')}
                 </Button>}
             </div>
           </div>

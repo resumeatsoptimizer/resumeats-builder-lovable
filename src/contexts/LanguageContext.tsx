@@ -1,0 +1,151 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+type Language = 'th' | 'en';
+
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string) => string;
+}
+
+interface Translations {
+  [key: string]: {
+    th: string;
+    en: string;
+  };
+}
+
+const translations: Translations = {
+  // Navigation
+  'nav.getStarted': { th: 'Get Started', en: 'Get Started' },
+  'nav.signOut': { th: 'ออกจากระบบ', en: 'Sign Out' },
+  'nav.resumeEditor': { th: 'แก้ไขเรซูเม่', en: 'Resume Editor' },
+  
+  // Hero Section
+  'hero.title': { th: 'สร้างเรซูเม่ที่ผ่าน ATS ได้ง่าย', en: 'Create ATS-Friendly Resumes Easily' },
+  'hero.subtitle': { th: 'สร้างเรซูเม่มืออาชีพที่ผ่านระบบ ATS และปรับปรุงด้วย AI เพื่อการสมัครงานที่สำเร็จ', en: 'Build professional resumes that pass ATS systems and enhance with AI for successful job applications' },
+  'hero.cta': { th: 'เริ่มสร้างเรซูเม่', en: 'Start Building Resume' },
+  'hero.tryFree': { th: 'ลองใช้ฟรี', en: 'Try Free' },
+  
+  // Features Section
+  'features.title': { th: 'ฟีเจอร์ที่ทรงพลัง', en: 'Powerful Features' },
+  'features.subtitle': { th: 'เครื่องมือครบครันสำหรับการสร้างเรซูเม่ที่สมบูรณ์แบบ', en: 'Complete tools for creating the perfect resume' },
+  
+  // Feature Cards
+  'feature.atsReady.title': { th: 'ATS Ready', en: 'ATS Ready' },
+  'feature.atsReady.desc': { th: 'เรซูเม่ที่ผ่านระบบ ATS ได้ 100%', en: '100% ATS system compatible resumes' },
+  
+  'feature.aiPowered.title': { th: 'AI-Powered Enhancement', en: 'AI-Powered Enhancement' },
+  'feature.aiPowered.desc': { th: 'ปรับปรุงเนื้อหาด้วย AI อัจฉริยะ', en: 'Enhance content with intelligent AI' },
+  
+  'feature.templates.title': { th: 'ATS-Friendly Templates', en: 'ATS-Friendly Templates' },
+  'feature.templates.desc': { th: 'เทมเพลตที่ออกแบบมาเพื่อ ATS', en: 'Templates designed specifically for ATS' },
+  
+  'feature.match.title': { th: 'Job Match Analysis', en: 'Job Match Analysis' },
+  'feature.match.desc': { th: 'วิเคราะห์ความเข้ากันกับตำแหน่งงาน', en: 'Analyze compatibility with job positions' },
+  
+  'feature.translation.title': { th: 'AI Translation', en: 'AI Translation' },
+  'feature.translation.desc': { th: 'แปลเรซูเม่เป็นภาษาต่างๆ ด้วย AI', en: 'Translate resumes to various languages with AI' },
+  
+  'feature.download.title': { th: 'ดาวน์โหลดทันที', en: 'Instant Download' },
+  'feature.download.desc': { th: 'ดาวน์โหลด PDF คุณภาพสูงทันที', en: 'Download high-quality PDF instantly' },
+  
+  // Footer
+  'footer.product': { th: 'ผลิตภัณฑ์', en: 'Product' },
+  'footer.company': { th: 'บริษัท', en: 'Company' },
+  'footer.support': { th: 'ฝ่ายสนับสนุน', en: 'Support' },
+  'footer.legal': { th: 'ด้านกฎหมาย', en: 'Legal' },
+  
+  'footer.templates': { th: 'เทมเพลต', en: 'Templates' },
+  'footer.examples': { th: 'ตัวอย่าง', en: 'Examples' },
+  'footer.aboutUs': { th: 'เกี่ยวกับเรา', en: 'About Us' },
+  'footer.careers': { th: 'ร่วมงานกับเรา', en: 'Careers' },
+  'footer.contact': { th: 'ติดต่อเรา', en: 'Contact Us' },
+  'footer.help': { th: 'ช่วยเหลือ', en: 'Help Center' },
+  'footer.privacy': { th: 'นโยบายความเป็นส่วนตัว', en: 'Privacy Policy' },
+  'footer.terms': { th: 'ข้อกำหนดการใช้งาน', en: 'Terms of Service' },
+  'footer.rights': { th: 'สงวนลิขสิทธิ์', en: 'All rights reserved' },
+  
+  // Pricing Page
+  'pricing.title': { th: 'แผนราคา', en: 'Pricing Plans' },
+  'pricing.subtitle': { th: 'เลือกแผนที่เหมาะกับคุณ', en: 'Choose the plan that fits your needs' },
+  'pricing.free': { th: 'ฟรี', en: 'Free' },
+  'pricing.basic': { th: 'พื้นฐาน', en: 'Basic' },
+  'pricing.premium': { th: 'พรีเมียม', en: 'Premium' },
+  'pricing.month': { th: 'เดือน', en: 'month' },
+  'pricing.popular': { th: 'ยอดนิยม!', en: 'Most Popular!' },
+  'pricing.getStarted': { th: 'เริ่มใช้งาน', en: 'Get Started' },
+  'pricing.currentPlan': { th: 'แผนปัจจุบัน', en: 'Current Plan' },
+  'pricing.upgrade': { th: 'อัพเกรด', en: 'Upgrade' },
+  
+  // Features list
+  'pricing.features.basicResume': { th: 'สร้างเรซูเม่พื้นฐาน', en: 'Basic resume creation' },
+  'pricing.features.atsTemplates': { th: 'เทมเพลต ATS', en: 'ATS templates' },
+  'pricing.features.pdfDownload': { th: 'ดาวน์โหลด PDF', en: 'PDF download' },
+  'pricing.features.aiEnhancement': { th: 'การปรับปรุงด้วย AI', en: 'AI Enhancement uses' },
+  'pricing.features.jobMatch': { th: 'Job Match Analysis', en: 'Job Match Analysis' },
+  'pricing.features.translation': { th: 'Language Resume Translation', en: 'Language Resume Translation' },
+  'pricing.features.validMonths': { th: 'ใช้ได้ {months} เดือน', en: 'Valid for {months} months' },
+  'pricing.features.bestValue': { th: 'คุณค่าที่ดีที่สุด!', en: 'Best Value!' },
+  
+  // Credit usage
+  'pricing.creditUsage': { th: 'การใช้เครดิต', en: 'Credit Usage' },
+  'pricing.enhancement': { th: 'Enhancement', en: 'Enhancement' },
+  'pricing.enhancementCredit': { th: '1 เครดิต ต่อการปรับปรุง', en: '1 credit per enhancement' },
+  'pricing.jobMatchCredit': { th: '2 เครดิต ต่อการวิเคราะห์', en: '2 credits per analysis' },
+  'pricing.translationCredit': { th: '3 เครดิต ต่อการแปลเรซูเม่', en: '3 credits per resume translation' },
+  
+  // Auth
+  'auth.signIn': { th: 'เข้าสู่ระบบ', en: 'Sign In' },
+  'auth.signUp': { th: 'สมัครสมาชิก', en: 'Sign Up' },
+  'auth.email': { th: 'อีเมล', en: 'Email' },
+  'auth.password': { th: 'รหัสผ่าน', en: 'Password' },
+  
+  // Common
+  'common.loading': { th: 'กำลังโหลด...', en: 'Loading...' },
+  'common.save': { th: 'บันทึก', en: 'Save' },
+  'common.cancel': { th: 'ยกเลิก', en: 'Cancel' },
+  'common.confirm': { th: 'ยืนยัน', en: 'Confirm' },
+  'common.credits': { th: 'เครดิต', en: 'Credits' },
+};
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguage] = useState<Language>('th');
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('language') as Language;
+    if (savedLanguage && (savedLanguage === 'th' || savedLanguage === 'en')) {
+      setLanguage(savedLanguage);
+    }
+  }, []);
+
+  const handleSetLanguage = (lang: Language) => {
+    setLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
+
+  const t = (key: string): string => {
+    const translation = translations[key];
+    if (!translation) {
+      console.warn(`Translation key "${key}" not found`);
+      return key;
+    }
+    return translation[language];
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
