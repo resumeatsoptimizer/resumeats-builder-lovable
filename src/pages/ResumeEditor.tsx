@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
@@ -13,6 +14,7 @@ import { PDFGenerator } from '@/components/PDFGenerator';
 import LanguageSelection from '@/components/LanguageSelection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Plus, X, Upload, User } from 'lucide-react';
 
 interface WorkExperience {
   id: string;
@@ -41,14 +43,10 @@ interface ResumeData {
     email: string;
     linkedin: string;
     portfolio?: string;
+    profileImage?: string;
   };
   summary: string;
-  skills: {
-    digitalMarketing: string[];
-    analytics: string[];
-    tools: string[];
-    softSkills: string[];
-  };
+  skills: string[];
   workExperience: WorkExperience[];
   education: Education[];
   certifications: string[];
@@ -58,8 +56,11 @@ interface ResumeData {
 const ResumeEditor = () => {
   const { toast } = useToast();
   const [templateName, setTemplateName] = useState('Professional');
+  const [themeColor, setThemeColor] = useState('slate');
   const [resumeId, setResumeId] = useState<string | null>(null);
   const [isPublic, setIsPublic] = useState(false);
+  const [newSkill, setNewSkill] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
@@ -70,12 +71,7 @@ const ResumeEditor = () => {
       portfolio: ''
     },
     summary: '',
-    skills: {
-      digitalMarketing: [],
-      analytics: [],
-      tools: [],
-      softSkills: []
-    },
+    skills: [],
     workExperience: [{
       id: '1',
       position: '',
@@ -105,14 +101,50 @@ const ResumeEditor = () => {
     }));
   };
 
-  const updateSkills = (category: keyof ResumeData['skills'], value: string) => {
+  const addSkill = () => {
+    if (newSkill.trim() && !resumeData.skills.includes(newSkill.trim())) {
+      setResumeData(prev => ({
+        ...prev,
+        skills: [...prev.skills, newSkill.trim()]
+      }));
+      setNewSkill('');
+    }
+  };
+
+  const removeSkill = (skillToRemove: string) => {
     setResumeData(prev => ({
       ...prev,
-      skills: {
-        ...prev.skills,
-        [category]: value.split(',').map(skill => skill.trim()).filter(Boolean)
-      }
+      skills: prev.skills.filter(skill => skill !== skillToRemove)
     }));
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast({
+        title: "ไฟล์ใหญ่เกินไป",
+        description: "กรุณาเลือกรูปภาพที่มีขนาดไม่เกิน 2MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Convert to base64 for preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64String = e.target?.result as string;
+      setResumeData(prev => ({
+        ...prev,
+        personalInfo: {
+          ...prev.personalInfo,
+          profileImage: base64String
+        }
+      }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const addWorkExperience = () => {
@@ -229,6 +261,19 @@ const ResumeEditor = () => {
               </SelectContent>
             </Select>
             
+            <Select value={themeColor} onValueChange={setThemeColor}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="slate">Slate</SelectItem>
+                <SelectItem value="blue">Blue</SelectItem>
+                <SelectItem value="emerald">Emerald</SelectItem>
+                <SelectItem value="violet">Violet</SelectItem>
+                <SelectItem value="rose">Rose</SelectItem>
+              </SelectContent>
+            </Select>
+            
             <div className="flex items-center space-x-2">
               <Switch
                 id="public-resume"
@@ -249,6 +294,51 @@ const ResumeEditor = () => {
         <ResizablePanel defaultSize={50} minSize={30}>
           <div className="p-6 h-full overflow-y-auto">
             <div className="space-y-6">
+              {/* Profile Photo Upload */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Profile Photo</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      {resumeData.personalInfo.profileImage ? (
+                        <img
+                          src={resumeData.personalInfo.profileImage}
+                          alt="Profile"
+                          className="w-24 h-24 rounded-full object-cover border-2 border-border"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center border-2 border-border">
+                          <User className="w-8 h-8 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex items-center gap-2"
+                      >
+                        <Upload className="w-4 h-4" />
+                        อัพโหลดรูปภาพ
+                      </Button>
+                      <p className="text-xs text-muted-foreground">
+                        รองรับไฟล์ JPG, PNG (สูงสุด 2MB)
+                      </p>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Personal Information */}
               <Card>
                 <CardHeader>
@@ -329,41 +419,59 @@ const ResumeEditor = () => {
                   <CardTitle>Skills</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="digitalMarketing">Digital Marketing</Label>
+                  <div className="flex gap-2">
                     <Input
-                      id="digitalMarketing"
-                      value={resumeData.skills.digitalMarketing.join(', ')}
-                      onChange={(e) => updateSkills('digitalMarketing', e.target.value)}
-                      placeholder="SEO, SEM, Content Marketing, Social Media Marketing"
+                      value={newSkill}
+                      onChange={(e) => setNewSkill(e.target.value)}
+                      placeholder="เพิ่มทักษะ เช่น Digital Marketing, Google Analytics"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          addSkill();
+                        }
+                      }}
                     />
+                    <Button type="button" onClick={addSkill} size="sm">
+                      <Plus className="w-4 h-4" />
+                      Add Skill
+                    </Button>
                   </div>
-                  <div>
-                    <Label htmlFor="analytics">Analytics & Reporting</Label>
-                    <Input
-                      id="analytics"
-                      value={resumeData.skills.analytics.join(', ')}
-                      onChange={(e) => updateSkills('analytics', e.target.value)}
-                      placeholder="Google Analytics, Data Analysis, A/B Testing"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="tools">Tools</Label>
-                    <Input
-                      id="tools"
-                      value={resumeData.skills.tools.join(', ')}
-                      onChange={(e) => updateSkills('tools', e.target.value)}
-                      placeholder="Google Ads, Facebook Ads Manager, HubSpot"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="softSkills">Soft Skills</Label>
-                    <Input
-                      id="softSkills"
-                      value={resumeData.skills.softSkills.join(', ')}
-                      onChange={(e) => updateSkills('softSkills', e.target.value)}
-                      placeholder="Strategic Planning, Project Management, Team Leadership"
-                    />
+                  
+                  {resumeData.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {resumeData.skills.map((skill, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          {skill}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="h-4 w-4 p-0 hover:bg-transparent"
+                            onClick={() => removeSkill(skill)}
+                          >
+                            <X className="w-3 h-3" />
+                          </Button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div className="text-sm text-muted-foreground">
+                    <p className="font-medium mb-1">แนะนำทักษะ:</p>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span className="font-medium">Digital Marketing:</span> SEO, SEM, Content Marketing, Social Media Marketing
+                      </div>
+                      <div>
+                        <span className="font-medium">Analytics:</span> Google Analytics, Data Analysis, A/B Testing
+                      </div>
+                      <div>
+                        <span className="font-medium">Tools:</span> Google Ads, Facebook Ads Manager, HubSpot
+                      </div>
+                      <div>
+                        <span className="font-medium">Soft Skills:</span> Strategic Planning, Project Management, Team Leadership
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -513,48 +621,109 @@ const ResumeEditor = () => {
         <ResizableHandle withHandle />
         
         <ResizablePanel defaultSize={50} minSize={30}>
-          <div className="p-6 h-full overflow-y-auto bg-muted/30">
-            <div className="mb-4 flex justify-between items-start">
-              <div>
-                <h2 className="text-lg font-semibold text-foreground">Live Preview</h2>
-                <p className="text-sm text-muted-foreground">Template: {templateName}</p>
-              </div>
-              
-              {/* PDF and QR Code Controls */}
-              <div className="flex flex-col gap-3 min-w-[200px]">
-                {resumeId && (
-                  <>
-                    <PDFGenerator 
-                      resumeId={resumeId} 
-                      resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} 
+          <div className="p-6 h-full overflow-y-auto bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-6 space-y-4">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl font-bold text-foreground">Live Preview</h2>
+                  <div className="flex gap-2">
+                    <LanguageSelection 
+                      resumeData={resumeData}
+                      onResumeUpdate={handleResumeUpdate}
                     />
-                    {isPublic && (
-                      <QRCodeGenerator 
-                        resumeId={resumeId}
-                        resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
-                      />
+                    {resumeId && (
+                      <>
+                        <PDFGenerator 
+                          resumeId={resumeId}
+                          resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+                        />
+                        {isPublic && (
+                          <QRCodeGenerator 
+                            resumeId={resumeId}
+                            resumeTitle={resumeData.personalInfo.fullName || 'My Resume'}
+                          />
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-                {!resumeId && (
-                  <div className="text-center p-4 border border-dashed rounded-lg">
-                    <p className="text-sm text-muted-foreground">
-                      Save your resume first to enable PDF download and QR code sharing
-                    </p>
                   </div>
-                )}
-                {resumeId && !isPublic && (
-                  <div className="text-center p-3 border border-dashed rounded-lg">
-                    <p className="text-xs text-muted-foreground">
-                      Enable "Make public" to share your resume via QR code
-                    </p>
+                </div>
+                
+                {/* Modern Grid Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Main Resume Preview */}
+                  <div className="lg:col-span-2">
+                    <div className="bg-white rounded-lg shadow-lg border border-border overflow-hidden">
+                      <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
+                    </div>
                   </div>
-                )}
+                  
+                  {/* Preview Controls */}
+                  <div className="space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-sm">Quick Actions</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <Button onClick={handleSave} className="w-full" size="sm">
+                          Save Resume
+                        </Button>
+                        <div className="flex items-center space-x-2">
+                        <Switch
+                            id="public-preview"
+                            checked={isPublic}
+                            onCheckedChange={setIsPublic}
+                          />
+                          <Label htmlFor="public-preview" className="text-xs">
+                            Make public
+                          </Label>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-sm">Template & Theme</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div>
+                          <Label className="text-xs">Template</Label>
+                          <Select value={templateName} onValueChange={setTemplateName}>
+                            <SelectTrigger className="h-8">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Professional">Professional</SelectItem>
+                              <SelectItem value="Creative">Creative</SelectItem>
+                              <SelectItem value="Corporate">Corporate</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div>
+                          <Label className="text-xs">Color Theme</Label>
+                          <div className="grid grid-cols-5 gap-1 mt-1">
+                            {[
+                              { value: 'slate', color: 'bg-slate-600' },
+                              { value: 'blue', color: 'bg-blue-600' },
+                              { value: 'emerald', color: 'bg-emerald-600' },
+                              { value: 'violet', color: 'bg-violet-600' },
+                              { value: 'rose', color: 'bg-rose-600' }
+                            ].map((theme) => (
+                              <button
+                                key={theme.value}
+                                className={`w-8 h-8 rounded-full ${theme.color} ring-2 ${
+                                  themeColor === theme.value ? 'ring-foreground' : 'ring-transparent'
+                                } hover:ring-foreground/50 transition-all`}
+                                onClick={() => setThemeColor(theme.value)}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
               </div>
-            </div>
-            
-            <div className="bg-white shadow-lg rounded-lg">
-              <ResumeTemplate data={resumeData} template={templateName} />
             </div>
           </div>
         </ResizablePanel>

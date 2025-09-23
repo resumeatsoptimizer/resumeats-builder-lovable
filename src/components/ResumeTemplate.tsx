@@ -4,14 +4,9 @@ interface PersonalInfo {
   email: string;
   linkedin: string;
   portfolio?: string;
+  profileImage?: string;
 }
 
-interface Skills {
-  digitalMarketing: string[];
-  analytics: string[];
-  tools: string[];
-  softSkills: string[];
-}
 
 interface WorkExperience {
   id: string;
@@ -36,7 +31,7 @@ interface Education {
 interface ResumeData {
   personalInfo: PersonalInfo;
   summary: string;
-  skills: Skills;
+  skills: string[];
   workExperience: WorkExperience[];
   education: Education[];
   certifications: string[];
@@ -46,20 +41,59 @@ interface ResumeData {
 interface ResumeTemplateProps {
   data: ResumeData;
   template: string;
+  themeColor?: string;
 }
 
-export const ResumeTemplate = ({ data, template }: ResumeTemplateProps) => {
+export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeTemplateProps) => {
   const { personalInfo, summary, skills, workExperience, education, certifications, awards } = data;
+
+  // Get theme color classes
+  const getThemeColors = () => {
+    switch (themeColor) {
+      case 'blue':
+        return {
+          header: 'from-blue-600 to-blue-800',
+          section: 'text-blue-700 border-blue-700',
+          accent: 'text-blue-700'
+        };
+      case 'emerald':
+        return {
+          header: 'from-emerald-600 to-emerald-800',
+          section: 'text-emerald-700 border-emerald-700',
+          accent: 'text-emerald-700'
+        };
+      case 'violet':
+        return {
+          header: 'from-violet-600 to-violet-800',
+          section: 'text-violet-700 border-violet-700',
+          accent: 'text-violet-700'
+        };
+      case 'rose':
+        return {
+          header: 'from-rose-600 to-rose-800',
+          section: 'text-rose-700 border-rose-700',
+          accent: 'text-rose-700'
+        };
+      default: // slate
+        return {
+          header: 'from-slate-600 to-slate-800',
+          section: 'text-slate-700 border-slate-700',
+          accent: 'text-slate-700'
+        };
+    }
+  };
 
   // Professional template styling
   const getTemplateStyles = () => {
+    const colors = getThemeColors();
+    
     switch (template) {
       case 'Creative':
         return {
-          headerBg: 'bg-gradient-to-r from-blue-600 to-purple-600',
+          headerBg: `bg-gradient-to-r ${colors.header}`,
           headerText: 'text-white',
-          sectionTitle: 'text-blue-600 border-b-2 border-blue-600',
-          accentColor: 'text-blue-600'
+          sectionTitle: `${colors.section} border-b-2`,
+          accentColor: colors.accent
         };
       case 'Corporate':
         return {
@@ -70,10 +104,10 @@ export const ResumeTemplate = ({ data, template }: ResumeTemplateProps) => {
         };
       default: // Professional
         return {
-          headerBg: 'bg-slate-700',
+          headerBg: `bg-gradient-to-r ${colors.header}`,
           headerText: 'text-white',
-          sectionTitle: 'text-slate-700 border-b-2 border-slate-700',
-          accentColor: 'text-slate-700'
+          sectionTitle: `${colors.section} border-b-2`,
+          accentColor: colors.accent
         };
     }
   };
@@ -81,15 +115,24 @@ export const ResumeTemplate = ({ data, template }: ResumeTemplateProps) => {
   const styles = getTemplateStyles();
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 text-black text-sm leading-relaxed">
+    <div className="max-w-4xl mx-auto bg-white text-black text-sm leading-relaxed">
       {/* Header */}
-      <div className={`${styles.headerBg} ${styles.headerText} p-6 rounded-t-lg`}>
-        <h1 className="text-3xl font-bold mb-2">{personalInfo.fullName || 'Your Name'}</h1>
-        <div className="flex flex-wrap gap-4 text-sm">
-          {personalInfo.phone && <span>{personalInfo.phone}</span>}
-          {personalInfo.email && <span>{personalInfo.email}</span>}
-          {personalInfo.linkedin && <span>{personalInfo.linkedin}</span>}
-          {personalInfo.portfolio && <span>{personalInfo.portfolio}</span>}
+      <div className={`${styles.headerBg} ${styles.headerText} p-8 flex items-center gap-6`}>
+        {personalInfo.profileImage && (
+          <img
+            src={personalInfo.profileImage}
+            alt="Profile"
+            className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+          />
+        )}
+        <div className="flex-1">
+          <h1 className="text-4xl font-bold mb-3">{personalInfo.fullName || 'Your Name'}</h1>
+          <div className="grid grid-cols-2 gap-2 text-sm opacity-95">
+            {personalInfo.phone && <span>📞 {personalInfo.phone}</span>}
+            {personalInfo.email && <span>✉️ {personalInfo.email}</span>}
+            {personalInfo.linkedin && <span>💼 {personalInfo.linkedin}</span>}
+            {personalInfo.portfolio && <span>🌐 {personalInfo.portfolio}</span>}
+          </div>
         </div>
       </div>
 
@@ -105,37 +148,23 @@ export const ResumeTemplate = ({ data, template }: ResumeTemplateProps) => {
         )}
 
         {/* Skills */}
-        <section>
-          <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
-            SKILLS
-          </h2>
-          <div className="space-y-2">
-            {skills.digitalMarketing.length > 0 && (
-              <div>
-                <span className={`font-semibold ${styles.accentColor}`}>Digital Marketing: </span>
-                <span>{skills.digitalMarketing.join(', ')}</span>
-              </div>
-            )}
-            {skills.analytics.length > 0 && (
-              <div>
-                <span className={`font-semibold ${styles.accentColor}`}>Analytics & Reporting: </span>
-                <span>{skills.analytics.join(', ')}</span>
-              </div>
-            )}
-            {skills.tools.length > 0 && (
-              <div>
-                <span className={`font-semibold ${styles.accentColor}`}>Tools: </span>
-                <span>{skills.tools.join(', ')}</span>
-              </div>
-            )}
-            {skills.softSkills.length > 0 && (
-              <div>
-                <span className={`font-semibold ${styles.accentColor}`}>Soft Skills: </span>
-                <span>{skills.softSkills.join(', ')}</span>
-              </div>
-            )}
-          </div>
-        </section>
+        {skills.length > 0 && (
+          <section>
+            <h2 className={`text-lg font-bold mb-3 pb-1 ${styles.sectionTitle}`}>
+              SKILLS
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className={`px-3 py-1 text-xs font-medium rounded-full border ${styles.accentColor} bg-gray-50`}
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Work Experience */}
         {workExperience.length > 0 && workExperience[0].position && (
