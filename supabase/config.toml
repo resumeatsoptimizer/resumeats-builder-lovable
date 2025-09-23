@@ -11,3 +11,6 @@ verify_jwt = true
 
 [functions.ai-translate]
 verify_jwt = true
+
+[functions.create-checkout-session]
+verify_jwt = true
