@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.ai-job-match]
 verify_jwt = true
+
+[functions.ai-translate]
+verify_jwt = true
