@@ -87,17 +87,10 @@ const LanguageSelection: React.FC<LanguageSelectionProps> = ({
   };
   return <>
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Globe className="h-5 w-5" />
-            แปลภาษา
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        
+        <CardContent className="space-y-4 py-[12px]">
           <div>
-            <label className="text-sm font-medium mb-2 block">
-              เลือกภาษาที่ต้องการแปล
-            </label>
+            
             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
               <SelectTrigger className="bg-background">
                 <SelectValue placeholder="เลือกภาษา" />
