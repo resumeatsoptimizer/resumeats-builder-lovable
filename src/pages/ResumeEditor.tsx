@@ -695,12 +695,12 @@ const ResumeEditor = () => {
                    </CardHeader>
                    <CardContent className="space-y-4">
                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                       <div>
-                          <Label htmlFor="prefix">คำนำหน้า / Prefix</Label>
-                          <Select value={resumeData.personalInfo.prefix} onValueChange={(value) => updatePersonalInfo('prefix', value)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="เลือกคำนำหน้า" />
-                            </SelectTrigger>
+                        <div>
+                           <Label htmlFor="prefix">{t('editor.prefix')}</Label>
+                           <Select value={resumeData.personalInfo.prefix} onValueChange={(value) => updatePersonalInfo('prefix', value)}>
+                             <SelectTrigger>
+                               <SelectValue placeholder={t('editor.selectPrefix')} />
+                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="นาย">นาย (Mr.)</SelectItem>
                               <SelectItem value="นาง">นาง (Mrs.)</SelectItem>
@@ -717,7 +717,7 @@ const ResumeEditor = () => {
                           <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
                         </div>
                         <div>
-                          <Label htmlFor="birthDate">วันเกิด / Birth Date</Label>
+                          <Label htmlFor="birthDate">{t('editor.birthDate')}</Label>
                           <Input 
                             id="birthDate" 
                             value={resumeData.personalInfo.birthDate || ''} 
@@ -726,7 +726,7 @@ const ResumeEditor = () => {
                             pattern="\d{2}/\d{2}/\d{4}"
                           />
                           {resumeData.personalInfo.age && resumeData.personalInfo.age > 0 && (
-                            <p className="text-xs text-muted-foreground mt-1">อายุ: {resumeData.personalInfo.age} ปี</p>
+                            <p className="text-xs text-muted-foreground mt-1">{t('editor.age')}: {resumeData.personalInfo.age} {t('editor.years')}</p>
                           )}
                         </div>
                       </div>
@@ -1017,16 +1017,16 @@ const ResumeEditor = () => {
                   <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
                 </div>
                  
-                 {/* Dashboard Link */}
-                 <div className="mt-6 text-center">
-                   <Button 
-                     variant="outline" 
-                     onClick={() => navigate('/dashboard')}
-                     className="w-full"
-                   >
-                     เรซูเม่ของคุณ
-                   </Button>
-                 </div>
+                  {/* Dashboard Link */}
+                  <div className="mt-6 text-center">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate('/dashboard')}
+                      className="w-full"
+                    >
+                      {t('dashboard.yourResumes')}
+                    </Button>
+                  </div>
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -1055,10 +1055,10 @@ const ResumeEditor = () => {
                            {t('editor.uploadImage')}
                          </Button>
                         {resumeData.personalInfo.profileImage && (
-                          <Button type="button" variant="outline" onClick={handleDeleteProfileImage} className="flex items-center gap-2 text-destructive hover:text-destructive">
-                            <Trash2 className="w-4 h-4" />
-                            ลบรูปภาพ
-                          </Button>
+                         <Button type="button" variant="outline" onClick={handleDeleteProfileImage} className="flex items-center gap-2 text-destructive hover:text-destructive">
+                           <Trash2 className="w-4 h-4" />
+                           {t('editor.deleteImage')}
+                         </Button>
                         )}
                         <p className="text-xs text-muted-foreground">
                           รองรับไฟล์ JPG, PNG (สูงสุด 2MB)
@@ -1082,12 +1082,12 @@ const ResumeEditor = () => {
                   </CardHeader>
                    <CardContent className="space-y-4">
                      <div className="space-y-4">
-                       <div>
-                         <Label htmlFor="mobile-prefix">คำนำหน้า / Prefix</Label>
-                         <Select value={resumeData.personalInfo.prefix} onValueChange={(value) => updatePersonalInfo('prefix', value)}>
-                           <SelectTrigger>
-                             <SelectValue placeholder="เลือกคำนำหน้า" />
-                           </SelectTrigger>
+                        <div>
+                          <Label htmlFor="mobile-prefix">{t('editor.prefix')}</Label>
+                          <Select value={resumeData.personalInfo.prefix} onValueChange={(value) => updatePersonalInfo('prefix', value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder={t('editor.selectPrefix')} />
+                            </SelectTrigger>
                            <SelectContent>
                              <SelectItem value="นาย">นาย (Mr.)</SelectItem>
                              <SelectItem value="นาง">นาง (Mrs.)</SelectItem>
@@ -1103,19 +1103,19 @@ const ResumeEditor = () => {
                          <Label htmlFor="mobile-fullName">Full Name</Label>
                          <Input id="mobile-fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
                        </div>
-                       <div>
-                         <Label htmlFor="mobile-birthDate">วันเกิด / Birth Date</Label>
-                         <Input 
-                           id="mobile-birthDate" 
-                           value={resumeData.personalInfo.birthDate || ''} 
-                           onChange={e => updatePersonalInfo('birthDate', e.target.value)} 
-                           placeholder="DD/MM/YYYY"
-                           pattern="\d{2}/\d{2}/\d{4}"
-                         />
-                         {resumeData.personalInfo.age && resumeData.personalInfo.age > 0 && (
-                           <p className="text-xs text-muted-foreground mt-1">อายุ: {resumeData.personalInfo.age} ปี</p>
-                         )}
-                       </div>
+                        <div>
+                          <Label htmlFor="mobile-birthDate">{t('editor.birthDate')}</Label>
+                          <Input 
+                            id="mobile-birthDate" 
+                            value={resumeData.personalInfo.birthDate || ''} 
+                            onChange={e => updatePersonalInfo('birthDate', e.target.value)} 
+                            placeholder="DD/MM/YYYY"
+                            pattern="\d{2}/\d{2}/\d{4}"
+                          />
+                          {resumeData.personalInfo.age && resumeData.personalInfo.age > 0 && (
+                            <p className="text-xs text-muted-foreground mt-1">{t('editor.age')}: {resumeData.personalInfo.age} {t('editor.years')}</p>
+                          )}
+                        </div>
                        <div>
                          <Label htmlFor="mobile-phone">Phone</Label>
                          <Input id="mobile-phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
@@ -1202,7 +1202,7 @@ const ResumeEditor = () => {
                   onClick={() => navigate('/dashboard')}
                   className="w-full"
                 >
-                  เรซูเม่ของคุณ
+                  {t('dashboard.yourResumes')}
                 </Button>
               </div>
             </div>

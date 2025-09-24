@@ -98,6 +98,14 @@ const translations: Translations = {
   'pricing.jobMatchCredit': { th: '2 เครดิต ต่อการวิเคราะห์', en: '2 credits per analysis' },
   'pricing.translationCredit': { th: '3 เครดิต ต่อการแปลเรซูเม่', en: '3 credits per resume translation' },
   
+  // Editor specific
+  'editor.prefix': { th: 'คำนำหน้า', en: 'Prefix' },
+  'editor.selectPrefix': { th: 'เลือกคำนำหน้า', en: 'Select prefix' },
+  'editor.birthDate': { th: 'วันเกิด', en: 'Birth Date' },
+  'editor.age': { th: 'อายุ', en: 'Age' },
+  'editor.years': { th: 'ปี', en: 'years' },
+  'editor.deleteImage': { th: 'ลบรูปภาพ', en: 'Delete Image' },
+  
   // Auth
   'auth.signIn': { th: 'เข้าสู่ระบบ', en: 'Sign In' },
   'auth.signUp': { th: 'สมัครสมาชิก', en: 'Sign Up' },
@@ -118,12 +126,15 @@ const translations: Translations = {
   'auth.signUpCheck': { th: 'กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชีของคุณ', en: 'Please check your email to verify your account' },
   'auth.signInSuccess': { th: 'เข้าสู่ระบบสำเร็จ', en: 'Sign in successful' },
   'auth.welcome': { th: 'ยินดีต้อนรับสู่ ResumeATS-Builder!', en: 'Welcome to ResumeATS-Builder!' },
+  
+  // Dashboard  
+  'dashboard.yourResumes': { th: 'เรซูเม่ของคุณ', en: 'Your Resumes' },
 
   // Resume Editor
   'editor.title': { th: 'เครื่องมือสร้างเรซูเม่', en: 'Resume Builder' },
   'editor.personalInfo': { th: 'ข้อมูลส่วนตัว', en: 'Personal Information' },
   'editor.fullName': { th: 'ชื่อ-นามสกุล', en: 'Full Name' },
-  'editor.phone': { th: 'เบอร์โทรศัพท์', en: 'Phone' },
+  'editor.phone': { th: 'โทรศัพท์', en: 'Phone' },
   'editor.email': { th: 'อีเมล', en: 'Email' },
   'editor.linkedin': { th: 'LinkedIn', en: 'LinkedIn' },
   'editor.portfolio': { th: 'Portfolio', en: 'Portfolio' },

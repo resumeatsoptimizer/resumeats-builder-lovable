@@ -1,3 +1,6 @@
+import React from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
+
 interface PersonalInfo {
   prefix: string;
   fullName: string;
@@ -51,6 +54,7 @@ interface ResumeTemplateProps {
 
 export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeTemplateProps) => {
   const { personalInfo, summary, skills, workExperience, education, certifications, awards } = data;
+  const { t } = useLanguage();
 
   // Get theme color styles using hex color
   const getThemeColors = () => {
@@ -129,19 +133,19 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           />
         )}
         <div className="flex-1">
-          <h1 className={`${styles.nameSize} font-bold mb-3`}>
+          <h2 className={`${styles.nameSize} font-bold mb-3`}>
             {personalInfo.prefix && `${personalInfo.prefix} `}
             {personalInfo.fullName || 'Your Name'}
-            {personalInfo.age && personalInfo.age > 0 && ` อายุ ${personalInfo.age} ปี`}
-          </h1>
+            {personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}
+          </h2>
           <p className="text-sm opacity-95 mb-2 leading-relaxed">
             {[
-              personalInfo.phone && `โทรศัพท์: ${personalInfo.phone}`,
-              personalInfo.email && `อีเมล: ${personalInfo.email}`,
+              personalInfo.phone && `${t('editor.phone')}: ${personalInfo.phone}`,
+              personalInfo.email && `${t('editor.email')}: ${personalInfo.email}`,
               personalInfo.linkedin && `LinkedIn: ${personalInfo.linkedin}`,
               personalInfo.portfolio && `Portfolio: ${personalInfo.portfolio}`,
-              personalInfo.website && `เว็บไซต์: ${personalInfo.website}`,
-              personalInfo.address && `ที่อยู่: ${personalInfo.address}`
+              personalInfo.website && `${t('editor.website')}: ${personalInfo.website}`,
+              personalInfo.address && `${t('editor.address')}: ${personalInfo.address}`
             ].filter(Boolean).join(' • ')}
           </p>
         </div>
