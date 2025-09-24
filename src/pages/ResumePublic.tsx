@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
+import { PDFGenerator } from '@/components/PDFGenerator';
+import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
@@ -107,7 +109,16 @@ const ResumePublic = () => {
             <ResumeTemplate 
               data={resumeData.resume_data} 
               template={resumeData.template_name} 
+              themeColor={resumeData.theme_color || '#3b82f6'}
             />
+          </div>
+          
+          {/* PDF and QR Code Section */}
+          <div className="max-w-4xl mx-auto mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <PDFGenerator resumeId={id || ''} resumeTitle={resumeData.resume_data?.personalInfo?.fullName || 'Resume'} />
+              <QRCodeGenerator resumeId={id || ''} resumeTitle={resumeData.resume_data?.personalInfo?.fullName || 'Resume'} />
+            </div>
           </div>
           
           <div className="text-center mt-8">

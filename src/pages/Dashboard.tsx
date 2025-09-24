@@ -6,6 +6,8 @@ import Navigation from '@/components/Navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { Loader2, Plus, Edit, Eye, Trash2, FileText, Clock } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
@@ -95,6 +97,37 @@ const Dashboard = () => {
       toast({
         title: "Error",
         description: "Failed to delete resume",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const togglePublic = async (id: string, currentPublicStatus: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('resumes')
+        .update({ is_public: !currentPublicStatus })
+        .eq('id', id);
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to update resume visibility",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      toast({
+        title: "Success",
+        description: `Resume is now ${!currentPublicStatus ? 'public' : 'private'}`
+      });
+
+      fetchResumes();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update resume visibility",
         variant: "destructive"
       });
     }
@@ -231,61 +264,73 @@ const Dashboard = () => {
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="text-sm text-muted-foreground">
-                        <p>Created: {formatDate(resume.created_at)}</p>
-                        <p>Updated: {formatDate(resume.updated_at)}</p>
-                      </div>
+                   <CardContent>
+                     <div className="space-y-4">
+                       <div className="text-sm text-muted-foreground">
+                         <p>Created: {formatDate(resume.created_at)}</p>
+                         <p>Updated: {formatDate(resume.updated_at)}</p>
+                       </div>
 
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => navigate(`/resume-editor?id=${resume.id}`)}
-                          className="flex-1"
-                        >
-                          <Edit className="w-4 h-4 mr-2" />
-                          Edit
-                        </Button>
-                        
-                        {resume.is_public && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => window.open(`/resume/${resume.id}`, '_blank')}
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                        )}
+                       {/* Make Public Toggle */}
+                       <div className="flex items-center space-x-2">
+                         <Switch 
+                           id={`public-${resume.id}`} 
+                           checked={resume.is_public} 
+                           onCheckedChange={() => togglePublic(resume.id, resume.is_public)} 
+                         />
+                         <Label htmlFor={`public-${resume.id}`} className="text-sm">
+                           Make public
+                         </Label>
+                       </div>
 
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="outline" size="sm">
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Delete Resume</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Are you sure you want to delete this resume? This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => deleteResume(resume.id)}
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                              >
-                                Delete
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </div>
-                  </CardContent>
+                       <div className="flex gap-2">
+                         <Button
+                           variant="outline"
+                           size="sm"
+                           onClick={() => navigate(`/resume-editor?id=${resume.id}`)}
+                           className="flex-1"
+                         >
+                           <Edit className="w-4 h-4 mr-2" />
+                           Edit
+                         </Button>
+                         
+                         {resume.is_public && (
+                           <Button
+                             variant="outline"
+                             size="sm"
+                             onClick={() => window.open(`/resume/${resume.id}`, '_blank')}
+                           >
+                             <Eye className="w-4 h-4" />
+                           </Button>
+                         )}
+
+                         <AlertDialog>
+                           <AlertDialogTrigger asChild>
+                             <Button variant="outline" size="sm">
+                               <Trash2 className="w-4 h-4" />
+                             </Button>
+                           </AlertDialogTrigger>
+                           <AlertDialogContent>
+                             <AlertDialogHeader>
+                               <AlertDialogTitle>Delete Resume</AlertDialogTitle>
+                               <AlertDialogDescription>
+                                 Are you sure you want to delete this resume? This action cannot be undone.
+                               </AlertDialogDescription>
+                             </AlertDialogHeader>
+                             <AlertDialogFooter>
+                               <AlertDialogCancel>Cancel</AlertDialogCancel>
+                               <AlertDialogAction
+                                 onClick={() => deleteResume(resume.id)}
+                                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                               >
+                                 Delete
+                               </AlertDialogAction>
+                             </AlertDialogFooter>
+                           </AlertDialogContent>
+                         </AlertDialog>
+                       </div>
+                     </div>
+                   </CardContent>
                 </Card>
               ))}
             </div>

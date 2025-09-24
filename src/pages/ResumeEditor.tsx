@@ -485,14 +485,6 @@ const ResumeEditor = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-2">
-                  <Switch id="public-resume" checked={isPublic} onCheckedChange={setIsPublic} />
-                  <Label htmlFor="public-resume" className="text-sm">
-                    Make public
-                  </Label>
-                </div>
-                
-                <PDFGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
                 
                 <Button onClick={handleSave}>Save Resume</Button>
               </div>
@@ -916,19 +908,17 @@ const ResumeEditor = () => {
                 <div className="bg-white rounded-lg shadow-sm">
                   <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
                 </div>
-                
-                {/* Share Resume - Moved below preview */}
-                <Card className="mt-6">
-                  <CardHeader>
-                     <CardTitle className="flex items-center gap-2">
-                       <Share2 className="w-4 h-4" />
-                       View Resume Online
-                     </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex gap-3">
-                    <QRCodeGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
-                  </CardContent>
-                </Card>
+                 
+                 {/* Dashboard Link */}
+                 <div className="mt-6 text-center">
+                   <Button 
+                     variant="outline" 
+                     onClick={() => navigate('/dashboard')}
+                     className="w-full"
+                   >
+                     เรซูเม่ของคุณ
+                   </Button>
+                 </div>
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -1059,18 +1049,16 @@ const ResumeEditor = () => {
                 <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
               </div>
               
-              {/* Share Resume */}
-              <Card>
-                <CardHeader>
-                   <CardTitle className="flex items-center gap-2">
-                     <Share2 className="w-4 h-4" />
-                     View Resume Online
-                   </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <QRCodeGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
-                </CardContent>
-              </Card>
+              {/* Dashboard Link */}
+              <div className="text-center">
+                <Button 
+                  variant="outline" 
+                  onClick={() => navigate('/dashboard')}
+                  className="w-full"
+                >
+                  เรซูเม่ของคุณ
+                </Button>
+              </div>
             </div>
           </div>
         )}
