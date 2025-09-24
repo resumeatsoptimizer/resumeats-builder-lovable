@@ -133,19 +133,19 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           />
         )}
         <div className="flex-1">
-          <h2 className="text-xl font-bold mb-3">
+          <h2 className="text-xl font-bold mb-2">
             <span className="text-sm">{personalInfo.prefix && `${personalInfo.prefix} `}</span>
             <span className="text-base">{personalInfo.fullName || 'Your Name'}</span>
-            <span className="text-sm">{personalInfo.birthDate && ` ${personalInfo.birthDate}`}</span>
+            <span className="text-sm">{personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}</span>
           </h2>
-          <div className="text-sm opacity-95 leading-relaxed space-y-1">
+          <div className="text-sm opacity-95 leading-tight space-y-0">
             {(personalInfo.phone || personalInfo.email) && (
-              <p>{[personalInfo.phone, personalInfo.email].filter(Boolean).join(', ')}</p>
+              <p>{t('editor.phone')}: {personalInfo.phone || ''}, {t('editor.email')}: {personalInfo.email || ''}</p>
             )}
             {personalInfo.linkedin && <p>LinkedIn: {personalInfo.linkedin}</p>}
             {personalInfo.portfolio && <p>Portfolio: {personalInfo.portfolio}</p>}
             {personalInfo.website && <p>{t('editor.website')}: {personalInfo.website}</p>}
-            {personalInfo.address && <p>{personalInfo.address}</p>}
+            {personalInfo.address && <p>{t('editor.address')}: {personalInfo.address}</p>}
           </div>
         </div>
       </div>
