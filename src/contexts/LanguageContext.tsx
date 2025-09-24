@@ -144,6 +144,14 @@ const translations: Translations = {
   'editor.uploadImage': { th: 'อัปโหลดรูป', en: 'Upload Image' },
   'editor.summary': { th: 'สรุปเกี่ยวกับตัว', en: 'Professional Summary' },
   'editor.skills': { th: 'ทักษะ', en: 'Skills' },
+  
+  // Section headings
+  'skills': { th: 'ความสามารถ/ทักษะ', en: 'Abilities & Skills' },
+  'professionalSummary': { th: 'สรุปประสบการณ์การทำงาน', en: 'Professional Summary' },
+  'workExperience': { th: 'ประสบการณ์การทำงาน', en: 'Work Experience' },
+  'education': { th: 'การศึกษา', en: 'Education' },
+  'certifications': { th: 'ใบรับรอง/ประกาศนียบัตร', en: 'Certifications' },
+  'awards': { th: 'รางวัลและการยกย่อง', en: 'Awards and Recognition' },
   'editor.addSkill': { th: 'เพิ่มทักษะ', en: 'Add Skill' },
   'editor.workExperience': { th: 'ประสบการณ์การทำงาน', en: 'Work Experience' },
   'editor.position': { th: 'ตำแหน่ง', en: 'Position' },

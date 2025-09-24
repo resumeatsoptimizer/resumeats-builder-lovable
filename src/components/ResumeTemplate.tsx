@@ -133,7 +133,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           />
         )}
         <div className="flex-1">
-          <h2 className={`${styles.nameSize} font-bold mb-3`}>
+          <h2 className="text-2xl font-bold mb-3">
             {personalInfo.prefix && `${personalInfo.prefix} `}
             {personalInfo.fullName || 'Your Name'}
             {personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}
@@ -160,7 +160,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
               {summary && (
                 <section>
                   <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                    PROFESSIONAL SUMMARY
+                    {t('professionalSummary').toUpperCase()}
                   </h2>
                   <p className="text-justify">{summary}</p>
                 </section>
@@ -169,7 +169,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
               {workExperience.length > 0 && workExperience[0].position && (
                 <section>
                   <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                    WORK EXPERIENCE
+                    {t('workExperience').toUpperCase()}
                   </h2>
                   <div className="space-y-4">
                     {workExperience.map((exp) => (
@@ -205,7 +205,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
               {certifications.length > 0 && certifications[0] && (
                 <section>
                   <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                    CERTIFICATIONS
+                    {t('certifications').toUpperCase()}
                   </h2>
                   <ul className="space-y-1 ml-4">
                     {certifications.map((cert, index) => (
@@ -225,7 +225,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
               {skills.length > 0 && (
                 <section>
                   <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                    SKILLS
+                    {t('skills').toUpperCase()}
                   </h2>
                   <div className="flex flex-wrap gap-2">
                     {skills.map((skill, index) => (
@@ -244,7 +244,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
               {education.length > 0 && education[0].degree && (
                 <section>
                   <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                    EDUCATION
+                    {t('education').toUpperCase()}
                   </h2>
                   <div className="space-y-3">
                     {education.map((edu) => (
@@ -282,7 +282,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
               {awards.length > 0 && awards[0] && (
                 <section>
                   <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                    AWARDS AND RECOGNITION
+                    {t('awards').toUpperCase()}
                   </h2>
                   <ul className="space-y-1 ml-4">
                     {awards.map((award, index) => (
@@ -304,7 +304,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             {summary && (
               <section>
                 <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  PROFESSIONAL SUMMARY
+                  {t('professionalSummary').toUpperCase()}
                 </h2>
                 <p className="text-justify">{summary}</p>
               </section>
@@ -314,7 +314,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             {skills.length > 0 && (
               <section>
                 <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  SKILLS
+                  {t('skills').toUpperCase()}
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {skills.map((skill, index) => (
@@ -334,7 +334,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             {workExperience.length > 0 && workExperience[0].position && (
               <section>
                 <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  WORK EXPERIENCE
+                  {t('workExperience').toUpperCase()}
                 </h2>
                 <div className="space-y-4">
                   {workExperience.map((exp) => (
@@ -375,7 +375,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             {education.length > 0 && education[0].degree && (
               <section>
                 <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  EDUCATION
+                  {t('education').toUpperCase()}
                 </h2>
                 <div className="space-y-3">
                   {education.map((edu) => (
@@ -418,7 +418,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             {certifications.length > 0 && certifications[0] && (
               <section>
                 <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  CERTIFICATIONS
+                  {t('certifications').toUpperCase()}
                 </h2>
                 <ul className="space-y-1 ml-4">
                   {certifications.map((cert, index) => (
@@ -436,7 +436,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             {awards.length > 0 && awards[0] && (
               <section>
                 <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  AWARDS AND RECOGNITION
+                  {t('awards').toUpperCase()}
                 </h2>
                 <ul className="space-y-1 ml-4">
                   {awards.map((award, index) => (
