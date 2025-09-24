@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import ResumeEditor from "./pages/ResumeEditor";
 import ResumePublic from "./pages/ResumePublic";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/resume-editor" element={<ResumeEditor />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/resume/:id" element={<ResumePublic />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />

@@ -69,6 +69,9 @@ const Navigation = () => {
     name: t('nav.aboutUs'),
     href: "#about"
   }, ...(isAuthenticated ? [{
+    name: 'Dashboard',
+    href: "/dashboard"
+  }, {
     name: t('nav.resumeEditor'),
     href: "/resume-editor"
   }] : [])];
