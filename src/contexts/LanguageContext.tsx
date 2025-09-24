@@ -57,6 +57,11 @@ const translations: Translations = {
   
   'feature.autoApply.title': { th: 'สมัครงานอัตโนมัติ', en: 'Auto Job Application' },
   'feature.autoApply.desc': { th: 'ส่งอีเมลสมัครงานไปยังหลายบริษัทได้ในคลิกเดียว', en: 'Apply to multiple companies automatically with just one click' },
+
+  // ATS Section
+  'ats.title': { th: 'เรซูเม่ที่ HR ได้เห็น 100% ไม่พลาดโอกาสสมัครงาน', en: 'Ensure HR Sees Your Resume — 100% Visibility, Zero Missed Opportunities' },
+  'ats.subtitle': { th: 'ATS (Applicant Tracking System) คือระบบที่บริษัทและ HR ใช้ในการคัดกรองเรซูเม่อัตโนมัติ หากเรซูเม่ไม่เป็นมิตรกับ ATS ข้อมูลสำคัญอาจไม่ถูกอ่านหรือถูกตัดออก ทำให้พลาดโอกาสไปโดยไม่รู้ตัว', en: 'An ATS (Applicant Tracking System) is software used by recruiters to automatically screen resumes. If your resume isn\'t ATS-friendly, important details may not be read or may get rejected before reaching the recruiter.' },
+  'ats.description': { th: 'เรซูเม่แบบ ATS-Friendly จึงหมายถึงเรซูเม่ที่ออกแบบและจัดรูปแบบมาให้ระบบ ATS อ่านได้ครบถ้วน ช่วยเพิ่มโอกาสให้ HR เห็นข้อมูลจริงของคุณ และผ่านด่านแรกของการคัดเลือก', en: 'An ATS-Friendly Resume is designed and formatted so that ATS can accurately read your information — ensuring your skills and experience get noticed and improving your chances of passing the first screening.' },
     
   // Footer
   'footer.product': { th: 'ผลิตภัณฑ์', en: 'Product' },

@@ -67,7 +67,7 @@ const Navigation = () => {
     href: "#features"
   }, {
     name: t('nav.pricing'), 
-    href: "/pricing"
+    href: "#pricing"
   }, {
     name: t('nav.aboutUs'),
     href: "#about"
