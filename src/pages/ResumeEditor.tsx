@@ -254,9 +254,9 @@ const ResumeEditor = () => {
         fullName: "Somchai Jaidee",
         phone: "+66 81 234 5678",
         email: "somchai.jaidee@email.com",
-        linkedin: "linkedin.com/in/somchai-jaidee",
-        portfolio: "portfolio.somchai.com",
-        website: "www.somchai.com",
+        linkedin: "https://linkedin.com/in/xxx-xxx",
+        portfolio: "https://portfolio.xxx.com",
+        website: "https://www.somchai.com",
         address: "123/456 Sukhumvit Road, Watthana, Bangkok 10110",
         birthDate: "15/03/1990",
         age: 34
