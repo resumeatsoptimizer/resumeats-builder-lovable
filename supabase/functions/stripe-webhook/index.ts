@@ -46,7 +46,7 @@ serve(async (req) => {
       // Verify the webhook signature
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
       console.log('Webhook signature verified');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Webhook signature verification failed:', err.message);
       return new Response(`Webhook signature verification failed: ${err.message}`, { status: 400 });
     }
@@ -120,7 +120,7 @@ serve(async (req) => {
       headers: corsHeaders 
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Webhook error:', error);
     return new Response(`Webhook error: ${error.message}`, { 
       status: 500,

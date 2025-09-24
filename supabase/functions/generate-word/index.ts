@@ -25,12 +25,9 @@ serve(async (req) => {
       }
     )
 
-    // Get the authorization header
-    const authHeader = req.headers.get('Authorization')!
-    const token = authHeader.replace('Bearer ', '')
-    
-    // Set the auth token
-    supabaseClient.auth.getUser(token)
+    // Get the authorization header (optional for public resumes)
+    const authHeader = req.headers.get('Authorization')
+    const token = authHeader ? authHeader.replace('Bearer ', '') : null
 
     const { resume_id } = await req.json()
 
@@ -57,6 +54,13 @@ serve(async (req) => {
 
     // If resume is not public, verify user authentication
     if (!resume.is_public) {
+      if (!token) {
+        return new Response(
+          JSON.stringify({ error: 'Access denied - Resume is private and no authentication provided' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
       const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token)
       
       if (userError || !user || user.id !== resume.user_id) {
@@ -241,19 +245,19 @@ function generateWordDocument(resumeData: any, templateName: string, themeColor:
         ${skills?.length ? `
         <div class="section-title">${t('skills').toUpperCase()}</div>
         <div class="skills-list">
-            ${skills.map(skill => `<span class="skill-item">${skill}</span>`).join('')}
+            ${skills.map((skill: string) => `<span class="skill-item">${skill}</span>`).join('')}
         </div>` : ''}
 
         <!-- Work Experience -->
         ${workExperience?.length && workExperience[0]?.position ? `
         <div class="section-title">${t('workExperience').toUpperCase()}</div>
-        ${workExperience.map(exp => `
+        ${workExperience.map((exp: any) => `
             <div class="work-item">
                 <div class="work-title">${exp.position} | ${exp.company}</div>
                 <div class="work-meta">${exp.location} | ${exp.startDate} – ${exp.endDate}</div>
                 ${exp.description?.length ? `
                 <ul>
-                    ${exp.description.map(desc => desc.trim() ? `<li>${desc.trim()}</li>` : '').join('')}
+                    ${exp.description.map((desc: string) => desc.trim() ? `<li>${desc.trim()}</li>` : '').join('')}
                 </ul>` : ''}
             </div>
         `).join('')}` : ''}
@@ -261,13 +265,13 @@ function generateWordDocument(resumeData: any, templateName: string, themeColor:
         <!-- Education -->
         ${education?.length && education[0]?.degree ? `
         <div class="section-title">${t('education').toUpperCase()}</div>
-        ${education.map(edu => `
+        ${education.map((edu: any) => `
             <div class="education-item">
                 <div class="work-title">${edu.degree}</div>
                 <div class="work-meta">${edu.institution} | ${edu.location} | ${edu.graduationYear}${edu.gpa ? ` | GPA: ${edu.gpa}` : ''}</div>
                 ${edu.projects ? `
                 <ul>
-                    ${edu.projects.split('\n').map(project => project.trim() ? `<li>${project.trim()}</li>` : '').join('')}
+                    ${edu.projects.split('\n').map((project: string) => project.trim() ? `<li>${project.trim()}</li>` : '').join('')}
                 </ul>` : ''}
             </div>
         `).join('')}` : ''}
@@ -276,14 +280,14 @@ function generateWordDocument(resumeData: any, templateName: string, themeColor:
         ${certifications?.length && certifications[0] ? `
         <div class="section-title">${t('certifications').toUpperCase()}</div>
         <ul>
-            ${certifications.map(cert => cert.trim() ? `<li>${cert.trim()}</li>` : '').join('')}
+            ${certifications.map((cert: string) => cert.trim() ? `<li>${cert.trim()}</li>` : '').join('')}
         </ul>` : ''}
 
         <!-- Awards -->
         ${awards?.length && awards[0] ? `
         <div class="section-title">${t('awards').toUpperCase()}</div>
         <ul>
-            ${awards.map(award => award.trim() ? `<li>${award.trim()}</li>` : '').join('')}
+            ${awards.map((award: string) => award.trim() ? `<li>${award.trim()}</li>` : '').join('')}
         </ul>` : ''}
 
     </body>

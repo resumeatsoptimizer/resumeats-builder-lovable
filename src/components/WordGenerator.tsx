@@ -19,21 +19,16 @@ export const WordGenerator = ({ resumeId, resumeTitle = "Resume" }: WordGenerato
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
-      if (!session) {
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to download your resume as Word document",
-          variant: "destructive"
-        });
-        return;
+      // Prepare request headers - include auth if available
+      const headers: Record<string, string> = {};
+      if (session?.access_token) {
+        headers.Authorization = `Bearer ${session.access_token}`;
       }
 
       // Call the Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('generate-word', {
         body: { resume_id: resumeId },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
+        headers,
       });
 
       if (error) {

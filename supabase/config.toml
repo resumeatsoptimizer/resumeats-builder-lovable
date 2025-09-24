@@ -3,6 +3,9 @@ project_id = "ydlxjdraipgmqewwlqdb"
 [functions.generate-pdf]
 verify_jwt = false
 
+[functions.generate-word]
+verify_jwt = false
+
 [functions.ai-enhance]
 verify_jwt = true
 
