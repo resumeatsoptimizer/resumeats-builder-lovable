@@ -514,6 +514,7 @@ const ResumeEditor = () => {
     setResumeData(updatedData);
   };
   return <div className="min-h-screen bg-background">
+      <Navigation />
       {/* Header */}
       <div className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -562,6 +563,9 @@ const ResumeEditor = () => {
                 
                 
                 <Button onClick={handleSave}>Save Resume</Button>
+                {resumeId && (
+                  <WordGenerator resumeId={resumeId} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
+                )}
               </div>
             </div>
           ) : (
@@ -628,9 +632,11 @@ const ResumeEditor = () => {
                         </div>
                         
                         {/* PDF Download */}
-                        <div className="pt-4 border-t">
-                          <WordGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
-                        </div>
+                        {resumeId && (
+                          <div className="pt-4 border-t">
+                            <WordGenerator resumeId={resumeId} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </SheetContent>
