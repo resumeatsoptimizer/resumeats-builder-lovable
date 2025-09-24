@@ -80,7 +80,7 @@ const HeroSection = () => {
                     <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <span className="text-sm text-muted-foreground">4.8/5 จาก 1,200+ ผู้ใช้</span>
+                <span className="text-sm text-muted-foreground">Rated 4.8/5 by 1,200+ users</span>
               </div>
             </div>
           </div>
