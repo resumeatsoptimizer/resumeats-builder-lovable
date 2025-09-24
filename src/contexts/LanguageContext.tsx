@@ -185,7 +185,7 @@ const translations: Translations = {
   'editor.enhancing': { th: 'กำลังปรับปรุง...', en: 'Enhancing...' },
   'editor.analyzing': { th: 'กำลังวิเคราะห์...', en: 'Analyzing...' },
   'editor.generateSample': { th: 'สร้างข้อมูลตัวอย่าง', en: 'Generate Sample Data' },
-  'editor.backToHome': { th: 'ไปที่ Dashboard', en: 'Go to Dashboard' },
+  'editor.backToHome': { th: 'ไปที่ แดชบอร์ด', en: 'Go to Dashboard' },
   
   // Common
   'common.loading': { th: 'กำลังโหลด...', en: 'Loading...' },
