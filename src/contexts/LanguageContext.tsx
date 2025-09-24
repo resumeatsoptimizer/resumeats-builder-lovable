@@ -23,6 +23,7 @@ const translations: Translations = {
   'nav.features': { th: 'คุณสมบัติ', en: 'Features' },
   'nav.pricing': { th: 'แผนราคา', en: 'Pricing' },
   'nav.aboutUs': { th: 'เกี่ยวกับเรา', en: 'About Us' },
+  'nav.dashboard': { th: 'แดชบอร์ด', en: 'Dashboard' },
   
   // Hero Section
   'hero.title': { th: 'สร้างเรซูเม่ที่ผ่าน ATS ได้ง่าย', en: 'Create ATS-Friendly Resumes Easily' },
