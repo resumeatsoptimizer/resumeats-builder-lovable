@@ -133,12 +133,10 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           />
         )}
         <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-2">
-            <span className="text-2xl">{personalInfo.prefix && `${personalInfo.prefix} `}</span>
-            <span className="text-2xl">{personalInfo.fullName || 'Your Name'}</span>
-            <span className="text-lg">{personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}</span>
-          </h2>
-          <div className="text-sm opacity-95 leading-tight -space-y-0.5">
+          <h1 className="text-4xl font-bold mb-2 leading-none">
+            {personalInfo.fullName || 'Your Name'}
+          </h1>
+          <div className="text-sm opacity-95 leading-none space-y-1">
             {(personalInfo.phone || personalInfo.email) && (
               <p>{t('editor.phone')}: {personalInfo.phone || ''}, {t('editor.email')}: {personalInfo.email || ''}</p>
             )}
