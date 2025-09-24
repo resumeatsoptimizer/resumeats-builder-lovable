@@ -49,8 +49,14 @@ const translations: Translations = {
   'feature.translation.title': { th: 'AI Translation 12 Languages', en: 'AI Translation in 12 Languages' },
   'feature.translation.desc': { th: 'แปลเรซูเม่ได้หลายภาษาอย่างมืออาชีพด้วย AI', en: 'Translate resumes into 12 languages with AI precision' },
   
-  'feature.download.title': { th: 'ดาวน์โหลดได้ทันที', en: 'Instant Download' },
-  'feature.download.desc': { th: 'บันทึกเป็น Word ได้ทันใจ', en: 'Download in Word format instantly' },
+  'feature.onlineResume.title': { th: 'เรซูเม่ออนไลน์', en: 'Online Resume' },
+  'feature.onlineResume.desc': { th: 'แชร์เรซูเม่ง่าย ๆ ด้วย QR Code', en: 'Easily share your resume with a QR code' },
+  
+  'feature.instantDownload.title': { th: 'ดาวน์โหลดได้ทันที', en: 'Instant Download' },
+  'feature.instantDownload.desc': { th: 'บันทึกเป็นไฟล์ Word พร้อมแก้ไขได้ทันใจ', en: 'Save as an editable Word file instantly' },
+  
+  'feature.autoApply.title': { th: 'สมัครงานอัตโนมัติ', en: 'Auto Job Application' },
+  'feature.autoApply.desc': { th: 'ส่งอีเมลสมัครงานไปยังหลายบริษัทได้ในคลิกเดียว', en: 'Apply to multiple companies automatically with just one click' },
     
   // Footer
   'footer.product': { th: 'ผลิตภัณฑ์', en: 'Product' },
