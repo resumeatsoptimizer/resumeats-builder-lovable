@@ -75,7 +75,7 @@ const Navigation = () => {
 
   // Authenticated user navigation
   const userNavLinks = isAuthenticated ? [{
-    name: 'Dashboard',
+    name: t('nav.dashboard'),
     href: "/dashboard"
   }, {
     name: t('nav.resumeEditor'),
