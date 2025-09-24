@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -8,9 +8,11 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 const Navigation = () => {
   const { t } = useLanguage();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [userCredits, setUserCredits] = useState<number | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isLandingPage = location.pathname === '/';
   const toggleMenu = () => setIsOpen(!isOpen);
   useEffect(() => {
     // Check authentication status and fetch credits
@@ -59,7 +61,8 @@ const Navigation = () => {
     });
     return () => subscription.unsubscribe();
   }, []);
-  const navLinks = [{
+  // Landing page navigation
+  const landingNavLinks = [{
     name: t('nav.features'),
     href: "#features"
   }, {
@@ -68,13 +71,19 @@ const Navigation = () => {
   }, {
     name: t('nav.aboutUs'),
     href: "#about"
-  }, ...(isAuthenticated ? [{
+  }];
+
+  // Authenticated user navigation
+  const userNavLinks = isAuthenticated ? [{
     name: 'Dashboard',
     href: "/dashboard"
   }, {
     name: t('nav.resumeEditor'),
     href: "/resume-editor"
-  }] : [])];
+  }] : [];
+
+  // Combine links based on page type
+  const navLinks = isLandingPage ? [...landingNavLinks, ...userNavLinks] : userNavLinks;
   return <nav className="bg-background border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Desktop Navigation */}

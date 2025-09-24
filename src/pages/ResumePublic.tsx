@@ -4,7 +4,8 @@ import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { PDFGenerator } from '@/components/PDFGenerator';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import Navigation from '@/components/Navigation';
 
 const ResumePublic = () => {
@@ -96,13 +97,16 @@ const ResumePublic = () => {
       <Navigation />
       <div className="min-h-screen bg-gray-100 py-8">
         <div className="container mx-auto px-4">
-          {/* Debug info */}
-          <div className="max-w-4xl mx-auto mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded">
-            <p><strong>Debug Info:</strong></p>
-            <p>Resume ID from URL: {id}</p>
-            <p>Resume found: {resumeData ? 'Yes' : 'No'}</p>
-            <p>Is Public: {resumeData?.is_public ? 'Yes' : 'No'}</p>
-            <p>Template: {resumeData?.template_name}</p>
+          {/* Back to Dashboard Button */}
+          <div className="max-w-4xl mx-auto mb-6">
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.href = '/dashboard'}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              กลับไป Dashboard
+            </Button>
           </div>
           
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
