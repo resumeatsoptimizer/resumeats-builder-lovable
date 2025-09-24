@@ -41,7 +41,7 @@ serve(async (req) => {
       )
     }
 
-    // Verify the resume belongs to the authenticated user
+    // First check if the resume is public or belongs to the authenticated user
     const { data: resume, error: resumeError } = await supabaseClient
       .from('resumes')
       .select('*')
@@ -50,9 +50,21 @@ serve(async (req) => {
 
     if (resumeError || !resume) {
       return new Response(
-        JSON.stringify({ error: 'Resume not found or access denied' }),
+        JSON.stringify({ error: 'Resume not found' }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
+    }
+
+    // If resume is not public, verify user authentication
+    if (!resume.is_public) {
+      const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token)
+      
+      if (userError || !user || user.id !== resume.user_id) {
+        return new Response(
+          JSON.stringify({ error: 'Access denied - Resume is private' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
     }
 
     // Generate Word document content

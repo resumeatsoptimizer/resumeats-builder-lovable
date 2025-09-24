@@ -6,8 +6,6 @@ import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Navigation from '@/components/Navigation';
-
 const ResumePublic = () => {
   const { id } = useParams<{ id: string }>();
   const [resumeData, setResumeData] = useState<any>(null);
@@ -93,9 +91,7 @@ const ResumePublic = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <div className="min-h-screen bg-gray-100 py-8">
+    <div className="min-h-screen bg-gray-100 py-8">
         <div className="container mx-auto px-4">
           {/* Back to Dashboard Button */}
           <div className="max-w-4xl mx-auto mb-6">
@@ -132,8 +128,7 @@ const ResumePublic = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default ResumePublic;
