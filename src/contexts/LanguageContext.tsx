@@ -43,7 +43,7 @@ const translations: Translations = {
   'feature.templates.title': { th: 'เทมเพลต ATS-Friendly', en: 'ATS-Friendly Templates' },
   'feature.templates.desc': { th: 'ดีไซน์พิเศษเพื่อการผ่าน ATS โดยเฉพาะ', en: 'Professionally designed to pass ATS screening' },
   
-  'feature.match.title': { th: 'การวิเคราะห์ความเหมาะสมงาน', en: 'Job Match Analysis' },
+  'feature.match.title': { th: 'Job Match Analysis', en: 'Job Match Analysis' },
   'feature.match.desc': { th: 'ตรวจสอบความเข้ากับตำแหน่งงานเป้าหมาย', en: 'Assess compatibility with target job positions' },
   
   'feature.translation.title': { th: 'AI Translation 12 Languages', en: 'AI Translation in 12 Languages' },
