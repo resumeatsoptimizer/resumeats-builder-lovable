@@ -280,4 +280,3 @@ function generateWordDocument(resumeData: any, templateName: string, themeColor:
 
   return wordHTML
 }
-}
