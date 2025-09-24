@@ -138,7 +138,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
             <span className="text-2xl">{personalInfo.fullName || 'Your Name'}</span>
             <span className="text-lg">{personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}</span>
           </h2>
-          <div className="text-sm opacity-95 leading-tight space-y-0">
+          <div className="text-sm opacity-95 leading-tight -space-y-0.5">
             {(personalInfo.phone || personalInfo.email) && (
               <p>{t('editor.phone')}: {personalInfo.phone || ''}, {t('editor.email')}: {personalInfo.email || ''}</p>
             )}
@@ -413,40 +413,86 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
               </section>
             )}
 
-            {/* Certifications */}
-            {certifications.length > 0 && certifications[0] && (
-              <section>
-                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  {t('certifications').toUpperCase()}
-                </h2>
-                <ul className="space-y-1 ml-4">
-                  {certifications.map((cert, index) => (
-                    cert.trim() && (
-                      <li key={index} className="list-disc">
-                        {cert.trim()}
-                      </li>
-                    )
-                  ))}
-                </ul>
-              </section>
+            {/* Certifications and Awards - 2 columns for Professional template */}
+            {template === 'Professional' && (certifications.length > 0 && certifications[0] || awards.length > 0 && awards[0]) && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Certifications */}
+                {certifications.length > 0 && certifications[0] && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      {t('certifications').toUpperCase()}
+                    </h2>
+                    <ul className="space-y-1 ml-4">
+                      {certifications.map((cert, index) => (
+                        cert.trim() && (
+                          <li key={index} className="list-disc">
+                            {cert.trim()}
+                          </li>
+                        )
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {/* Awards */}
+                {awards.length > 0 && awards[0] && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      {t('awards').toUpperCase()}
+                    </h2>
+                    <ul className="space-y-1 ml-4">
+                      {awards.map((award, index) => (
+                        award.trim() && (
+                          <li key={index} className="list-disc">
+                            {award.trim()}
+                          </li>
+                        )
+                      ))}
+                    </ul>
+                  </section>
+                )}
+              </div>
             )}
 
-            {/* Awards */}
-            {awards.length > 0 && awards[0] && (
-              <section>
-                <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
-                  {t('awards').toUpperCase()}
-                </h2>
-                <ul className="space-y-1 ml-4">
-                  {awards.map((award, index) => (
-                    award.trim() && (
-                      <li key={index} className="list-disc">
-                        {award.trim()}
-                      </li>
-                    )
-                  ))}
-                </ul>
-              </section>
+            {/* Certifications and Awards - Single column for other templates */}
+            {template !== 'Professional' && (
+              <>
+                {/* Certifications */}
+                {certifications.length > 0 && certifications[0] && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      {t('certifications').toUpperCase()}
+                    </h2>
+                    <ul className="space-y-1 ml-4">
+                      {certifications.map((cert, index) => (
+                        cert.trim() && (
+                          <li key={index} className="list-disc">
+                            {cert.trim()}
+                          </li>
+                        )
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {/* Awards */}
+                {awards.length > 0 && awards[0] && (
+                  <section>
+                    <h2 className="text-lg font-bold mb-3 pb-1 border-b-2" style={colors.accentStyle}>
+                      {t('awards').toUpperCase()}
+                    </h2>
+                    <ul className="space-y-1 ml-4">
+                      {awards.map((award, index) => (
+                        award.trim() && (
+                          <li key={index} className="list-disc">
+                            {award.trim()}
+                          </li>
+                        )
+                      ))}
+                    </ul>
+                  </section>
+                )}
+              </>
             )}
           </>
         )}
