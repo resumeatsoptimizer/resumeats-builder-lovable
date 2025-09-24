@@ -251,7 +251,7 @@ const ResumeEditor = () => {
     setResumeData({
       personalInfo: {
         prefix: "นาย",
-        fullName: "สมชาย ใจดี",
+        fullName: "Somchai Jaidee",
         phone: "+66 81 234 5678",
         email: "somchai.jaidee@email.com",
         linkedin: "linkedin.com/in/somchai-jaidee",
