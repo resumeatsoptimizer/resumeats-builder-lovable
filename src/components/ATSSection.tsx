@@ -1,11 +1,10 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Shield, Eye, TrendingUp } from "lucide-react";
-
 const ATSSection = () => {
-  const { t } = useLanguage();
-
-  return (
-    <section id="about" className="py-20 bg-muted/30">
+  const {
+    t
+  } = useLanguage();
+  return <section id="about" className="bg-muted/30 my-0 py-[101px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
@@ -48,8 +47,6 @@ const ATSSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ATSSection;
