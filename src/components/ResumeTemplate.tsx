@@ -136,7 +136,7 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           <h2 className="text-2xl font-bold mb-2">
             <span className="text-2xl">{personalInfo.prefix && `${personalInfo.prefix} `}</span>
             <span className="text-2xl">{personalInfo.fullName || 'Your Name'}</span>
-            <span className="text-2xl">{personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}</span>
+            <span className="text-lg">{personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}</span>
           </h2>
           <div className="text-sm opacity-95 leading-tight space-y-0">
             {(personalInfo.phone || personalInfo.email) && (
