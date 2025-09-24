@@ -90,7 +90,8 @@ const Pricing: React.FC = () => {
   };
 
   return (
-    <div id="pricing" className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
+      <Navigation />
       <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-primary mb-2">{t('pricing.title')}</h1>

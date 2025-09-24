@@ -21,16 +21,8 @@ const FeaturesSection = () => {
     icon: Globe,
     title: t('feature.translation.title'),
     description: t('feature.translation.desc')
-  }, {
-    icon: FileCheck,
-    title: t('feature.onlineResume.title'),
-    description: t('feature.onlineResume.desc')
-  }, {
-    icon: Download,
-    title: t('feature.instantDownload.title'),
-    description: t('feature.instantDownload.desc')
   }];
-  return <section id="features" className="py-20 bg-muted/30">
+  return <section className="py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -43,7 +35,7 @@ const FeaturesSection = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => {
           const IconComponent = feature.icon;
           return <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-border bg-background">
