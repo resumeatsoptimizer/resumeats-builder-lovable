@@ -26,34 +26,32 @@ const translations: Translations = {
   'nav.dashboard': { th: 'แดชบอร์ด', en: 'Dashboard' },
   
   // Hero Section
-  'hero.title': { th: 'สร้างเรซูเม่ที่ผ่าน ATS ได้ง่าย', en: 'Create ATS-Friendly Resumes Easily' },
-  'hero.subtitle': { th: 'สร้างเรซูเม่มืออาชีพที่ผ่านระบบ ATS และปรับปรุงด้วย AI เพื่อการสมัครงานที่สำเร็จ', en: 'Build professional resumes that pass ATS systems and enhance with AI for successful job applications' },
-  'hero.cta': { th: 'เริ่มสร้างเรซูเม่', en: 'Start Building Resume' },
-  'hero.tryFree': { th: 'ลองใช้ฟรี', en: 'Try Free' },
+  'hero.title': { th: 'สร้างเรซูเม่ ATS-Friendly ง่ายดายเพียง 5 นาที', en: 'Create Your ATS-Friendly Resume in 5 Minutes' },
+  'hero.subtitle': { th: 'เรซูเม่มืออาชีพที่ผ่าน ATS พร้อมการปรับแต่งด้วย AI เพื่อเพิ่มโอกาสสมัครงานสำเร็จ', en: 'Craft professional resumes optimized for ATS and enhanced with AI to boost your job success' },
+  'hero.cta': { th: 'เริ่มสร้างเรซูเม่เลย', en: 'Start Building Your Resume' },
+  'hero.tryFree': { th: 'ทดลองใช้ฟรี', en: 'Try for Free' },
+    
+  'features.title': { th: 'ฟีเจอร์ทรงพลัง', en: 'Powerful Features' },
+  'features.subtitle': { th: 'เครื่องมือครบชุดสำหรับสร้างเรซูเม่มืออาชีพ', en: 'All-in-one tools for creating a professional resume' },
   
-  // Features Section
-  'features.title': { th: 'ฟีเจอร์ที่ทรงพลัง', en: 'Powerful Features' },
-  'features.subtitle': { th: 'เครื่องมือครบครันสำหรับการสร้างเรซูเม่ที่สมบูรณ์แบบ', en: 'Complete tools for creating the perfect resume' },
+  'feature.atsReady.title': { th: 'รองรับ ATS 100%', en: '100% ATS Compatible' },
+  'feature.atsReady.desc': { th: 'เรซูเม่ที่ผ่านระบบ ATS ได้อย่างมั่นใจ', en: 'Resumes fully optimized for ATS systems' },
   
-  // Feature Cards
-  'feature.atsReady.title': { th: 'ATS Ready', en: 'ATS Ready' },
-  'feature.atsReady.desc': { th: 'เรซูเม่ที่ผ่านระบบ ATS ได้ 100%', en: '100% ATS system compatible resumes' },
+  'feature.aiPowered.title': { th: 'เสริมด้วยพลัง AI', en: 'AI-Powered Enhancement' },
+  'feature.aiPowered.desc': { th: 'ยกระดับเนื้อหาด้วย AI อัจฉริยะ', en: 'Elevate your content with intelligent AI' },
   
-  'feature.aiPowered.title': { th: 'AI-Powered Enhancement', en: 'AI-Powered Enhancement' },
-  'feature.aiPowered.desc': { th: 'ปรับปรุงเนื้อหาด้วย AI อัจฉริยะ', en: 'Enhance content with intelligent AI' },
+  'feature.templates.title': { th: 'เทมเพลต ATS-Friendly', en: 'ATS-Friendly Templates' },
+  'feature.templates.desc': { th: 'ดีไซน์พิเศษเพื่อการผ่าน ATS โดยเฉพาะ', en: 'Professionally designed to pass ATS screening' },
   
-  'feature.templates.title': { th: 'ATS-Friendly Templates', en: 'ATS-Friendly Templates' },
-  'feature.templates.desc': { th: 'เทมเพลตที่ออกแบบมาเพื่อ ATS', en: 'Templates designed specifically for ATS' },
+  'feature.match.title': { th: 'การวิเคราะห์ความเหมาะสมงาน', en: 'Job Match Analysis' },
+  'feature.match.desc': { th: 'ตรวจสอบความเข้ากับตำแหน่งงานเป้าหมาย', en: 'Assess compatibility with target job positions' },
   
-  'feature.match.title': { th: 'Job Match Analysis', en: 'Job Match Analysis' },
-  'feature.match.desc': { th: 'วิเคราะห์ความเข้ากันกับตำแหน่งงาน', en: 'Analyze compatibility with job positions' },
+  'feature.translation.title': { th: 'AI Translation 12 Languages', en: 'AI Translation in 12 Languages' },
+  'feature.translation.desc': { th: 'แปลเรซูเม่ได้หลายภาษาอย่างมืออาชีพด้วย AI', en: 'Translate resumes into 12 languages with AI precision' },
   
-  'feature.translation.title': { th: 'AI Translation', en: 'AI Translation' },
-  'feature.translation.desc': { th: 'แปลเรซูเม่เป็นภาษาต่างๆ ด้วย AI', en: 'Translate resumes to various languages with AI' },
-  
-  'feature.download.title': { th: 'ดาวน์โหลดทันที', en: 'Instant Download' },
-  'feature.download.desc': { th: 'ดาวน์โหลด PDF คุณภาพสูงทันที', en: 'Download high-quality PDF instantly' },
-  
+  'feature.download.title': { th: 'ดาวน์โหลดได้ทันที', en: 'Instant Download' },
+  'feature.download.desc': { th: 'บันทึกเป็น Word ได้ทันใจ', en: 'Download in Word format instantly' },
+    
   // Footer
   'footer.product': { th: 'ผลิตภัณฑ์', en: 'Product' },
   'footer.company': { th: 'บริษัท', en: 'Company' },
