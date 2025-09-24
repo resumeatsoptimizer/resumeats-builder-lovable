@@ -746,7 +746,7 @@ const ResumeEditor = () => {
                           <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
                         </div>
                         <div>
-                          <Label htmlFor="portfolio">Portfolio ({t('editor.optional')})</Label>
+                          <Label htmlFor="portfolio">Portfolio</Label>
                           <Input 
                             id="portfolio" 
                             value={resumeData.personalInfo.portfolio || ''} 
@@ -757,7 +757,7 @@ const ResumeEditor = () => {
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="website">{t('editor.website')} ({t('editor.optional')})</Label>
+                          <Label htmlFor="website">{t('editor.website')}</Label>
                           <Input 
                             id="website" 
                             value={resumeData.personalInfo.website || ''} 
@@ -766,7 +766,7 @@ const ResumeEditor = () => {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="address">{t('editor.address')} ({t('editor.optional')})</Label>
+                          <Label htmlFor="address">{t('editor.address')}</Label>
                          <Input 
                            id="address" 
                            value={resumeData.personalInfo.address || ''} 
@@ -908,7 +908,7 @@ const ResumeEditor = () => {
                              <Input value={edu.location} onChange={e => updateEducation(edu.id, 'location', e.target.value)} placeholder="Bangkok, Thailand" />
                            </div>
                            <div>
-                             <Label>GPA ({t('editor.optional')})</Label>
+                             <Label>GPA</Label>
                              <Input value={edu.gpa || ''} onChange={e => updateEducation(edu.id, 'gpa', e.target.value)} placeholder="3.75" />
                            </div>
                            <div>
@@ -917,7 +917,7 @@ const ResumeEditor = () => {
                            </div>
                          </div>
                          <div>
-                           <Label>{t('editor.projects')} ({t('editor.optional')})</Label>
+                           <Label>{t('editor.projects')}</Label>
                           <Textarea value={edu.projects || ''} onChange={e => updateEducation(edu.id, 'projects', e.target.value)} placeholder="Relevant projects or activities..." rows={2} />
                         </div>
                       </div>)}
@@ -1129,15 +1129,15 @@ const ResumeEditor = () => {
                          <Input id="mobile-linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
                        </div>
                        <div>
-                         <Label htmlFor="mobile-portfolio">Portfolio (Optional)</Label>
+                         <Label htmlFor="mobile-portfolio">Portfolio</Label>
                          <Input id="mobile-portfolio" value={resumeData.personalInfo.portfolio || ''} onChange={e => updatePersonalInfo('portfolio', e.target.value)} placeholder="your-portfolio.com" />
                        </div>
                        <div>
-                         <Label htmlFor="mobile-website">Website (Optional)</Label>
+                         <Label htmlFor="mobile-website">Website</Label>
                          <Input id="mobile-website" value={resumeData.personalInfo.website || ''} onChange={e => updatePersonalInfo('website', e.target.value)} placeholder="www.yourname.com" />
                        </div>
                        <div>
-                         <Label htmlFor="mobile-address">Address (Optional)</Label>
+                         <Label htmlFor="mobile-address">Address</Label>
                          <Input id="mobile-address" value={resumeData.personalInfo.address || ''} onChange={e => updatePersonalInfo('address', e.target.value)} placeholder="123 Main St, Bangkok 10110, Thailand" />
                        </div>
                      </div>

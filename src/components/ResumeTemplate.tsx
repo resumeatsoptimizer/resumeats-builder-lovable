@@ -133,21 +133,20 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           />
         )}
         <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-3">
-            {personalInfo.prefix && `${personalInfo.prefix} `}
-            {personalInfo.fullName || 'Your Name'}
-            {personalInfo.age && personalInfo.age > 0 && ` ${t('editor.age')} ${personalInfo.age} ${t('editor.years')}`}
+          <h2 className="text-xl font-bold mb-3">
+            <span className="text-sm">{personalInfo.prefix && `${personalInfo.prefix} `}</span>
+            <span className="text-base">{personalInfo.fullName || 'Your Name'}</span>
+            <span className="text-sm">{personalInfo.birthDate && ` ${personalInfo.birthDate}`}</span>
           </h2>
-          <p className="text-sm opacity-95 mb-2 leading-relaxed">
-            {[
-              personalInfo.phone && `${t('editor.phone')}: ${personalInfo.phone}`,
-              personalInfo.email && `${t('editor.email')}: ${personalInfo.email}`,
-              personalInfo.linkedin && `LinkedIn: ${personalInfo.linkedin}`,
-              personalInfo.portfolio && `Portfolio: ${personalInfo.portfolio}`,
-              personalInfo.website && `${t('editor.website')}: ${personalInfo.website}`,
-              personalInfo.address && `${t('editor.address')}: ${personalInfo.address}`
-            ].filter(Boolean).join(' • ')}
-          </p>
+          <div className="text-sm opacity-95 leading-relaxed space-y-1">
+            {(personalInfo.phone || personalInfo.email) && (
+              <p>{[personalInfo.phone, personalInfo.email].filter(Boolean).join(', ')}</p>
+            )}
+            {personalInfo.linkedin && <p>LinkedIn: {personalInfo.linkedin}</p>}
+            {personalInfo.portfolio && <p>Portfolio: {personalInfo.portfolio}</p>}
+            {personalInfo.website && <p>{t('editor.website')}: {personalInfo.website}</p>}
+            {personalInfo.address && <p>{personalInfo.address}</p>}
+          </div>
         </div>
       </div>
 
