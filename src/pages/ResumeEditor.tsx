@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { WordGenerator } from '@/components/WordGenerator';
@@ -70,7 +69,6 @@ const ResumeEditor = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t } = useLanguage();
-
   const [templateName, setTemplateName] = useState('Professional');
   const [themeColor, setThemeColor] = useState('#3b82f6');
   const [resumeId, setResumeId] = useState<string | null>(null);
@@ -80,7 +78,6 @@ const ResumeEditor = () => {
   const [jobDescription, setJobDescription] = useState('');
   const [isEnhancing, setIsEnhancing] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [showMobileControls, setShowMobileControls] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load existing resume if ID is provided in URL
@@ -377,11 +374,7 @@ const ResumeEditor = () => {
 
   const handleSave = async () => {
     try {
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
           title: "Error",
@@ -390,6 +383,7 @@ const ResumeEditor = () => {
         });
         return;
       }
+
       const resumeToSave = {
         user_id: user.id,
         template_name: templateName,
@@ -397,6 +391,7 @@ const ResumeEditor = () => {
         resume_data: resumeData as any,
         is_public: isPublic
       };
+
       let result;
       if (resumeId) {
         // Update existing resume
@@ -405,16 +400,15 @@ const ResumeEditor = () => {
         // Insert new resume
         result = await supabase.from('resumes').insert(resumeToSave).select('id').single();
       }
-      const {
-        data,
-        error
-      } = result;
+
+      const { data, error } = result;
       if (error) throw error;
 
       // Set the resume ID for QR code and PDF generation
       if (data?.id && !resumeId) {
         setResumeId(data.id);
       }
+
       toast({
         title: "Success",
         description: "Resume saved successfully!"
@@ -429,395 +423,246 @@ const ResumeEditor = () => {
     }
   };
 
-  const handleAiEnhancement = async () => {
-    try {
-      setIsEnhancing(true);
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
-      if (!user) {
-        toast({
-          title: "Error",
-          description: "You must be logged in to use AI features",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      // Enhance the professional summary
-      const {
-        data,
-        error
-      } = await supabase.functions.invoke('ai-enhance', {
-        body: {
-          text: resumeData.summary,
-          section: 'summary'
-        }
-      });
-      if (error) throw error;
-      setResumeData(prev => ({
-        ...prev,
-        summary: data.enhancedText
-      }));
-      toast({
-        title: "AI Enhancement Complete",
-        description: `Enhanced your summary! Credits remaining: ${data.credits}`
-      });
-    } catch (error) {
-      console.error('Error enhancing resume:', error);
-      toast({
-        title: "Error",
-        description: "Failed to enhance resume. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsEnhancing(false);
-    }
-  };
-
-  const handleJobMatchAnalysis = async () => {
-    if (!jobDescription.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a job description",
-        variant: "destructive"
-      });
-      return;
-    }
-    try {
-      setIsAnalyzing(true);
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
-      if (!user) {
-        toast({
-          title: "Error",
-          description: "You must be logged in to use AI features",
-          variant: "destructive"
-        });
-        return;
-      }
-      const {
-        data,
-        error
-      } = await supabase.functions.invoke('ai-job-match', {
-        body: {
-          resumeData,
-          jobDescription
-        }
-      });
-      if (error) throw error;
-      toast({
-        title: `Job Match: ${data.matchingScore}%`,
-        description: data.analysis,
-        duration: 10000
-      });
-    } catch (error) {
-      console.error('Error analyzing job match:', error);
-      toast({
-        title: "Error",
-        description: "Failed to analyze job match. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
-
   const handleResumeUpdate = (updatedData: ResumeData) => {
     setResumeData(updatedData);
   };
 
-  const renderEditorContent = () => (
-    <div className="space-y-6">
-      {/* Profile Photo Upload */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('editor.profileImage')}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              {resumeData.personalInfo.profileImage ? (
-                <img
-                  src={resumeData.personalInfo.profileImage}
-                  alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover border-2 border-border"
-                />
-              ) : (
-                <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center border-2 border-border">
-                  <User className="w-8 h-8 text-muted-foreground" />
-                </div>
-              )}
-            </div>
-            <div className="flex-1 space-y-2">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full"
-              >
-                <Upload className="w-4 h-4 mr-2" />
-                {t('editor.uploadPhoto')}
-              </Button>
-              {resumeData.personalInfo.profileImage && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={handleDeleteProfileImage}
-                  className="w-full text-destructive"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  {t('editor.deletePhoto')}
-                </Button>
-              )}
-            </div>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {t('editor.photoRequirements')}
-          </p>
-        </CardContent>
-      </Card>
-
-      {/* Personal Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('editor.personalInfo')}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="fullName">{t('editor.fullName')}</Label>
-              <Input 
-                id="fullName" 
-                value={resumeData.personalInfo.fullName} 
-                onChange={e => updatePersonalInfo('fullName', e.target.value)} 
-                placeholder="Your full name" 
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="phone">{t('editor.phone')}</Label>
-              <Input 
-                id="phone" 
-                value={resumeData.personalInfo.phone} 
-                onChange={e => updatePersonalInfo('phone', e.target.value)} 
-                placeholder="+66 81 234 5678" 
-              />
-            </div>
-            <div>
-              <Label htmlFor="email">{t('editor.email')}</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                value={resumeData.personalInfo.email} 
-                onChange={e => updatePersonalInfo('email', e.target.value)} 
-                placeholder="your.email@example.com" 
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="linkedin">LinkedIn</Label>
-              <Input 
-                id="linkedin" 
-                value={resumeData.personalInfo.linkedin} 
-                onChange={e => updatePersonalInfo('linkedin', e.target.value)} 
-                placeholder="https://linkedin.com/in/xxx-xxx" 
-              />
-            </div>
-            <div>
-              <Label htmlFor="portfolio">Portfolio</Label>
-              <Input 
-                id="portfolio" 
-                value={resumeData.personalInfo.portfolio || ''} 
-                onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
-                placeholder="https://portfolio.xxx.com" 
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="website">{t('editor.website')}</Label>
-              <Input 
-                id="website" 
-                value={resumeData.personalInfo.website || ''} 
-                onChange={e => updatePersonalInfo('website', e.target.value)} 
-                placeholder="www.yourname.com" 
-              />
-            </div>
-            <div>
-              <Label htmlFor="address">{t('editor.address')}</Label>
-              <Input 
-                id="address" 
-                value={resumeData.personalInfo.address || ''} 
-                onChange={e => updatePersonalInfo('address', e.target.value)} 
-                placeholder="123 Main St, Bangkok 10110, Thailand" 
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Professional Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('editor.summary')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Textarea 
-            value={resumeData.summary} 
-            onChange={e => setResumeData(prev => ({
-              ...prev,
-              summary: e.target.value
-            }))} 
-            placeholder="Write a compelling professional summary highlighting your key achievements and skills..." 
-            className="min-h-[120px]" 
-          />
-        </CardContent>
-      </Card>
-
-      {/* Skills */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <span>{t('skills')}</span>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Input 
-                value={newSkill} 
-                onChange={e => setNewSkill(e.target.value)} 
-                placeholder="เพิ่มทักษะ" 
-                className="w-full sm:w-48" 
-                onKeyPress={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addSkill();
-                  }
-                }} 
-              />
-              <Button type="button" onClick={addSkill} size="sm" className="whitespace-nowrap">
-                <Plus className="w-4 h-4" />
-                Add Skill
-              </Button>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {resumeData.skills.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {resumeData.skills.map((skill, index) => (
-                <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                  {skill}
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-4 w-4 p-0 hover:bg-transparent" 
-                    onClick={() => removeSkill(skill)}
-                  >
-                    <X className="w-3 h-3" />
-                  </Button>
-                </Badge>
-              ))}
-            </div>
-          ) : (
-            <p className="text-muted-foreground text-sm">{t('editor.addSkill')}</p>
-          )}
-        </CardContent>
-      </Card>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="w-full py-6 px-4">
-        <div className="flex justify-between items-center mb-6">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {t('nav.backToHome')}
-          </Button>
-          <div className="flex gap-2">
-            <Button onClick={handleSave}>
-              {t('editor.saveResume')}
-            </Button>
-            {resumeId && (
-              <QRCodeGenerator resumeId={resumeId} />
-            )}
-            {resumeId && (
-              <WordGenerator resumeId={resumeId} />
-            )}
+      <div className="border-b">
+        <div className="w-full px-4 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <Button variant="outline" onClick={() => navigate('/')} className="flex items-center gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                {t('dashboard.backToHome')}
+              </Button>
+              <h1 className="text-2xl font-bold text-foreground">{t('editor.title')}</h1>
+            </div>
+            <div className="flex items-center gap-4">
+              {/* Template & Theme */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm">Template:</Label>
+                  <Select value={templateName} onValueChange={setTemplateName}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Professional">Professional</SelectItem>
+                      <SelectItem value="Creative">Creative</SelectItem>
+                      <SelectItem value="Corporate">Corporate</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm">Theme:</Label>
+                  <div className="relative">
+                    <div 
+                      className="w-8 h-8 rounded-md border cursor-pointer" 
+                      style={{ backgroundColor: themeColor }}
+                      onClick={() => setShowColorPicker(!showColorPicker)} 
+                    />
+                    {showColorPicker && (
+                      <div className="absolute z-10 mt-2 right-0">
+                        <div className="fixed inset-0" onClick={() => setShowColorPicker(false)} />
+                        <div className="bg-white p-3 rounded-lg shadow-lg border">
+                          <HexColorPicker color={themeColor} onChange={setThemeColor} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <Button onClick={handleSave}>Save Resume</Button>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Main Content - Fluid Grid Layout */}
-        {isMobile ? (
-          // Mobile Layout with Sheet - Full Width
-          <div className="w-full">
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-xl font-bold">{t('editor.resumeEditor')}</h1>
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <Menu className="h-4 w-4 mr-2" />
-                    {t('editor.editResume')}
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-80 p-0 overflow-y-auto">
-                  <div className="p-6">
-                    {renderEditorContent()}
+      {/* Main Content - Fluid Grid Layout */}
+      <div className="w-full min-h-screen">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
+          {/* Left Column - Form */}
+          <div className="bg-background p-6 overflow-y-auto max-h-screen">
+            <div className="space-y-6">
+              {/* Personal Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('editor.personalInfo')}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4">
+                    <div>
+                      <Label htmlFor="fullName">{t('editor.fullName')}</Label>
+                      <Input 
+                        id="fullName" 
+                        value={resumeData.personalInfo.fullName} 
+                        onChange={e => updatePersonalInfo('fullName', e.target.value)} 
+                        placeholder={t('editor.fullNamePlaceholder')} 
+                      />
+                    </div>
                   </div>
-                </SheetContent>
-              </Sheet>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="phone">{t('editor.phone')}</Label>
+                      <Input 
+                        id="phone" 
+                        value={resumeData.personalInfo.phone} 
+                        onChange={e => updatePersonalInfo('phone', e.target.value)} 
+                        placeholder="+66 81 234 5678" 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="email">{t('editor.email')}</Label>
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        value={resumeData.personalInfo.email} 
+                        onChange={e => updatePersonalInfo('email', e.target.value)} 
+                        placeholder="your.email@example.com" 
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="linkedin">LinkedIn</Label>
+                      <Input 
+                        id="linkedin" 
+                        value={resumeData.personalInfo.linkedin} 
+                        onChange={e => updatePersonalInfo('linkedin', e.target.value)} 
+                        placeholder={t('editor.linkedinPlaceholder')} 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="portfolio">Portfolio</Label>
+                      <Input 
+                        id="portfolio" 
+                        value={resumeData.personalInfo.portfolio || ''} 
+                        onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
+                        placeholder={t('editor.portfolioPlaceholder')} 
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="website">{t('editor.website')}</Label>
+                      <Input 
+                        id="website" 
+                        value={resumeData.personalInfo.website || ''} 
+                        onChange={e => updatePersonalInfo('website', e.target.value)} 
+                        placeholder="https://www.yourname.com" 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="address">{t('editor.address')}</Label>
+                     <Input 
+                       id="address" 
+                       value={resumeData.personalInfo.address || ''} 
+                       onChange={e => updatePersonalInfo('address', e.target.value)} 
+                       placeholder="123 Main St, Bangkok 10110, Thailand" 
+                     />
+                   </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Professional Summary */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t('editor.summary')}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Textarea 
+                    value={resumeData.summary} 
+                    onChange={e => setResumeData(prev => ({ ...prev, summary: e.target.value }))} 
+                    placeholder="Write a compelling professional summary highlighting your key achievements and skills..." 
+                    className="min-h-[120px]" 
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Skills */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                    <span>{t('skills')}</span>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Input 
+                        value={newSkill} 
+                        onChange={e => setNewSkill(e.target.value)} 
+                        placeholder="เพิ่มทักษะ" 
+                        className="w-full sm:w-48" 
+                        onKeyPress={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addSkill();
+                          }
+                        }} 
+                      />
+                      <Button type="button" onClick={addSkill} size="sm" className="whitespace-nowrap">
+                        <Plus className="w-4 h-4" />
+                        Add Skill
+                      </Button>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {resumeData.skills.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {resumeData.skills.map((skill, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          {skill}
+                          <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-4 w-4 p-0 hover:bg-transparent" 
+                            onClick={() => removeSkill(skill)}
+                          >
+                            <X className="w-3 h-3" />
+                          </Button>
+                        </Badge>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground text-sm">{t('editor.addSkill')}</p>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Generate Sample Data Button */}
+              <div className="text-center">
+                <Button 
+                  type="button" 
+                  variant="secondary" 
+                  onClick={generateSampleData} 
+                  className="flex items-center gap-2"
+                >
+                  <FileText className="w-4 h-4" />
+                  Generate Sample Data
+                </Button>
+              </div>
             </div>
-            <div className="w-full bg-white p-4 rounded-lg shadow-sm border">
+          </div>
+
+          {/* Right Column - Preview */}
+          <div className="bg-gray-50 p-6 overflow-y-auto max-h-screen">
+            <div className="mb-4">
+              <h2 className="text-xl font-bold text-center text-foreground">{t('editor.preview')}</h2>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm">
               <ResumeTemplate 
                 data={resumeData} 
-                template={templateName}
-                themeColor={themeColor}
+                template={templateName} 
+                themeColor={themeColor} 
               />
             </div>
           </div>
-        ) : (
-          // Desktop Layout with Fluid Grid - Full Width
-          <div className="w-full grid grid-cols-12 gap-6 min-h-[calc(100vh-200px)]">
-            {/* Left Panel - Editor */}
-            <div className="col-span-4 bg-white rounded-lg shadow-sm border">
-              <div className="h-full p-6 overflow-y-auto">
-                {renderEditorContent()}
-              </div>
-            </div>
-            
-            {/* Right Panel - Preview */}
-            <div className="col-span-8 bg-gray-50 rounded-lg">
-              <div className="h-full p-6 overflow-y-auto">
-                <div className="w-full bg-white p-6 rounded-lg shadow-lg">
-                  <ResumeTemplate 
-                    data={resumeData} 
-                    template={templateName}
-                    themeColor={themeColor}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

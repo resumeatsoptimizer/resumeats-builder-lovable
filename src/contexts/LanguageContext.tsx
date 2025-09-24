@@ -57,6 +57,11 @@ const translations: Translations = {
   
   'feature.autoApply.title': { th: 'สมัครงานอัตโนมัติ', en: 'Auto Job Application' },
   'feature.autoApply.desc': { th: 'ส่งอีเมลสมัครงานไปยังหลายบริษัทได้ในคลิกเดียว', en: 'Apply to multiple companies automatically with just one click' },
+
+  // ATS Section
+  'ats.title': { th: 'เรซูเม่ที่ HR ได้เห็น 100% ไม่พลาดโอกาสสมัครงาน', en: 'Ensure HR Sees Your Resume — 100% Visibility, Zero Missed Opportunities' },
+  'ats.subtitle': { th: 'ATS (Applicant Tracking System) คือระบบที่บริษัทและ HR ใช้ในการคัดกรองเรซูเม่อัตโนมัติ หากเรซูเม่ไม่เป็นมิตรกับ ATS ข้อมูลสำคัญอาจไม่ถูกอ่านหรือถูกตัดออก ทำให้พลาดโอกาสไปโดยไม่รู้ตัว', en: 'An ATS (Applicant Tracking System) is software used by recruiters to automatically screen resumes. If your resume isn\'t ATS-friendly, important details may not be read or may get rejected before reaching the recruiter.' },
+  'ats.description': { th: 'เรซูเม่แบบ ATS-Friendly จึงหมายถึงเรซูเม่ที่ออกแบบและจัดรูปแบบมาให้ระบบ ATS อ่านได้ครบถ้วน ช่วยเพิ่มโอกาสให้ HR เห็นข้อมูลจริงของคุณ และผ่านด่านแรกของการคัดเลือก', en: 'An ATS-Friendly Resume is designed and formatted so that ATS can accurately read your information — ensuring your skills and experience get noticed and improving your chances of passing the first screening.' },
     
   // Footer
   'footer.product': { th: 'ผลิตภัณฑ์', en: 'Product' },
@@ -134,15 +139,37 @@ const translations: Translations = {
   
   // Dashboard  
   'dashboard.yourResumes': { th: 'เรซูเม่ของคุณ', en: 'Your Resumes' },
+  'dashboard.title': { th: 'เรซูเม่ของฉัน', en: 'My Resumes' },
+  'dashboard.subtitle': { th: 'จัดการและดูเรซูเม่ที่บันทึกไว้ทั้งหมด', en: 'Manage and view all your saved resumes' },
+  'dashboard.totalResumes': { th: 'เรซูเม่ทั้งหมด', en: 'Total Resumes' },
+  'dashboard.publicResumes': { th: 'เรซูเม่สาธารณะ', en: 'Public Resumes' },
+  'dashboard.lastUpdated': { th: 'อัปเดตล่าสุด', en: 'Last Updated' },
+  'dashboard.noResumes': { th: 'ยังไม่มีเรซูเม่', en: 'No resumes yet' },
+  'dashboard.getStarted': { th: 'เริ่มต้นด้วยการสร้างเรซูเม่แรกของคุณ', en: 'Get started by creating your first resume' },
+  'dashboard.createFirst': { th: 'สร้างเรซูเม่แรกของคุณ', en: 'Create Your First Resume' },
+  'dashboard.createNew': { th: 'สร้างเรซูเม่ใหม่', en: 'Create New Resume' },
+  'dashboard.template': { th: 'เทมเพลต', en: 'Template' },
+  'dashboard.public': { th: 'สาธารณะ', en: 'Public' },
+  'dashboard.private': { th: 'ส่วนตัว', en: 'Private' },
+  'dashboard.created': { th: 'สร้างเมื่อ', en: 'Created' },
+  'dashboard.updated': { th: 'อัปเดต', en: 'Updated' },
+  'dashboard.makePublic': { th: 'เผยแพร่สาธารณะ', en: 'Make public' },
+  'dashboard.edit': { th: 'แก้ไข', en: 'Edit' },
+  'dashboard.delete': { th: 'ลบเรซูเม่', en: 'Delete Resume' },
+  'dashboard.deleteConfirm': { th: 'คุณแน่ใจหรือไม่ที่จะลบเรซูเม่นี้? การกระทำนี้ไม่สามารถย้อนกลับได้', en: 'Are you sure you want to delete this resume? This action cannot be undone.' },
+  'dashboard.backToHome': { th: 'กลับสู่หน้าแรก', en: 'Back to Home' },
 
   // Resume Editor
   'editor.title': { th: 'เครื่องมือสร้างเรซูเม่', en: 'Resume Builder' },
   'editor.personalInfo': { th: 'ข้อมูลส่วนตัว', en: 'Personal Information' },
   'editor.fullName': { th: 'ชื่อ-นามสกุล', en: 'Full Name' },
+  'editor.fullNamePlaceholder': { th: 'กรอกชื่อ-นามสกุล', en: 'Enter your full name' },
   'editor.phone': { th: 'โทรศัพท์', en: 'Phone' },
   'editor.email': { th: 'อีเมล', en: 'Email' },
   'editor.linkedin': { th: 'LinkedIn', en: 'LinkedIn' },
+  'editor.linkedinPlaceholder': { th: 'https://linkedin.com/in/your-profile', en: 'https://linkedin.com/in/your-profile' },
   'editor.portfolio': { th: 'Portfolio', en: 'Portfolio' },
+  'editor.portfolioPlaceholder': { th: 'https://portfolio.your-name.com', en: 'https://portfolio.your-name.com' },
   'editor.website': { th: 'เว็บไซต์', en: 'Website' },
   'editor.address': { th: 'ที่อยู่', en: 'Address' },
   'editor.profileImage': { th: 'รูปโปรไฟล์', en: 'Profile Image' },

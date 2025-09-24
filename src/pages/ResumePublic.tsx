@@ -99,14 +99,14 @@ const ResumePublic = () => {
         <div className="container mx-auto px-4">
           {/* Back to Dashboard Button */}
           <div className="max-w-4xl mx-auto mb-6">
-            <Button 
-              variant="outline" 
-              onClick={() => window.location.href = '/dashboard'}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              กลับไป Dashboard
-            </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => window.location.href = '/'}
+                className="flex items-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                กลับสู่หน้าแรก
+              </Button>
           </div>
           
           <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
