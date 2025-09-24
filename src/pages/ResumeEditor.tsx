@@ -73,6 +73,42 @@ const ResumeEditor = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showMobileControls, setShowMobileControls] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load existing resume if ID is provided in URL
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    if (id) {
+      setResumeId(id);
+      loadResume(id);
+    }
+  }, []);
+
+  const loadResume = async (id: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('resumes')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setResumeData(data.resume_data as unknown as ResumeData);
+        setTemplateName(data.template_name);
+        setThemeColor(data.theme_color || '#3b82f6');
+        setIsPublic(data.is_public);
+      }
+    } catch (error) {
+      console.error('Error loading resume:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load resume",
+        variant: "destructive"
+      });
+    }
+  };
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
       fullName: '',
@@ -302,6 +338,7 @@ const ResumeEditor = () => {
       const resumeToSave = {
         user_id: user.id,
         template_name: templateName,
+        theme_color: themeColor,
         resume_data: resumeData as any,
         is_public: isPublic
       };

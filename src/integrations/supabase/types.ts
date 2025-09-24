@@ -45,6 +45,7 @@ export type Database = {
           is_public: boolean
           resume_data: Json
           template_name: string
+          theme_color: string | null
           updated_at: string
           user_id: string
         }
@@ -54,6 +55,7 @@ export type Database = {
           is_public?: boolean
           resume_data?: Json
           template_name: string
+          theme_color?: string | null
           updated_at?: string
           user_id: string
         }
@@ -63,6 +65,7 @@ export type Database = {
           is_public?: boolean
           resume_data?: Json
           template_name?: string
+          theme_color?: string | null
           updated_at?: string
           user_id?: string
         }
