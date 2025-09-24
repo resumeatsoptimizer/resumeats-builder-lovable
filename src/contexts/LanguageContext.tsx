@@ -178,7 +178,7 @@ const translations: Translations = {
   'editor.jobMatch': { th: 'Job Match Analysis', en: 'Job Match Analysis' },
   'editor.translate': { th: 'แปลภาษา', en: 'Translate' },
   'editor.save': { th: 'บันทึก', en: 'Save' },
-  'editor.download': { th: 'ดาวน์โหลด PDF', en: 'Download PDF' },
+  'editor.download': { th: 'ดาวน์โหลด Word', en: 'Download Word' },
   'editor.share': { th: 'แชร์', en: 'Share' },
   'editor.public': { th: 'เผยแพร่สาธารณะ', en: 'Make Public' },
   'editor.jobDescription': { th: 'รายละเอียดงาน (สำหรับ Job Match)', en: 'Job Description (for Job Match)' },

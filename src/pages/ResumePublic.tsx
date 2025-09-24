@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
-import { PDFGenerator } from '@/components/PDFGenerator';
+import { WordGenerator } from '@/components/WordGenerator';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, ArrowLeft } from 'lucide-react';
@@ -120,7 +120,7 @@ const ResumePublic = () => {
           {/* PDF and QR Code Section */}
           <div className="max-w-4xl mx-auto mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <PDFGenerator resumeId={id || ''} resumeTitle={resumeData.resume_data?.personalInfo?.fullName || 'Resume'} />
+              <WordGenerator resumeId={id || ''} resumeTitle={resumeData.resume_data?.personalInfo?.fullName || 'Resume'} />
               <QRCodeGenerator resumeId={id || ''} resumeTitle={resumeData.resume_data?.personalInfo?.fullName || 'Resume'} />
             </div>
           </div>

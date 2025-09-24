@@ -11,7 +11,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ResumeTemplate } from '@/components/ResumeTemplate';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
-import { PDFGenerator } from '@/components/PDFGenerator';
+import { WordGenerator } from '@/components/WordGenerator';
 import LanguageSelection from '@/components/LanguageSelection';
 import Navigation from '@/components/Navigation';
 import { supabase } from '@/integrations/supabase/client';
@@ -630,7 +630,7 @@ const ResumeEditor = () => {
                         
                         {/* PDF Download */}
                         <div className="pt-4 border-t">
-                          <PDFGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
+                          <WordGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />
                         </div>
                       </div>
                     </div>
