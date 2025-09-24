@@ -18,9 +18,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target, Menu, Settings } from 'lucide-react';
+import { Plus, X, Upload, User, ArrowLeft, Download, Share2, Languages, Trash2, FileText, Zap, Target, Menu, Settings, CalendarIcon } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 import { useNavigate } from 'react-router-dom';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { format } from 'date-fns';
 interface WorkExperience {
   id: string;
   position: string;
@@ -41,14 +44,17 @@ interface Education {
 }
 interface ResumeData {
   personalInfo: {
+    prefix: string;
     fullName: string;
     phone: string;
     email: string;
     linkedin: string;
-  portfolio?: string;
-  website?: string;
+    portfolio?: string;
+    website?: string;
     address?: string;
     profileImage?: string;
+    birthDate?: string;
+    age?: number;
   };
   summary: string;
   skills: string[];
@@ -111,12 +117,15 @@ const ResumeEditor = () => {
   };
   const [resumeData, setResumeData] = useState<ResumeData>({
     personalInfo: {
+      prefix: '',
       fullName: '',
       phone: '',
       email: '',
       linkedin: '',
       portfolio: '',
-      website: ''
+      website: '',
+      birthDate: '',
+      age: 0
     },
     summary: '',
     skills: [],
@@ -141,14 +150,41 @@ const ResumeEditor = () => {
     certifications: [''],
     awards: ['']
   });
-  const updatePersonalInfo = (field: keyof ResumeData['personalInfo'], value: string) => {
-    setResumeData(prev => ({
-      ...prev,
-      personalInfo: {
+  // Calculate age from birth date
+  const calculateAge = (birthDate: string): number => {
+    if (!birthDate) return 0;
+    const [day, month, year] = birthDate.split('/').map(Number);
+    if (!day || !month || !year) return 0;
+    
+    const today = new Date();
+    const birth = new Date(year, month - 1, day);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    
+    return age;
+  };
+
+  const updatePersonalInfo = (field: keyof ResumeData['personalInfo'], value: string | number) => {
+    setResumeData(prev => {
+      const newPersonalInfo = {
         ...prev.personalInfo,
         [field]: value
+      };
+      
+      // If birth date is updated, calculate age
+      if (field === 'birthDate' && typeof value === 'string') {
+        newPersonalInfo.age = calculateAge(value);
       }
-    }));
+      
+      return {
+        ...prev,
+        personalInfo: newPersonalInfo
+      };
+    });
   };
   const addSkill = () => {
     if (newSkill.trim() && !resumeData.skills.includes(newSkill.trim())) {
@@ -214,13 +250,16 @@ const ResumeEditor = () => {
   const generateSampleData = () => {
     setResumeData({
       personalInfo: {
+        prefix: "นาย",
         fullName: "สมชาย ใจดี",
         phone: "+66 81 234 5678",
         email: "somchai.jaidee@email.com",
         linkedin: "linkedin.com/in/somchai-jaidee",
         portfolio: "portfolio.somchai.com",
         website: "www.somchai.com",
-        address: "123/456 Sukhumvit Road, Watthana, Bangkok 10110"
+        address: "123/456 Sukhumvit Road, Watthana, Bangkok 10110",
+        birthDate: "15/03/1990",
+        age: 34
       },
       summary: "Digital Marketing Specialist with 5+ years of experience in developing and executing successful digital marketing campaigns. Proven track record of increasing brand awareness and driving sales growth through strategic use of SEO, SEM, and social media marketing.",
       skills: ["Digital Marketing", "Google Analytics", "SEO/SEM", "Social Media Marketing", "Content Marketing", "Google Ads", "Facebook Ads", "Data Analysis"],
@@ -654,56 +693,88 @@ const ResumeEditor = () => {
                    <CardHeader>
                      <CardTitle>{t('editor.personalInfo')}</CardTitle>
                    </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                         <Label htmlFor="fullName">{t('editor.fullName')}</Label>
-                         <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
-                       </div>
+                   <CardContent className="space-y-4">
+                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                        <div>
-                         <Label htmlFor="phone">{t('editor.phone')}</Label>
-                         <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
-                       </div>
-                     </div>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <Label htmlFor="prefix">คำนำหน้า / Prefix</Label>
+                          <Select value={resumeData.personalInfo.prefix} onValueChange={(value) => updatePersonalInfo('prefix', value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="เลือกคำนำหน้า" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="นาย">นาย (Mr.)</SelectItem>
+                              <SelectItem value="นาง">นาง (Mrs.)</SelectItem>
+                              <SelectItem value="นางสาว">นางสาว (Ms.)</SelectItem>
+                              <SelectItem value="ดร.">ดร. (Dr.)</SelectItem>
+                              <SelectItem value="ศ.">ศ. (Prof.)</SelectItem>
+                              <SelectItem value="รศ.">รศ. (Assoc. Prof.)</SelectItem>
+                              <SelectItem value="ผศ.">ผศ. (Asst. Prof.)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                        <div>
-                         <Label htmlFor="email">{t('editor.email')}</Label>
-                         <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
-                       </div>
-                       <div>
-                         <Label htmlFor="linkedin">LinkedIn</Label>
-                         <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
-                       </div>
-                     </div>
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       <div>
-                         <Label htmlFor="portfolio">Portfolio ({t('editor.optional')})</Label>
+                          <Label htmlFor="fullName">{t('editor.fullName')}</Label>
+                          <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
+                        </div>
+                        <div>
+                          <Label htmlFor="birthDate">วันเกิด / Birth Date</Label>
+                          <Input 
+                            id="birthDate" 
+                            value={resumeData.personalInfo.birthDate || ''} 
+                            onChange={e => updatePersonalInfo('birthDate', e.target.value)} 
+                            placeholder="DD/MM/YYYY"
+                            pattern="\d{2}/\d{2}/\d{4}"
+                          />
+                          {resumeData.personalInfo.age && resumeData.personalInfo.age > 0 && (
+                            <p className="text-xs text-muted-foreground mt-1">อายุ: {resumeData.personalInfo.age} ปี</p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="phone">{t('editor.phone')}</Label>
+                          <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
+                        </div>
+                        <div>
+                          <Label htmlFor="email">{t('editor.email')}</Label>
+                          <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="linkedin">LinkedIn</Label>
+                          <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
+                        </div>
+                        <div>
+                          <Label htmlFor="portfolio">Portfolio ({t('editor.optional')})</Label>
+                          <Input 
+                            id="portfolio" 
+                            value={resumeData.personalInfo.portfolio || ''} 
+                            onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
+                            placeholder="portfolio.yourname.com" 
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="website">{t('editor.website')} ({t('editor.optional')})</Label>
+                          <Input 
+                            id="website" 
+                            value={resumeData.personalInfo.website || ''} 
+                            onChange={e => updatePersonalInfo('website', e.target.value)} 
+                            placeholder="www.yourname.com" 
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="address">{t('editor.address')} ({t('editor.optional')})</Label>
                          <Input 
-                           id="portfolio" 
-                           value={resumeData.personalInfo.portfolio || ''} 
-                           onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
-                           placeholder="portfolio.yourname.com" 
+                           id="address" 
+                           value={resumeData.personalInfo.address || ''} 
+                           onChange={e => updatePersonalInfo('address', e.target.value)} 
+                           placeholder="123 Main St, Bangkok 10110, Thailand" 
                          />
                        </div>
-                       <div>
-                         <Label htmlFor="website">{t('editor.website')} ({t('editor.optional')})</Label>
-                         <Input 
-                           id="website" 
-                           value={resumeData.personalInfo.website || ''} 
-                           onChange={e => updatePersonalInfo('website', e.target.value)} 
-                           placeholder="www.yourname.com" 
-                         />
-                       </div>
-                     </div>
-                     <div>
-                       <Label htmlFor="address">{t('editor.address')} ({t('editor.optional')})</Label>
-                      <Input 
-                        id="address" 
-                        value={resumeData.personalInfo.address || ''} 
-                        onChange={e => updatePersonalInfo('address', e.target.value)} 
-                        placeholder="123 Main St, Bangkok 10110, Thailand" 
-                      />
-                    </div>
+                      </div>
                   </CardContent>
                 </Card>
 
@@ -1009,29 +1080,67 @@ const ResumeEditor = () => {
                   <CardHeader>
                     <CardTitle>Personal Information</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="fullName">Full Name</Label>
-                        <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
-                      </div>
-                      <div>
-                        <Label htmlFor="linkedin">LinkedIn</Label>
-                        <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
-                      </div>
-                      <div>
-                        <Label htmlFor="portfolio">Portfolio/Website (Optional)</Label>
-                        <Input id="portfolio" value={resumeData.personalInfo.portfolio || ''} onChange={e => updatePersonalInfo('portfolio', e.target.value)} placeholder="your-portfolio.com" />
-                      </div>
-                    </div>
+                   <CardContent className="space-y-4">
+                     <div className="space-y-4">
+                       <div>
+                         <Label htmlFor="mobile-prefix">คำนำหน้า / Prefix</Label>
+                         <Select value={resumeData.personalInfo.prefix} onValueChange={(value) => updatePersonalInfo('prefix', value)}>
+                           <SelectTrigger>
+                             <SelectValue placeholder="เลือกคำนำหน้า" />
+                           </SelectTrigger>
+                           <SelectContent>
+                             <SelectItem value="นาย">นาย (Mr.)</SelectItem>
+                             <SelectItem value="นาง">นาง (Mrs.)</SelectItem>
+                             <SelectItem value="นางสาว">นางสาว (Ms.)</SelectItem>
+                             <SelectItem value="ดร.">ดร. (Dr.)</SelectItem>
+                             <SelectItem value="ศ.">ศ. (Prof.)</SelectItem>
+                             <SelectItem value="รศ.">รศ. (Assoc. Prof.)</SelectItem>
+                             <SelectItem value="ผศ.">ผศ. (Asst. Prof.)</SelectItem>
+                           </SelectContent>
+                         </Select>
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-fullName">Full Name</Label>
+                         <Input id="mobile-fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-birthDate">วันเกิด / Birth Date</Label>
+                         <Input 
+                           id="mobile-birthDate" 
+                           value={resumeData.personalInfo.birthDate || ''} 
+                           onChange={e => updatePersonalInfo('birthDate', e.target.value)} 
+                           placeholder="DD/MM/YYYY"
+                           pattern="\d{2}/\d{2}/\d{4}"
+                         />
+                         {resumeData.personalInfo.age && resumeData.personalInfo.age > 0 && (
+                           <p className="text-xs text-muted-foreground mt-1">อายุ: {resumeData.personalInfo.age} ปี</p>
+                         )}
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-phone">Phone</Label>
+                         <Input id="mobile-phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-email">Email</Label>
+                         <Input id="mobile-email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-linkedin">LinkedIn</Label>
+                         <Input id="mobile-linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-portfolio">Portfolio (Optional)</Label>
+                         <Input id="mobile-portfolio" value={resumeData.personalInfo.portfolio || ''} onChange={e => updatePersonalInfo('portfolio', e.target.value)} placeholder="your-portfolio.com" />
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-website">Website (Optional)</Label>
+                         <Input id="mobile-website" value={resumeData.personalInfo.website || ''} onChange={e => updatePersonalInfo('website', e.target.value)} placeholder="www.yourname.com" />
+                       </div>
+                       <div>
+                         <Label htmlFor="mobile-address">Address (Optional)</Label>
+                         <Input id="mobile-address" value={resumeData.personalInfo.address || ''} onChange={e => updatePersonalInfo('address', e.target.value)} placeholder="123 Main St, Bangkok 10110, Thailand" />
+                       </div>
+                     </div>
                   </CardContent>
                 </Card>
 

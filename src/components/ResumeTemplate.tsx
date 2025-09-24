@@ -1,4 +1,5 @@
 interface PersonalInfo {
+  prefix: string;
   fullName: string;
   phone: string;
   email: string;
@@ -7,6 +8,8 @@ interface PersonalInfo {
   website?: string;
   address?: string;
   profileImage?: string;
+  birthDate?: string;
+  age?: number;
 }
 
 
@@ -126,15 +129,21 @@ export const ResumeTemplate = ({ data, template, themeColor = 'slate' }: ResumeT
           />
         )}
         <div className="flex-1">
-          <h1 className={`${styles.nameSize} font-bold mb-3`}>{personalInfo.fullName || 'Your Name'}</h1>
-          <div className="flex flex-col gap-1 text-sm opacity-95">
-            {personalInfo.phone && <span>Phone: {personalInfo.phone}</span>}
-            {personalInfo.email && <span>Email: {personalInfo.email}</span>}
-            {personalInfo.linkedin && <span>LinkedIn: {personalInfo.linkedin}</span>}
-            {personalInfo.portfolio && <span>Portfolio: {personalInfo.portfolio}</span>}
-            {personalInfo.website && <span>Website: {personalInfo.website}</span>}
-            {personalInfo.address && <span>Address: {personalInfo.address}</span>}
-          </div>
+          <h1 className={`${styles.nameSize} font-bold mb-3`}>
+            {personalInfo.prefix && `${personalInfo.prefix} `}
+            {personalInfo.fullName || 'Your Name'}
+            {personalInfo.age && personalInfo.age > 0 && ` อายุ ${personalInfo.age} ปี`}
+          </h1>
+          <p className="text-sm opacity-95 mb-2 leading-relaxed">
+            {[
+              personalInfo.phone && `โทรศัพท์: ${personalInfo.phone}`,
+              personalInfo.email && `อีเมล: ${personalInfo.email}`,
+              personalInfo.linkedin && `LinkedIn: ${personalInfo.linkedin}`,
+              personalInfo.portfolio && `Portfolio: ${personalInfo.portfolio}`,
+              personalInfo.website && `เว็บไซต์: ${personalInfo.website}`,
+              personalInfo.address && `ที่อยู่: ${personalInfo.address}`
+            ].filter(Boolean).join(' • ')}
+          </p>
         </div>
       </div>
 
