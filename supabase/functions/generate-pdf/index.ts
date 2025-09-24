@@ -212,26 +212,30 @@ function generateResumeHTML(resumeData: any, templateName: string): string {
     <body>
         <div class="resume">
             <div class="header">
-                <h1>${personalInfo?.fullName || 'Your Name'}</h1>
-                <div class="contact-info">
-                    ${personalInfo?.phone ? `<span>📞 ${personalInfo.phone}</span>` : ''}
-                    ${personalInfo?.email ? `<span>✉️ ${personalInfo.email}</span>` : ''}
-                    ${personalInfo?.linkedin ? `<span>🔗 ${personalInfo.linkedin}</span>` : ''}
-                    ${personalInfo?.portfolio ? `<span>🌐 ${personalInfo.portfolio}</span>` : ''}
-                    ${personalInfo?.address ? `<span>📍 ${personalInfo.address}</span>` : ''}
+                <h1 style="font-size: 28px; margin-bottom: 8px;">
+                    <span style="font-size: 20px;">${personalInfo?.prefix ? `${personalInfo.prefix} ` : ''}</span>
+                    <span style="font-size: 28px;">${personalInfo?.fullName || 'Your Name'}</span>
+                    <span style="font-size: 22px;">${personalInfo?.age ? ` อายุ ${personalInfo.age} ปี` : ''}</span>
+                </h1>
+                <div class="contact-info" style="line-height: 1.2; font-size: 12px;">
+                    ${(personalInfo?.phone || personalInfo?.email) ? `<div>โทรศัพท์: ${personalInfo.phone || ''}, อีเมล: ${personalInfo.email || ''}</div>` : ''}
+                    ${personalInfo?.linkedin ? `<div>LinkedIn: ${personalInfo.linkedin}</div>` : ''}
+                    ${personalInfo?.portfolio ? `<div>Portfolio: ${personalInfo.portfolio}</div>` : ''}
+                    ${personalInfo?.website ? `<div>เว็บไซต์: ${personalInfo.website}</div>` : ''}
+                    ${personalInfo?.address ? `<div>ที่อยู่: ${personalInfo.address}</div>` : ''}
                 </div>
             </div>
 
             ${summary ? `
             <div class="section">
-                <div class="section-title">Professional Summary</div>
+                <div class="section-title">สรุปประสบการณ์</div>
                 <p>${summary}</p>
             </div>
             ` : ''}
 
             ${skills?.length ? `
             <div class="section">
-                <div class="section-title">Skills</div>
+                <div class="section-title">ความสามารถ/ทักษะ</div>
                 <div class="skills-list">
                     ${skills.map(skill => `<span class="skill-item">${skill}</span>`).join('')}
                 </div>
@@ -240,7 +244,7 @@ function generateResumeHTML(resumeData: any, templateName: string): string {
 
         ${workExperience?.length && workExperience[0]?.position ? `
         <div class="section">
-            <div class="section-title">WORK EXPERIENCE</div>
+            <div class="section-title">ประสบการณ์ทำงาน</div>
             ${workExperience.map(exp => `
                 <div class="work-item">
                     <div class="work-title">${exp.position} | ${exp.company}</div>
@@ -257,7 +261,7 @@ function generateResumeHTML(resumeData: any, templateName: string): string {
 
         ${education?.length && education[0]?.degree ? `
         <div class="section">
-            <div class="section-title">EDUCATION</div>
+            <div class="section-title">การศึกษา</div>
             ${education.map(edu => `
                 <div class="education-item">
                     <div class="work-title">${edu.degree}</div>
@@ -271,7 +275,7 @@ function generateResumeHTML(resumeData: any, templateName: string): string {
 
         ${certifications?.length && certifications[0] ? `
         <div class="section">
-            <div class="section-title">CERTIFICATIONS</div>
+            <div class="section-title">ใบรับรอง</div>
             <ul>
                 ${certifications.map(cert => cert.trim() ? `<li>${cert.trim()}</li>` : '').join('')}
             </ul>
@@ -280,7 +284,7 @@ function generateResumeHTML(resumeData: any, templateName: string): string {
 
         ${awards?.length && awards[0] ? `
         <div class="section">
-            <div class="section-title">AWARDS AND RECOGNITION</div>
+            <div class="section-title">รางวัลและเกียรติยศ</div>
             <ul>
                 ${awards.map(award => award.trim() ? `<li>${award.trim()}</li>` : '').join('')}
             </ul>

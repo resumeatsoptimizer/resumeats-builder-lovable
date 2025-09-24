@@ -522,7 +522,7 @@ const ResumeEditor = () => {
           {!isMobile ? (
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-4">
-                <Button variant="outline" onClick={() => navigate('/')} className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => navigate('/dashboard')} className="flex items-center gap-2">
                   <ArrowLeft className="w-4 h-4" />
                   {t('editor.backToHome')}
                 </Button>
@@ -569,7 +569,7 @@ const ResumeEditor = () => {
             /* Mobile Header */
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => navigate('/')} className="flex items-center gap-1">
+                <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')} className="flex items-center gap-1">
                   <ArrowLeft className="w-4 h-4" />
                   {t('editor.backToHome')}
                 </Button>
