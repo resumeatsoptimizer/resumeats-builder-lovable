@@ -26,7 +26,8 @@ const ResumePublic = () => {
           .from('resumes')
           .select('*')
           .eq('id', id)
-          .single();
+          .eq('is_public', true)
+          .maybeSingle();
 
         if (error) {
           console.error('Error fetching resume:', error);
