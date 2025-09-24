@@ -93,21 +93,30 @@ const ResumePublic = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <div className="min-h-screen bg-gray-100 py-8">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-          <ResumeTemplate 
-            data={resumeData.resume_data} 
-            template={resumeData.template_name} 
-          />
-        </div>
-        
-        <div className="text-center mt-8">
-          <p className="text-sm text-muted-foreground">
-            Powered by ResumeATS-Builder
-          </p>
+        <div className="container mx-auto px-4">
+          {/* Debug info */}
+          <div className="max-w-4xl mx-auto mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded">
+            <p><strong>Debug Info:</strong></p>
+            <p>Resume ID from URL: {id}</p>
+            <p>Resume found: {resumeData ? 'Yes' : 'No'}</p>
+            <p>Is Public: {resumeData?.is_public ? 'Yes' : 'No'}</p>
+            <p>Template: {resumeData?.template_name}</p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+            <ResumeTemplate 
+              data={resumeData.resume_data} 
+              template={resumeData.template_name} 
+            />
+          </div>
+          
+          <div className="text-center mt-8">
+            <p className="text-sm text-muted-foreground">
+              Powered by ResumeATS-Builder
+            </p>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };
