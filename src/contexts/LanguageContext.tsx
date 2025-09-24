@@ -137,11 +137,40 @@ const translations: Translations = {
   'auth.signInSuccess': { th: 'เข้าสู่ระบบสำเร็จ', en: 'Sign in successful' },
   'auth.welcome': { th: 'ยินดีต้อนรับสู่ ResumeATS-Builder!', en: 'Welcome to ResumeATS-Builder!' },
   
-  // Dashboard  
+  // Dashboard translations
   'dashboard.yourResumes': { th: 'เรซูเม่ของคุณ', en: 'Your Resumes' },
+  'dashboard.backToHome': { th: 'กลับไปหน้าหลัก', en: 'Back to Home' },
+  'dashboard.manageResumes': { th: 'จัดการและดูเรซูเม่ที่บันทึกไว้ทั้งหมด', en: 'Manage and view all your saved resumes' },
+  'dashboard.createNewResume': { th: 'สร้างเรซูเม่ใหม่', en: 'Create New Resume' },
+  'dashboard.totalResumes': { th: 'เรซูเม่ทั้งหมด', en: 'Total Resumes' },
+  'dashboard.publicResumes': { th: 'เรซูเม่สาธารณะ', en: 'Public Resumes' },
+  'dashboard.lastUpdated': { th: 'แก้ไขล่าสุด', en: 'Last Updated' },
+  'dashboard.noResumes': { th: 'ยังไม่มีเรซูเม่', en: 'No resumes yet' },
+  'dashboard.getStartedText': { th: 'เริ่มต้นด้วยการสร้างเรซูเม่แรกของคุณ', en: 'Get started by creating your first resume' },
+  'dashboard.createFirstResume': { th: 'สร้างเรซูเม่แรกของคุณ', en: 'Create Your First Resume' },
+  'dashboard.templateName': { th: 'เทมเพลต {name}', en: '{name} Template' },
+  'dashboard.public': { th: 'สาธารณะ', en: 'Public' },
+  'dashboard.private': { th: 'ส่วนตัว', en: 'Private' },
+  'dashboard.created': { th: 'สร้างเมื่อ', en: 'Created' },
+  'dashboard.updated': { th: 'แก้ไขเมื่อ', en: 'Updated' },
+  'dashboard.makePublic': { th: 'เผยแพร่สาธารณะ', en: 'Make public' },
+  'dashboard.edit': { th: 'แก้ไข', en: 'Edit' },
+  'dashboard.deleteResume': { th: 'ลบเรซูเม่', en: 'Delete Resume' },
+  'dashboard.deleteConfirmation': { th: 'คุณแน่ใจหรือไม่ว่าต้องการลบเรซูเม่นี้? การกระทำนี้ไม่สามารถยกเลิกได้', en: 'Are you sure you want to delete this resume? This action cannot be undone.' },
+  'dashboard.delete': { th: 'ลบ', en: 'Delete' },
+  'dashboard.resumeDeleted': { th: 'ลบเรซูเม่เรียบร้อยแล้ว', en: 'Resume deleted successfully' },
+  'dashboard.resumeNow': { th: 'เรซูเม่เป็น', en: 'Resume is now' },
+  'dashboard.untitledResume': { th: 'เรซูเม่ไม่มีชื่อ', en: 'Untitled Resume' },
+  'dashboard.errorLoadResumes': { th: 'ไม่สามารถโหลดเรซูเม่ได้', en: 'Failed to load resumes' },
 
-  // Resume Editor
-  'editor.title': { th: 'เครื่องมือสร้างเรซูเม่', en: 'Resume Builder' },
+  // Common
+  'common.loading': { th: 'กำลังโหลด...', en: 'Loading...' },
+  'common.save': { th: 'บันทึก', en: 'Save' },
+  'common.cancel': { th: 'ยกเลิก', en: 'Cancel' },
+  'common.confirm': { th: 'ยืนยัน', en: 'Confirm' },
+  'common.credits': { th: 'เครดิต', en: 'Credits' },
+  'common.success': { th: 'สำเร็จ', en: 'Success' },
+  'common.error': { th: 'ข้อผิดพลาด', en: 'Error' },
   'editor.personalInfo': { th: 'ข้อมูลส่วนตัว', en: 'Personal Information' },
   'editor.fullName': { th: 'ชื่อ-นามสกุล', en: 'Full Name' },
   'editor.phone': { th: 'โทรศัพท์', en: 'Phone' },
@@ -197,12 +226,8 @@ const translations: Translations = {
   'editor.generateSample': { th: 'สร้างข้อมูลตัวอย่าง', en: 'Generate Sample Data' },
   'editor.backToHome': { th: 'ไปที่ แดชบอร์ด', en: 'Go to Dashboard' },
   
-  // Common
-  'common.loading': { th: 'กำลังโหลด...', en: 'Loading...' },
-  'common.save': { th: 'บันทึก', en: 'Save' },
-  'common.cancel': { th: 'ยกเลิก', en: 'Cancel' },
-  'common.confirm': { th: 'ยืนยัน', en: 'Confirm' },
-  'common.credits': { th: 'เครดิต', en: 'Credits' },
+  // Dashboard specific
+  'dashboard.template': { th: 'เทมเพลต', en: 'Template' },
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -222,13 +247,23 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('language', lang);
   };
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, string>): string => {
     const translation = translations[key];
     if (!translation) {
       console.warn(`Translation key "${key}" not found`);
       return key;
     }
-    return translation[language];
+    
+    let result = translation[language];
+    
+    // Handle template replacement for parameters like {name}
+    if (params) {
+      Object.entries(params).forEach(([paramKey, paramValue]) => {
+        result = result.replace(`{${paramKey}}`, paramValue);
+      });
+    }
+    
+    return result;
   };
 
   return (

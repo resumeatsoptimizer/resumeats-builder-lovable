@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 const Navigation = () => {
   const { t } = useLanguage();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [userCredits, setUserCredits] = useState<number | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -137,7 +138,10 @@ const Navigation = () => {
                 <Link to="/auth">{t('nav.getStarted')}</Link>
               </Button>
             ) : (
-              <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut()}>
+              <Button variant="outline" size="sm" onClick={async () => {
+                await supabase.auth.signOut();
+                navigate('/');
+              }}>
                 {t('nav.signOut')}
               </Button>
             )}
@@ -182,9 +186,12 @@ const Navigation = () => {
               {/* Mobile Auth Buttons */}
               {!isAuthenticated ? <Button size="sm" className="w-full" asChild>
                   <Link to="/auth">{t('nav.getStarted')}</Link>
-                </Button> : <Button variant="outline" size="sm" className="w-full" onClick={() => supabase.auth.signOut()}>
-                  {t('nav.signOut')}
-                </Button>}
+                 </Button> : <Button variant="outline" size="sm" className="w-full" onClick={async () => {
+                   await supabase.auth.signOut();
+                   window.location.href = '/';
+                 }}>
+                   {t('nav.signOut')}
+                 </Button>}
             </div>
           </div>
         </div>
