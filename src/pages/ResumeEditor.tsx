@@ -514,7 +514,6 @@ const ResumeEditor = () => {
     setResumeData(updatedData);
   };
   return <div className="min-h-screen bg-background">
-      <Navigation />
       {/* Header */}
       <div className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -522,9 +521,9 @@ const ResumeEditor = () => {
           {!isMobile ? (
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-4">
-                <Button variant="outline" onClick={() => navigate('/dashboard')} className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => navigate('/')} className="flex items-center gap-2">
                   <ArrowLeft className="w-4 h-4" />
-                  {t('editor.backToHome')}
+                  {t('dashboard.backToHome')}
                 </Button>
                 <h1 className="text-2xl font-bold text-foreground">{t('editor.title')}</h1>
               </div>
@@ -569,9 +568,9 @@ const ResumeEditor = () => {
             /* Mobile Header */
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')} className="flex items-center gap-1">
+                <Button variant="outline" size="sm" onClick={() => navigate('/')} className="flex items-center gap-1">
                   <ArrowLeft className="w-4 h-4" />
-                  {t('editor.backToHome')}
+                  {t('dashboard.backToHome')}
                 </Button>
                 <h1 className="text-lg font-bold text-foreground">{t('editor.title')}</h1>
               </div>
@@ -642,14 +641,13 @@ const ResumeEditor = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="w-full px-4 py-6">
         {/* Main Content */}
         {!isMobile ? (
           /* Desktop Layout - Side by side panels */
-          <ResizablePanelGroup direction="horizontal" className="h-[calc(100vh-280px)]">
-            <ResizablePanel defaultSize={50} minSize={30}>
-              <div className="p-6 h-full overflow-y-auto">
-                <div className="space-y-6">
+          <div className="flex gap-6 max-w-full">
+            <div className="flex-1 min-w-0">
+              <div className="space-y-6">
                  {/* Profile Photo Upload */}
                   <Card>
                    <CardHeader>
@@ -694,87 +692,57 @@ const ResumeEditor = () => {
                      <CardTitle>{t('editor.personalInfo')}</CardTitle>
                    </CardHeader>
                    <CardContent className="space-y-4">
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 gap-4">
                         <div>
-                           <Label htmlFor="prefix">{t('editor.prefix')}</Label>
-                           <Select value={resumeData.personalInfo.prefix} onValueChange={(value) => updatePersonalInfo('prefix', value)}>
-                             <SelectTrigger>
-                               <SelectValue placeholder={t('editor.selectPrefix')} />
-                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="นาย">นาย (Mr.)</SelectItem>
-                              <SelectItem value="นาง">นาง (Mrs.)</SelectItem>
-                              <SelectItem value="นางสาว">นางสาว (Ms.)</SelectItem>
-                              <SelectItem value="ดร.">ดร. (Dr.)</SelectItem>
-                              <SelectItem value="ศ.">ศ. (Prof.)</SelectItem>
-                              <SelectItem value="รศ.">รศ. (Assoc. Prof.)</SelectItem>
-                              <SelectItem value="ผศ.">ผศ. (Asst. Prof.)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                       <div>
-                          <Label htmlFor="fullName">{t('editor.fullName')}</Label>
-                          <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder="Your full name" />
-                        </div>
-                        <div>
-                          <Label htmlFor="birthDate">{t('editor.birthDate')}</Label>
-                          <Input 
-                            id="birthDate" 
-                            value={resumeData.personalInfo.birthDate || ''} 
-                            onChange={e => updatePersonalInfo('birthDate', e.target.value)} 
-                            placeholder="DD/MM/YYYY"
-                            pattern="\d{2}/\d{2}/\d{4}"
-                          />
-                          {resumeData.personalInfo.age && resumeData.personalInfo.age > 0 && (
-                            <p className="text-xs text-muted-foreground mt-1">{t('editor.age')}: {resumeData.personalInfo.age} {t('editor.years')}</p>
-                          )}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="phone">{t('editor.phone')}</Label>
-                          <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
-                        </div>
-                        <div>
-                          <Label htmlFor="email">{t('editor.email')}</Label>
-                          <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="linkedin">LinkedIn</Label>
-                          <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder="linkedin.com/in/yourprofile" />
-                        </div>
-                        <div>
-                          <Label htmlFor="portfolio">Portfolio</Label>
-                          <Input 
-                            id="portfolio" 
-                            value={resumeData.personalInfo.portfolio || ''} 
-                            onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
-                            placeholder="portfolio.yourname.com" 
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="website">{t('editor.website')}</Label>
-                          <Input 
-                            id="website" 
-                            value={resumeData.personalInfo.website || ''} 
-                            onChange={e => updatePersonalInfo('website', e.target.value)} 
-                            placeholder="www.yourname.com" 
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="address">{t('editor.address')}</Label>
-                         <Input 
-                           id="address" 
-                           value={resumeData.personalInfo.address || ''} 
-                           onChange={e => updatePersonalInfo('address', e.target.value)} 
-                           placeholder="123 Main St, Bangkok 10110, Thailand" 
-                         />
+                           <Label htmlFor="fullName">{t('editor.fullName')}</Label>
+                           <Input id="fullName" value={resumeData.personalInfo.fullName} onChange={e => updatePersonalInfo('fullName', e.target.value)} placeholder={t('editor.fullNamePlaceholder')} />
+                         </div>
                        </div>
-                      </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                           <Label htmlFor="phone">{t('editor.phone')}</Label>
+                           <Input id="phone" value={resumeData.personalInfo.phone} onChange={e => updatePersonalInfo('phone', e.target.value)} placeholder="+66 81 234 5678" />
+                         </div>
+                         <div>
+                           <Label htmlFor="email">{t('editor.email')}</Label>
+                           <Input id="email" type="email" value={resumeData.personalInfo.email} onChange={e => updatePersonalInfo('email', e.target.value)} placeholder="your.email@example.com" />
+                         </div>
+                       </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                           <Label htmlFor="linkedin">LinkedIn</Label>
+                           <Input id="linkedin" value={resumeData.personalInfo.linkedin} onChange={e => updatePersonalInfo('linkedin', e.target.value)} placeholder={t('editor.linkedinPlaceholder')} />
+                         </div>
+                         <div>
+                           <Label htmlFor="portfolio">Portfolio</Label>
+                           <Input 
+                             id="portfolio" 
+                             value={resumeData.personalInfo.portfolio || ''} 
+                             onChange={e => updatePersonalInfo('portfolio', e.target.value)} 
+                             placeholder={t('editor.portfolioPlaceholder')} 
+                           />
+                         </div>
+                       </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                           <Label htmlFor="website">{t('editor.website')}</Label>
+                           <Input 
+                             id="website" 
+                             value={resumeData.personalInfo.website || ''} 
+                             onChange={e => updatePersonalInfo('website', e.target.value)} 
+                             placeholder="https://www.yourname.com" 
+                           />
+                         </div>
+                         <div>
+                           <Label htmlFor="address">{t('editor.address')}</Label>
+                          <Input 
+                            id="address" 
+                            value={resumeData.personalInfo.address || ''} 
+                            onChange={e => updatePersonalInfo('address', e.target.value)} 
+                            placeholder="123 Main St, Bangkok 10110, Thailand" 
+                          />
+                        </div>
+                       </div>
                   </CardContent>
                 </Card>
 
@@ -1004,32 +972,15 @@ const ResumeEditor = () => {
                  </Card>
                 </div>
               </div>
-            </ResizablePanel>
-            
-            <ResizableHandle />
-            
-            <ResizablePanel defaultSize={50} minSize={30}>
-              <div className="p-6 h-full overflow-y-auto bg-gray-50">
-                <div className="mb-4">
-                  <h2 className="text-xl font-bold text-center text-foreground">{t('editor.preview')}</h2>
-                </div>
-                <div className="bg-white rounded-lg shadow-sm">
-                  <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
-                </div>
-                 
-                  {/* Dashboard Link */}
-                  <div className="mt-6 text-center">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => navigate('/dashboard')}
-                      className="w-full"
-                    >
-                      {t('dashboard.yourResumes')}
-                    </Button>
-                  </div>
+            <div className="flex-1 min-w-0 bg-gray-50 p-6">
+              <div className="mb-4">
+                <h2 className="text-xl font-bold text-center text-foreground">{t('editor.preview')}</h2>
               </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+              <div className="bg-white rounded-lg shadow-sm">
+                <ResumeTemplate data={resumeData} template={templateName} themeColor={themeColor} />
+              </div>
+            </div>
+          </div>
         ) : (
           /* Mobile Layout - Stacked vertically */
           <div className="space-y-6">
