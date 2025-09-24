@@ -67,14 +67,20 @@ const Navigation = () => {
     href: "#features"
   }, {
     name: t('nav.pricing'), 
-    href: "#pricing"
+    href: "/pricing"
   }, {
     name: t('nav.aboutUs'),
     href: "#about"
   }];
 
   // Authenticated user navigation
-  const userNavLinks = isAuthenticated ? [] : [];
+  const userNavLinks = isAuthenticated ? [{
+    name: 'Dashboard',
+    href: "/dashboard"
+  }, {
+    name: t('nav.resumeEditor'),
+    href: "/resume-editor"
+  }] : [];
 
   // Combine links based on page type
   const navLinks = isLandingPage ? [...landingNavLinks, ...userNavLinks] : userNavLinks;
@@ -131,10 +137,7 @@ const Navigation = () => {
                 <Link to="/auth">{t('nav.getStarted')}</Link>
               </Button>
             ) : (
-              <Button variant="outline" size="sm" onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = '/';
-              }}>
+              <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut()}>
                 {t('nav.signOut')}
               </Button>
             )}
@@ -179,10 +182,7 @@ const Navigation = () => {
               {/* Mobile Auth Buttons */}
               {!isAuthenticated ? <Button size="sm" className="w-full" asChild>
                   <Link to="/auth">{t('nav.getStarted')}</Link>
-                </Button> : <Button variant="outline" size="sm" className="w-full" onClick={async () => {
-                  await supabase.auth.signOut();
-                  window.location.href = '/';
-                }}>
+                </Button> : <Button variant="outline" size="sm" className="w-full" onClick={() => supabase.auth.signOut()}>
                   {t('nav.signOut')}
                 </Button>}
             </div>
