@@ -73,8 +73,8 @@ const Navigation = () => {
     href: "#about"
   }];
 
-  // Authenticated user navigation
-  const userNavLinks = isAuthenticated ? [{
+  // Authenticated user navigation - hide Dashboard and Resume Editor on resume-editor page
+  const userNavLinks = isAuthenticated && location.pathname !== '/resume-editor' ? [{
     name: 'Dashboard',
     href: "/dashboard"
   }, {
