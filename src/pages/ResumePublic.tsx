@@ -20,8 +20,8 @@ const ResumePublic = () => {
       }
 
       try {
-        // For public viewing, we need to temporarily disable RLS or create a public policy
-        // For now, this will work only if the user is logged in or has public access
+        console.log('Fetching resume with ID:', id);
+        
         const { data, error } = await supabase
           .from('resumes')
           .select('*')
@@ -29,15 +29,24 @@ const ResumePublic = () => {
           .eq('is_public', true)
           .maybeSingle();
 
+        console.log('Query result:', { data, error });
+
         if (error) {
           console.error('Error fetching resume:', error);
-          setError('Resume not found or not accessible');
+          setError(`Database error: ${error.message}`);
           return;
         }
 
+        if (!data) {
+          console.log('No resume found with ID:', id, 'that is public');
+          setError('Resume not found or not public');
+          return;
+        }
+
+        console.log('Resume found:', data);
         setResumeData(data);
       } catch (err) {
-        console.error('Error:', err);
+        console.error('Unexpected error:', err);
         setError('Failed to load resume');
       } finally {
         setLoading(false);
