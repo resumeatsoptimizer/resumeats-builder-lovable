@@ -795,7 +795,7 @@ const ResumeEditor = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                      <span>Skills</span>
+                      <span>{t('skills')}</span>
                       <div className="flex flex-col sm:flex-row gap-2">
                         <Input value={newSkill} onChange={e => setNewSkill(e.target.value)} placeholder="เพิ่มทักษะ" className="w-full sm:w-48" onKeyPress={e => {
                         if (e.key === 'Enter') {
