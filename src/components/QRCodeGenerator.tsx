@@ -99,9 +99,14 @@ export const QRCodeGenerator = ({
             <Download className="w-4 h-4 mr-2" />
             Download
           </Button>
-          <Button variant="outline" size="sm" onClick={shareQRCode} className="flex-1">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => window.open(resumeUrl, '_blank')} 
+            className="flex-1"
+          >
             <Share2 className="w-4 h-4 mr-2" />
-            Share
+            View
           </Button>
         </div>
       </CardContent>

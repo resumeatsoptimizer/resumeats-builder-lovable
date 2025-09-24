@@ -922,7 +922,7 @@ const ResumeEditor = () => {
                   <CardHeader>
                      <CardTitle className="flex items-center gap-2">
                        <Share2 className="w-4 h-4" />
-                       {t('editor.share')}
+                       View Resume Online
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="flex gap-3">
@@ -1062,10 +1062,10 @@ const ResumeEditor = () => {
               {/* Share Resume */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Share2 className="w-4 h-4" />
-                    Share Your Resume
-                  </CardTitle>
+                   <CardTitle className="flex items-center gap-2">
+                     <Share2 className="w-4 h-4" />
+                     View Resume Online
+                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <QRCodeGenerator resumeId={resumeId || ''} resumeTitle={resumeData.personalInfo.fullName || 'My Resume'} />

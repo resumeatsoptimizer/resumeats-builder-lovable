@@ -93,63 +93,150 @@ function generateResumeHTML(resumeData: any, templateName: string): string {
         <meta charset="UTF-8">
         <title>Resume - ${personalInfo?.fullName || 'Resume'}</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; line-height: 1.6; }
-            .header { background: #374151; color: white; padding: 30px; margin-bottom: 20px; }
-            .header h1 { margin: 0 0 10px 0; font-size: 32px; }
-            .contact-info { font-size: 14px; }
-            .contact-info span { margin-right: 20px; }
-            .section { margin-bottom: 25px; }
-            .section-title { color: #374151; font-size: 18px; font-weight: bold; border-bottom: 2px solid #374151; padding-bottom: 5px; margin-bottom: 15px; }
-            .work-item, .education-item { margin-bottom: 20px; }
-            .work-title { font-weight: bold; color: #374151; }
-            .work-meta { color: #666; margin-bottom: 10px; }
-            .skills-category { margin-bottom: 10px; }
-            .skills-category strong { color: #374151; }
-            ul { margin: 10px 0; padding-left: 20px; }
-            li { margin-bottom: 5px; }
+            @page { 
+                size: A4; 
+                margin: 0.5in; 
+            }
+            * { 
+                box-sizing: border-box; 
+            }
+            body { 
+                font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif; 
+                margin: 0; 
+                padding: 0; 
+                color: #0f172a; 
+                line-height: 1.45; 
+                font-size: 11px;
+                max-width: 100%;
+                overflow-wrap: break-word;
+            }
+            .resume { 
+                max-width: 816px; 
+                margin: 0 auto; 
+                background: white; 
+                padding: 24px; 
+                min-height: 100vh;
+            }
+            .header { 
+                background: #3b82f6; 
+                color: white; 
+                padding: 20px; 
+                margin-bottom: 16px; 
+                border-radius: 6px;
+            }
+            .header h1 { 
+                margin: 0 0 8px 0; 
+                font-size: 24px; 
+                font-weight: 700;
+            }
+            .contact-info { 
+                font-size: 12px; 
+                line-height: 1.4;
+            }
+            .contact-info span { 
+                margin-right: 16px; 
+                display: inline-block;
+            }
+            .section { 
+                margin-bottom: 16px; 
+                page-break-inside: avoid;
+            }
+            .section-title { 
+                color: #3b82f6; 
+                font-size: 14px; 
+                font-weight: 700; 
+                border-bottom: 2px solid #3b82f6; 
+                padding-bottom: 4px; 
+                margin-bottom: 12px; 
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            .work-item, .education-item { 
+                margin-bottom: 14px; 
+                page-break-inside: avoid;
+            }
+            .work-title { 
+                font-weight: 600; 
+                color: #0f172a; 
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+            .work-meta { 
+                color: #64748b; 
+                margin-bottom: 8px; 
+                font-size: 10px;
+            }
+            .skills-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin: 8px 0;
+            }
+            .skill-item {
+                background: #f1f5f9;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 10px;
+                color: #334155;
+                border: 1px solid #e2e8f0;
+            }
+            ul { 
+                margin: 8px 0; 
+                padding-left: 16px; 
+            }
+            li { 
+                margin-bottom: 4px; 
+                font-size: 10px;
+            }
+            p {
+                margin: 8px 0;
+                font-size: 11px;
+            }
+            .two-column {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            @media print {
+                body { 
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                .resume {
+                    padding: 16px;
+                    min-height: auto;
+                }
+            }
         </style>
     </head>
     <body>
-        <div class="header">
-            <h1>${personalInfo?.fullName || 'Your Name'}</h1>
-            <div class="contact-info">
-                ${personalInfo?.phone ? `<span>${personalInfo.phone}</span>` : ''}
-                ${personalInfo?.email ? `<span>${personalInfo.email}</span>` : ''}
-                ${personalInfo?.linkedin ? `<span>${personalInfo.linkedin}</span>` : ''}
-                ${personalInfo?.portfolio ? `<span>${personalInfo.portfolio}</span>` : ''}
+        <div class="resume">
+            <div class="header">
+                <h1>${personalInfo?.fullName || 'Your Name'}</h1>
+                <div class="contact-info">
+                    ${personalInfo?.phone ? `<span>📞 ${personalInfo.phone}</span>` : ''}
+                    ${personalInfo?.email ? `<span>✉️ ${personalInfo.email}</span>` : ''}
+                    ${personalInfo?.linkedin ? `<span>🔗 ${personalInfo.linkedin}</span>` : ''}
+                    ${personalInfo?.portfolio ? `<span>🌐 ${personalInfo.portfolio}</span>` : ''}
+                    ${personalInfo?.address ? `<span>📍 ${personalInfo.address}</span>` : ''}
+                </div>
             </div>
-        </div>
 
-        ${summary ? `
-        <div class="section">
-            <div class="section-title">PROFESSIONAL SUMMARY</div>
-            <p>${summary}</p>
-        </div>
-        ` : ''}
+            ${summary ? `
+            <div class="section">
+                <div class="section-title">Professional Summary</div>
+                <p>${summary}</p>
+            </div>
+            ` : ''}
 
-        <div class="section">
-            <div class="section-title">SKILLS</div>
-            ${skills?.digitalMarketing?.length ? `
-            <div class="skills-category">
-                <strong>Digital Marketing:</strong> ${skills.digitalMarketing.join(', ')}
+            ${skills?.length ? `
+            <div class="section">
+                <div class="section-title">Skills</div>
+                <div class="skills-list">
+                    ${skills.map(skill => `<span class="skill-item">${skill}</span>`).join('')}
+                </div>
             </div>
             ` : ''}
-            ${skills?.analytics?.length ? `
-            <div class="skills-category">
-                <strong>Analytics & Reporting:</strong> ${skills.analytics.join(', ')}
-            </div>
-            ` : ''}
-            ${skills?.tools?.length ? `
-            <div class="skills-category">
-                <strong>Tools:</strong> ${skills.tools.join(', ')}
-            </div>
-            ` : ''}
-            ${skills?.softSkills?.length ? `
-            <div class="skills-category">
-                <strong>Soft Skills:</strong> ${skills.softSkills.join(', ')}
-            </div>
-            ` : ''}
-        </div>
 
         ${workExperience?.length && workExperience[0]?.position ? `
         <div class="section">
